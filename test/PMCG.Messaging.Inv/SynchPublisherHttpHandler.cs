@@ -28,7 +28,7 @@ namespace PMCG.Messaging.Inv
 
 		static PublisherHttpHandler()
 		{
-			var _connectionFactory = new ConnectionFactory { Uri = PublisherHttpHandler.c_connectionUri };
+			var _connectionFactory = new ConnectionFactory { Uri = new Uri(PublisherHttpHandler.c_connectionUri) };
 			PublisherHttpHandler.c_connection = _connectionFactory.CreateConnection();
 		}
 		

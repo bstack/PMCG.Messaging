@@ -43,23 +43,25 @@ namespace PMCG.Messaging.Client.UT.Configuration
 		}
 
 
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void Ctor_Where_Duplicate_Seed_Item_Type_Headers_Results_In_An_Exception()
 		{
-			this.c_SUT = new MessageConsumers(
+			Assert.That(() => {
+				this.c_SUT = new MessageConsumers(
 				new[]
 					{
-						new  MessageConsumer(
-							typeof(MyEvent),
-							TestingConfiguration.QueueName,
-							"** DUPLICATE_TYPE_HEADER ***",
-							message => ConsumerHandlerResult.Completed),
-						new  MessageConsumer(
-							typeof(MyEvent),
-							TestingConfiguration.QueueName,
-							"** DUPLICATE_TYPE_HEADER ***",
-							message => ConsumerHandlerResult.Completed)
-					});
+							new  MessageConsumer(
+								typeof(MyEvent),
+								TestingConfiguration.QueueName,
+								"** DUPLICATE_TYPE_HEADER ***",
+								message => ConsumerHandlerResult.Completed),
+							new  MessageConsumer(
+								typeof(MyEvent),
+								TestingConfiguration.QueueName,
+								"** DUPLICATE_TYPE_HEADER ***",
+								message => ConsumerHandlerResult.Completed)
+					});},
+				Throws.TypeOf<ArgumentException>());
 		}
 
 

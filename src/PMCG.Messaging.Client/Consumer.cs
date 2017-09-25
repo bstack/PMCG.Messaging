@@ -21,7 +21,7 @@ namespace PMCG.Messaging.Client
 
 		private bool c_hasBeenStarted;
 		private bool c_isCompleted;
-		private QueueingBasicConsumer c_consumer;
+		private EventingBasicConsumer c_consumer;
 
 
 		public bool IsCompleted { get { return this.c_isCompleted; } }
@@ -40,7 +40,7 @@ namespace PMCG.Messaging.Client
 
 			this.c_logger.Info("ctor About to create channel");
 			this.c_channel = connection.CreateModel();
-			this.c_channel.ModelShutdown += this.OnChannelShutdown;
+			this.c_channel.ModelShutdown += (m, args) => this.OnChannelShutdown(args);
 			this.c_channel.BasicQos(0, this.c_configuration.ConsumerMessagePrefetchCount, false);
 
 			this.c_logger.Info("ctor About to create consumer message processor");
@@ -64,7 +64,6 @@ namespace PMCG.Messaging.Client
 							this.c_hasBeenStarted = true;
 							this.EnsureTransientQueuesExist();
 							this.CreateAndConfigureConsumer();
-							this.RunConsumeLoop();
 						}
 						catch (Exception exception)
 						{
@@ -93,7 +92,6 @@ namespace PMCG.Messaging.Client
 
 
 		private void OnChannelShutdown(
-			IModel channel,
 			ShutdownEventArgs reason)
 		{
 			this.c_logger.InfoFormat("OnChannelShuutdown Code = {0} and text = {1}", reason.ReplyCode, reason.ReplyText);
@@ -113,35 +111,12 @@ namespace PMCG.Messaging.Client
 
 		private void CreateAndConfigureConsumer()
 		{
-			this.c_consumer = new QueueingBasicConsumer(this.c_channel);
+			this.c_consumer = new EventingBasicConsumer(this.c_channel);
 			foreach (var _queueName in this.c_configuration.MessageConsumers.GetDistinctQueueNames())
 			{
 				this.c_logger.InfoFormat("CreateAndConfigureConsumer Consume for queue {0}", _queueName);
 				var _consumerTag = this.c_channel.BasicConsume(_queueName, false, this.c_consumer);
 				this.c_logger.InfoFormat("CreateAndConfigureConsumer Consume for queue {0}, consumer tag is {1}", _queueName, _consumerTag);
-			}
-		}
-
-
-		private void RunConsumeLoop()
-		{
-			this.c_logger.Info("RunConsumeLoop Starting");
-			var _timeoutInMilliseconds = (int)this.c_configuration.ConsumerDequeueTimeout.TotalMilliseconds;
-			while (!this.c_cancellationToken.IsCancellationRequested)
-			{
-				try
-				{
-					BasicDeliverEventArgs _dequeueResult = null;
-					if (this.c_consumer.Queue.Dequeue(_timeoutInMilliseconds, out _dequeueResult))
-					{
-						this.c_messageProcessor.Process(this.c_channel, _dequeueResult);
-					}
-				}
-				catch (EndOfStreamException)
-				{
-					this.c_logger.Info("RunConsumeLoop End of stream");
-					break;
-				}
 			}
 		}
 	}

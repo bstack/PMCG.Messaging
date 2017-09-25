@@ -21,7 +21,7 @@ namespace PMCG.Messaging.Client.UT
 		}
 
 
-		[Test, ExpectedException]
+		[Test]
 		[Category("RequiresRunningInstance")]
 		public void Open_Where_Already_Opened_And_Second_Open_Call_Made_Results_In_Connection_Not_Being_Opened()
 		{
@@ -31,7 +31,7 @@ namespace PMCG.Messaging.Client.UT
 				TimeSpan.FromSeconds(5));
 			_SUT.Open();	// Requires a running instance of RabbitMQ
 
-			_SUT.Open();
+			Assert.That(() => _SUT.Open(), Throws.TypeOf<Exception>());
 		}
 	}
 }

@@ -61,7 +61,7 @@ namespace PMCG.Messaging.Client.Interactive
 			var _connectionUri = Configuration.LocalConnectionUri;
 			var _connectionFactory = new ConnectionFactory
 			{
-				Uri = _connectionUri,
+				Uri = new Uri(_connectionUri),
 				UseBackgroundThreadsForIO = false,
 				AutomaticRecoveryEnabled = false,
 				TopologyRecoveryEnabled = false

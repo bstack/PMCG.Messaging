@@ -51,7 +51,7 @@ namespace PMCG.Messaging.Inv
 
 		private void OpenConnection()
 		{
-			var _connectionFactory = new ConnectionFactory { Uri = this.c_connectionUri };
+			var _connectionFactory = new ConnectionFactory { Uri = new Uri(this.c_connectionUri) };
 			this.c_connection = _connectionFactory.CreateConnection();
 		}
 

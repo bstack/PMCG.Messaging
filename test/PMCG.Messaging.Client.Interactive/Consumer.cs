@@ -75,7 +75,7 @@ namespace PMCG.Messaging.Client.Interactive
 			BusConfiguration busConfiguration)
 		{
 			var _connectionFactory = new ConnectionFactory {
-				Uri = busConfiguration.ConnectionUris.First(),
+				Uri = new Uri(busConfiguration.ConnectionUris.First()),
 				UseBackgroundThreadsForIO = false,
 				AutomaticRecoveryEnabled = false,
 				TopologyRecoveryEnabled = false

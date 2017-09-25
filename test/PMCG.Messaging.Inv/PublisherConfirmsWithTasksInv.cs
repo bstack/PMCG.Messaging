@@ -55,12 +55,12 @@ namespace PMCG.Messaging.Inv
 
 		private void Run()
 		{
-			var _connectionFactory = new ConnectionFactory { Uri = this.c_connectionUri };
+			var _connectionFactory = new ConnectionFactory { Uri = new Uri(this.c_connectionUri) };
 			var _connection = _connectionFactory.CreateConnection();
 			var _channel = _connection.CreateModel();
 			_channel.ConfirmSelect();
-			_channel.BasicAcks += this.OnChannelAck;
-			_channel.BasicNacks += this.OnChannelNack;
+			_channel.BasicAcks += (m, args) => this.OnChannelAck(args);
+			_channel.BasicNacks += (m, args) => this.OnChannelNack(args);
 
 			_channel.ExchangeDeclare(this.c_exchangeName, ExchangeType.Fanout, true, false, null);
 			_channel.QueueDeclare(this.c_queueName, true, false, false, null);
@@ -94,7 +94,6 @@ namespace PMCG.Messaging.Inv
 
 
 		private void OnChannelAck(
-			IModel channel,
 			BasicAckEventArgs args)
 		{
 			TaskCompletionSource<string> _taskCompletionSource;
@@ -112,7 +111,6 @@ namespace PMCG.Messaging.Inv
 
 
 		private void OnChannelNack(
-			IModel channel,
 			BasicNackEventArgs args)
 		{
 			TaskCompletionSource<string> _taskCompletionSource;

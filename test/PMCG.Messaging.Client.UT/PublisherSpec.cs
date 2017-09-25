@@ -17,7 +17,7 @@ namespace PMCG.Messaging.Client.UT
 	[TestFixture]
 	public class PublisherSpec
 	{
-		[Test, ExpectedException]
+		[Test]
 		public void Start_Where_Cancellation_Token_Is_Cancelled_Results_In_An_Exception()
 		{
 			var _connection = Substitute.For<IConnection>();
@@ -26,7 +26,8 @@ namespace PMCG.Messaging.Client.UT
 
 			var _SUT = new Publisher(_connection, _publicationQueue, _cancellationTokenSource.Token);
 			_cancellationTokenSource.Cancel();
-			_SUT.Start();
+			
+			Assert.That(() => _SUT.Start(), Throws.TypeOf<Exception>());
 		}
 
 
@@ -111,7 +112,7 @@ namespace PMCG.Messaging.Client.UT
 			_publicationQueue.Add(_publication);
 
 			_waitHandle.WaitOne();	// Allow publication to complete
-			_channel.BasicAcks += Raise.Event<BasicAckEventHandler>(_channel, new BasicAckEventArgs { Multiple = false, DeliveryTag = 1 });
+			_channel.BasicAcks += Raise.EventWith(_channel, new BasicAckEventArgs { Multiple = false, DeliveryTag = 1 });
 			
 			Assert.IsTrue(_publication.ResultTask.IsCompleted);
 			_messageProperties.Received().ContentType = "application/json";
@@ -155,7 +156,7 @@ namespace PMCG.Messaging.Client.UT
 
 			_waitHandle.Wait();	// Allow publications to complete
 			foreach(var _publication in _publications) { Assert.IsFalse(_publication.ResultTask.IsCompleted); }
-			_channel.BasicAcks += Raise.Event<BasicAckEventHandler>(_channel, new BasicAckEventArgs { Multiple = true, DeliveryTag = (ulong)_publications.Count });
+			_channel.BasicAcks += Raise.EventWith(_channel, new BasicAckEventArgs { Multiple = true, DeliveryTag = (ulong)_publications.Count });
 			foreach(var _publication in _publications)
 			{
 				Assert.IsTrue(_publication.ResultTask.IsCompleted);
@@ -197,7 +198,7 @@ namespace PMCG.Messaging.Client.UT
 			_waitHandle.Wait();		// Allow channel publications to complete
 			foreach(var _publication in _publications) { Assert.IsFalse(_publication.ResultTask.IsCompleted); }
 			var _deliveryTagToAcknowledge = 73;
-			_channel.BasicAcks += Raise.Event<BasicAckEventHandler>(_channel, new BasicAckEventArgs { Multiple = true, DeliveryTag = (ulong)_deliveryTagToAcknowledge });
+			_channel.BasicAcks += Raise.EventWith(_channel, new BasicAckEventArgs { Multiple = true, DeliveryTag = (ulong)_deliveryTagToAcknowledge });
 
 			Assert.AreEqual(_deliveryTagToAcknowledge, _publications.Count(publication => publication.ResultTask.IsCompleted), "A1");
 			Assert.AreEqual(_deliveryTagToAcknowledge, _publications.Count(publication => publication.ResultTask.IsCompleted && publication.ResultTask.Result.Status == PublicationResultStatus.Acked), "A2");
@@ -229,7 +230,7 @@ namespace PMCG.Messaging.Client.UT
 			_publicationQueue.Add(_publication);
 
 			_waitHandle.WaitOne();		// Allow channel publication to complete
-			_channel.BasicNacks += Raise.Event<BasicNackEventHandler>(_channel, new BasicNackEventArgs { Multiple = true, DeliveryTag = 1UL });
+			_channel.BasicNacks += Raise.EventWith(_channel, new BasicNackEventArgs { Multiple = true, DeliveryTag = 1UL });
 
 			Assert.IsTrue(_publication.ResultTask.IsCompleted);
 			Assert.AreEqual(PublicationResultStatus.Nacked, _publication.ResultTask.Result.Status);
@@ -265,7 +266,7 @@ namespace PMCG.Messaging.Client.UT
 			_publicationQueue.Add(_publication2);
 			
 			_waitHandle.Wait();		// Allow channel publications to complete
-			_channel.ModelShutdown += Raise.Event<ModelShutdownEventHandler>(_channel, new ShutdownEventArgs(ShutdownInitiator.Peer, 1, "Bang!"));
+			_channel.ModelShutdown += Raise.EventWith(_channel, new ShutdownEventArgs(ShutdownInitiator.Peer, 1, "Bang!"));
 
 			// Since all running on the same thread we do not need to wait - this is also not relaistic as we know the channel shutdown event will happen on a different thread
 			Assert.IsTrue(_publication1.ResultTask.IsCompleted);
@@ -301,7 +302,7 @@ namespace PMCG.Messaging.Client.UT
 			_publicationQueue.Add(_publication);
 
 			_waitHandle.WaitOne();		// Allow channel publication to complete
-			_channel.ModelShutdown += Raise.Event<ModelShutdownEventHandler>(_channel, new ShutdownEventArgs(ShutdownInitiator.Peer, 1, "404 Exchange does not exist !"));
+			_channel.ModelShutdown += Raise.EventWith(_channel, new ShutdownEventArgs(ShutdownInitiator.Peer, 1, "404 Exchange does not exist !"));
 
 			// Since all running on the same thread we do not need to wait - this is also not relaistic as we know the channel shutdown event will happen on a different thread
 			Assert.IsTrue(_publication.ResultTask.IsCompleted);

@@ -41,9 +41,9 @@ namespace PMCG.Messaging.Client
 
 			this.c_channel = connection.CreateModel();
 			this.c_channel.ConfirmSelect();
-			this.c_channel.ModelShutdown += this.OnChannelShutdown;
-			this.c_channel.BasicAcks += this.OnChannelAcked;
-			this.c_channel.BasicNacks += this.OnChannelNacked;
+			this.c_channel.ModelShutdown += (m, args) => this.OnChannelShutdown(args);
+			this.c_channel.BasicAcks += (m, args) => this.OnChannelAcked(args);
+			this.c_channel.BasicNacks += (m, args) => this.OnChannelNacked(args);
 
 			this.c_unconfirmedPublications = new ConcurrentDictionary<ulong, Publication>();
 
@@ -158,7 +158,6 @@ namespace PMCG.Messaging.Client
 
 
 		private void OnChannelShutdown(
-			IModel channel,
 			ShutdownEventArgs reason)
 		{
 			this.c_logger.InfoFormat("OnChannelShuutdown Starting, code = {0} and text = {1}", reason.ReplyCode, reason.ReplyText);
@@ -181,7 +180,6 @@ namespace PMCG.Messaging.Client
 
 
 		private void OnChannelAcked(
-			IModel channel,
 			BasicAckEventArgs args)
 		{
 			this.c_logger.DebugFormat("OnChannelAcked Starting, is multiple = {0} and delivery tag = {1}", args.Multiple, args.DeliveryTag);
@@ -196,7 +194,6 @@ namespace PMCG.Messaging.Client
 
 
 		private void OnChannelNacked(
-			IModel channel,
 			BasicNackEventArgs args)
 		{
 			this.c_logger.DebugFormat("OnChannelNacked Starting, is multiple = {0} and delivery tag = {1}", args.Multiple, args.DeliveryTag);

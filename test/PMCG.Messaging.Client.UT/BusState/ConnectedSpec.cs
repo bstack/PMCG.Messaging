@@ -90,7 +90,7 @@ namespace PMCG.Messaging.Client.UT.BusState
 			var _publicationResult = _SUT.PublishAsync(_theEvent);
 
 			_waitHandle.WaitOne();	// Allow publication to complete
-			_channel.BasicAcks += Raise.Event<BasicAckEventHandler>(_channel, new BasicAckEventArgs { Multiple = true, DeliveryTag = 10 });
+			_channel.BasicAcks += Raise.EventWith(_channel, new BasicAckEventArgs { Multiple = true, DeliveryTag = 10 });
 			_publicationResult.Wait();
 
 			Assert.AreEqual(PMCG.Messaging.PublicationResultStatus.Published, _publicationResult.Result.Status);
@@ -133,7 +133,7 @@ namespace PMCG.Messaging.Client.UT.BusState
 			var _publicationResult = _SUT.PublishAsync(_theEvent);
 
 			_waitHandle.Wait();	// Allow publication to complete
-			_channel.BasicAcks += Raise.Event<BasicAckEventHandler>(_channel, new BasicAckEventArgs { Multiple = true, DeliveryTag = 2 });
+			_channel.BasicAcks += Raise.EventWith(_channel, new BasicAckEventArgs { Multiple = true, DeliveryTag = 2 });
 			_publicationResult.Wait();
 
 			Assert.AreEqual(PMCG.Messaging.PublicationResultStatus.Published, _publicationResult.Result.Status);
@@ -180,8 +180,8 @@ namespace PMCG.Messaging.Client.UT.BusState
 			var _publicationResult = _SUT.PublishAsync(_theEvent);
 
 			_waitHandle.Wait();			// Wait for publications to complete
-			_channel.BasicAcks += Raise.Event<BasicAckEventHandler>(_channel, new BasicAckEventArgs { Multiple = true, DeliveryTag = 2 });
-			_channel.BasicNacks += Raise.Event<BasicNackEventHandler>(_channel, new BasicNackEventArgs { Multiple = false, DeliveryTag = 3 });
+			_channel.BasicAcks += Raise.EventWith(_channel, new BasicAckEventArgs { Multiple = true, DeliveryTag = 2 });
+			_channel.BasicNacks += Raise.EventWith(_channel, new BasicNackEventArgs { Multiple = false, DeliveryTag = 3 });
 			_publicationResult.Wait();
 
 			Assert.AreEqual(PMCG.Messaging.PublicationResultStatus.NotPublished, _publicationResult.Result.Status);

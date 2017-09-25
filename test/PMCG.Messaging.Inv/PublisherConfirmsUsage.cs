@@ -49,7 +49,7 @@ namespace PMCG.Messaging.Inv
 
 		private void OpenConnection()
 		{
-			var _connectionFactory = new ConnectionFactory { Uri = this.c_connectionUri };
+			var _connectionFactory = new ConnectionFactory { Uri = new Uri(this.c_connectionUri) };
 			this.c_connection = _connectionFactory.CreateConnection();
 		}
 
@@ -74,7 +74,7 @@ namespace PMCG.Messaging.Inv
 
 			var _channel = this.c_connection.CreateModel();
 			_channel.ConfirmSelect();
-			_channel.BasicAcks += this.OnChannelAck;
+			_channel.BasicAcks += (m, args) => this.OnChannelAck(args);
 
 			for(int _sequence = 1; _sequence <= numberOfMessages; _sequence++)
 			{
@@ -96,7 +96,6 @@ namespace PMCG.Messaging.Inv
 
 
 		private void OnChannelAck(
-			IModel channel,
 			BasicAckEventArgs args)
 		{
 			this.c_writeLog(string.Format("On channel ack : Is multiple {0}, delivery tag {1}", args.Multiple, args.DeliveryTag));

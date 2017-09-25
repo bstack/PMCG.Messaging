@@ -63,7 +63,7 @@ namespace PMCG.Messaging.Client
 				foreach (var _connectionUri in this.c_connectionUris)
 				{
 					var _connectionFactory = new ConnectionFactory {
-						Uri = _connectionUri,
+						Uri = new Uri(_connectionUri),
 						RequestedHeartbeat = (ushort)this.c_heartbeatInterval.TotalSeconds,
 						UseBackgroundThreadsForIO = false,
 						AutomaticRecoveryEnabled = false,
@@ -75,9 +75,9 @@ namespace PMCG.Messaging.Client
 					try
 					{
 						this.c_connection = _connectionFactory.CreateConnection();
-						this.c_connection.ConnectionBlocked += this.OnConnectionBlocked;
-						this.c_connection.ConnectionShutdown += this.OnConnectionShutdown;
-						this.c_connection.ConnectionUnblocked += this.OnConnectionUnblocked;
+						this.c_connection.ConnectionBlocked += (m, args) => this.OnConnectionBlocked(args);
+						this.c_connection.ConnectionShutdown += (m, args) => this.OnConnectionShutdown(args);
+						this.c_connection.ConnectionUnblocked += (m, args) => this.OnConnectionUnblocked();
 
 						this.c_logger.InfoFormat("Open Connected to ({0}), sequence {1}", _connectionInfo, _attemptSequence);
 						break;
@@ -116,7 +116,7 @@ namespace PMCG.Messaging.Client
 			this.c_isCloseRequested = true;
 			if (this.IsOpen)
 			{
-				this.c_connection.ConnectionShutdown -= this.OnConnectionShutdown;
+				this.c_connection.ConnectionShutdown -= (m, args) => this.OnConnectionShutdown(args);
 				this.c_connection.Close();
 			}
 
@@ -125,7 +125,6 @@ namespace PMCG.Messaging.Client
 
 
 		private void OnConnectionBlocked(
-			IConnection connection,
 			RabbitMQ.Client.Events.ConnectionBlockedEventArgs reason)
 		{
 			this.c_logger.Warn("OnConnectionBlocked Starting");
@@ -135,7 +134,6 @@ namespace PMCG.Messaging.Client
 
 
 		private void OnConnectionShutdown(
-			IConnection connection,
 			ShutdownEventArgs reason)
 		{
 			this.c_logger.Info("OnConnectionShutdown Starting");
@@ -144,8 +142,7 @@ namespace PMCG.Messaging.Client
 		}
 
 
-		private void OnConnectionUnblocked(
-			IConnection connection)
+		private void OnConnectionUnblocked()
 		{
 			this.c_logger.Info("OnConnectionUnblocked Starting");
 			this.Unblocked(null, new EventArgs());

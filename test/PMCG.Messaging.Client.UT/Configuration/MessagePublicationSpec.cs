@@ -50,10 +50,11 @@ namespace PMCG.Messaging.Client.UT.Configuration
 		}
 
 
-		[Test, ExpectedException]
+		[Test]
 		public void Ctor_Where_Command_With_Multiple_Message_Deliveries_Results_In_An_Exception()
 		{
-			new MessagePublication(
+			Assert.That(() => {
+				new MessagePublication(
 				typeof(MyCommand),
 				new []
 					{
@@ -67,7 +68,8 @@ namespace PMCG.Messaging.Client.UT.Configuration
 							"typeHeader",
 							MessageDeliveryMode.Persistent,
 							message => string.Empty)
-					});
+					}); },
+				Throws.TypeOf<Exception>());
 		}
 	}
 }
