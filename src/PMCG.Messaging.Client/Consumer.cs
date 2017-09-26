@@ -18,7 +18,6 @@ namespace PMCG.Messaging.Client
 		private readonly CancellationToken c_cancellationToken;
 		private readonly ConsumerMessageProcessor c_messageProcessor;
 
-		private bool c_hasBeenStarted;
 		private EventingBasicConsumer c_consumer;
 
 
@@ -48,23 +47,12 @@ namespace PMCG.Messaging.Client
 		public void Start()
 		{
 			this.c_logger.Info("Start Starting");
-			Check.Ensure(!this.c_hasBeenStarted, "Consumer has already been started, can only do so once");
-			Check.Ensure(!this.c_cancellationToken.IsCancellationRequested, "Cancellation token is already canceled");
+			Check.Ensure(!this.c_cancellationToken.IsCancellationRequested, "Cancellation token is already cancelled");
 
+			this.EnsureTransientQueuesExist();
+			this.CreateAndConfigureConsumer();
 
-			try
-			{
-				this.c_hasBeenStarted = true;
-				this.EnsureTransientQueuesExist();
-				this.CreateAndConfigureConsumer();
-
-				this.c_consumer.Received += (m, args) => this.c_messageProcessor.Process(this.c_channel, args);
-			}
-			catch (Exception exception)
-			{
-				this.c_logger.ErrorFormat("Start Exception : {0}", exception.InstrumentationString());
-				throw;
-			}
+			this.c_consumer.Received += (m, args) => this.c_messageProcessor.Process(this.c_channel, args);
 
 			this.c_logger.Info("Start Completed consuming");
 		}

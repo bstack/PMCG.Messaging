@@ -69,7 +69,7 @@ namespace PMCG.Messaging.Client.UT.Configuration
 							MessageDeliveryMode.Persistent,
 							message => string.Empty)
 					}); },
-				Throws.TypeOf<Exception>());
+				Throws.TypeOf<ApplicationException>());
 		}
 	}
 }

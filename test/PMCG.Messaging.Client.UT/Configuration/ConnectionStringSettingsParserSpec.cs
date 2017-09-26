@@ -15,14 +15,14 @@ namespace PMCG.Messaging.Client.UT.Configuration
 		[Test]
 		public void Parse_Where_Null_String_Results_In_An_Exception()
 		{
-			Assert.That(() => this.c_SUT.Parse(null), Throws.TypeOf<Exception>());
+			Assert.That(() => this.c_SUT.Parse(null), Throws.TypeOf<ArgumentException>());
 		}
 
 
 		[Test]
 		public void Parse_Where_Empty_String_Results_In_An_Exception()
 		{
-			Assert.That(() => this.c_SUT.Parse(" "), Throws.TypeOf<Exception>());
+			Assert.That(() => this.c_SUT.Parse(" "), Throws.TypeOf<ArgumentException>());
 		}
 
 

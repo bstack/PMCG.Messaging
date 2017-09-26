@@ -46,7 +46,7 @@ namespace PMCG.Messaging.Client.UT.Configuration
 				this.c_SUT
 				.RegisterPublication<MyCommand>("AnExchange1")
 				.RegisterPublication<MyCommand>("AnExchange2");}, 
-				Throws.TypeOf<Exception>());
+				Throws.TypeOf<ApplicationException>());
 		}
 	}
 }

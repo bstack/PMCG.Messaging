@@ -27,7 +27,7 @@ namespace PMCG.Messaging.Client.UT
 			var _SUT = new Publisher(_connection, _publicationQueue, _cancellationTokenSource.Token);
 			_cancellationTokenSource.Cancel();
 			
-			Assert.That(() => _SUT.Start(), Throws.TypeOf<Exception>());
+			Assert.That(() => _SUT.Start(), Throws.TypeOf<ApplicationException>());
 		}
 
 

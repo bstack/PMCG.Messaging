@@ -31,7 +31,7 @@ namespace PMCG.Messaging.Client.UT
 				TimeSpan.FromSeconds(5));
 			_SUT.Open();	// Requires a running instance of RabbitMQ
 
-			Assert.That(() => _SUT.Open(), Throws.TypeOf<Exception>());
+			Assert.That(() => _SUT.Open(), Throws.TypeOf<ApplicationException>());
 		}
 	}
 }

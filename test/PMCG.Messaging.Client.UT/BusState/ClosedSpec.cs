@@ -119,7 +119,7 @@ namespace PMCG.Messaging.Client.UT.BusState
 
 			var _theEvent = new MyEvent(Guid.NewGuid(), null, "Some detail", 1);
 
-			Assert.That(() => _SUT.PublishAsync(_theEvent), Throws.TypeOf<Exception>());
+			Assert.That(() => _SUT.PublishAsync(_theEvent), Throws.TypeOf<InvalidOperationException>());
 		}
 	}
 }

@@ -204,6 +204,7 @@ namespace PMCG.Messaging.Client.Interactive
 
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
 			_busConfigurationBuilder.ConnectionUris.Add(Configuration.LocalConnectionUri);
+			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
 				.RegisterPublication<MyEvent>(Configuration.ExchangeName1, typeof(MyEvent).Name)
 				.RegisterConsumer<MyEvent>(
@@ -215,19 +216,38 @@ namespace PMCG.Messaging.Client.Interactive
 
 			Console.WriteLine("Hit enter to publish message");
 			Console.ReadLine();
-			var _message = new MyEvent(Guid.NewGuid(), null, "R1", 1, "09:00", "DDD....");
-			_SUT.PublishAsync(_message);
 
-			Console.WriteLine("Hit enter to display captured message Id");
-			Console.ReadLine();
-			Console.WriteLine("Captured message Id [{0}]", _capturedMessageId);
 
-			Console.WriteLine("Hit enter to close");
-			Console.ReadLine();
-			_SUT.Close();
+			do
+			{
+				Console.WriteLine("About to publish {0}");
+				var _message = new MyEvent(Guid.NewGuid(), null, "R1", 1, "09:00", "DDD....");
 
-			Console.WriteLine("Hit enter to exit");
-			Console.ReadLine();
+				try
+				{
+					var _result = _SUT.PublishAsync(_message);
+					Console.WriteLine("Completed within time out = {0}");
+				}
+				catch (Exception theException)
+				{
+					Console.WriteLine("Exception encountered {0}", theException);
+				}
+			} while (Console.ReadLine() != "x");
+
+
+			//var _message = new MyEvent(Guid.NewGuid(), null, "R1", 1, "09:00", "DDD....");
+			//_SUT.PublishAsync(_message);
+
+			//Console.WriteLine("Hit enter to display captured message Id");
+			//Console.ReadLine();
+			//Console.WriteLine("Captured message Id [{0}]", _capturedMessageId);
+
+			//Console.WriteLine("Hit enter to close");
+			//Console.ReadLine();
+			//_SUT.Close();
+
+			//Console.WriteLine("Hit enter to exit");
+			//Console.ReadLine();
 		}
 
 
