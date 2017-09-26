@@ -12,13 +12,11 @@ namespace PMCG.Messaging.Client.Interactive
 		private int c_numberOfConsumers = 2;
 		private IConnection c_connection;
 		private CancellationTokenSource c_cancellationTokenSource;
-		private Task[] c_consumerTasks;
 
 
 		public void Run_Where_We_Instruct_To_Stop_The_Broker()
 		{
 			this.InstantiateConsumerTasks();
-			Array.ForEach(this.c_consumerTasks, task => task.Start());
 
 			Console.WriteLine("Stop the broker by running the following command as an admin");
 			Console.WriteLine("\t rabbitmqctl.bat stop");
@@ -30,7 +28,6 @@ namespace PMCG.Messaging.Client.Interactive
 		public void Run_Where_We_Close_The_Connection_Using_The_DashBoard()
 		{
 			this.InstantiateConsumerTasks();
-			Array.ForEach(this.c_consumerTasks, task => task.Start());
 
 			Console.WriteLine("Close the connection from the dashboard");
 			Console.WriteLine("After closing the connecton hit enter to exit");
@@ -41,7 +38,6 @@ namespace PMCG.Messaging.Client.Interactive
 		public void Run_Where_We_Start_Then_Cancel_Token_And_Then_Close_Connection()
 		{
 			this.InstantiateConsumerTasks();
-			Array.ForEach(this.c_consumerTasks, task => task.Start());
 
 			Console.WriteLine("Hit enter to cancel the token, should terminate the consumer, subject to the dequeue timeout");
 			Console.ReadLine();
@@ -73,11 +69,10 @@ namespace PMCG.Messaging.Client.Interactive
 
 			this.c_cancellationTokenSource = new CancellationTokenSource();
 
-			this.c_consumerTasks = new Task[this.c_numberOfConsumers];
 			for(var _index = 0; _index < this.c_numberOfConsumers; _index++)
 			{
 				var _consumer = new PMCG.Messaging.Client.Consumer(this.c_connection, _busConfigurationBuilder.Build(), this.c_cancellationTokenSource.Token);
-				this.c_consumerTasks[_index] = _consumer.Start();
+				_consumer.Start();
 			}
 		}
 	}

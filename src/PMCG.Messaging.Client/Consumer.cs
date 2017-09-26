@@ -18,13 +18,8 @@ namespace PMCG.Messaging.Client
 		private readonly CancellationToken c_cancellationToken;
 		private readonly ConsumerMessageProcessor c_messageProcessor;
 
-
 		private bool c_hasBeenStarted;
-		private bool c_isCompleted;
 		private EventingBasicConsumer c_consumer;
-
-
-		public bool IsCompleted { get { return this.c_isCompleted; } }
 
 
 		public Consumer(
@@ -50,44 +45,28 @@ namespace PMCG.Messaging.Client
 		}
 
 
-		public Task Start()
+		public void Start()
 		{
 			this.c_logger.Info("Start Starting");
 			Check.Ensure(!this.c_hasBeenStarted, "Consumer has already been started, can only do so once");
 			Check.Ensure(!this.c_cancellationToken.IsCancellationRequested, "Cancellation token is already canceled");
 
-			var _result = new Task(
-				() =>
-					{
-						try
-						{
-							this.c_hasBeenStarted = true;
-							this.EnsureTransientQueuesExist();
-							this.CreateAndConfigureConsumer();
-						}
-						catch (Exception exception)
-						{
-							this.c_logger.ErrorFormat("Start Exception : {0}", exception.InstrumentationString());
-							throw;
-						}
-						finally
-						{
-							if (this.c_channel.IsOpen)
-							{
-								// Cater for race condition, when stopping - Is open but when we get to this line it is closed
-								try { this.c_channel.Close(); } catch { }
-							}
 
-							this.c_isCompleted = true;
-							this.c_logger.Info("Start Consumer task completed");
-						}
-					},
-				this.c_cancellationToken,
-				TaskCreationOptions.LongRunning);
-			_result.Start();
+			try
+			{
+				this.c_hasBeenStarted = true;
+				this.EnsureTransientQueuesExist();
+				this.CreateAndConfigureConsumer();
+
+				this.c_consumer.Received += (m, args) => this.c_messageProcessor.Process(this.c_channel, args);
+			}
+			catch (Exception exception)
+			{
+				this.c_logger.ErrorFormat("Start Exception : {0}", exception.InstrumentationString());
+				throw;
+			}
 
 			this.c_logger.Info("Start Completed consuming");
-			return _result;
 		}
 
 

@@ -58,26 +58,6 @@ namespace PMCG.Messaging.Client.UT
 		}
 
 
-		[Test]
-		public void Cancellation_Token_Cancelled_Where_Already_Started_Results_In_Consumer_Completion()
-		{
-			this.c_channel.IsOpen.Returns(true);
-
-			var _SUT = new Consumer(
-				this.c_connection,
-				this.c_busConfiguration,
-				this.c_cancellationTokenSource.Token);
-			var _consumerTask = _SUT.Start();
-			while (_consumerTask.Status != TaskStatus.Running) { } // Spin till task starts
-
-			this.c_cancellationTokenSource.Cancel();
-			Thread.Sleep(30);	// Allow dequeue call to timeout, see above where we configured to be very short
-
-			Assert.IsTrue(_SUT.IsCompleted);
-			this.c_channel.Received().Close();
-		}
-
-
 		// TODO: BS Pending ...
 		//[Test]
 		//public void Consume_Where_We_Mock_All_Without_A_Real_Connection_Knows_Too_Much_About_RabbitMQ_Internals()

@@ -14,7 +14,6 @@ namespace PMCG.Messaging.Client.BusState
 		private readonly CancellationTokenSource c_cancellationTokenSource;
 		private readonly BlockingCollection<Publication> c_publicationQueue;
 		private readonly Task[] c_publisherTasks;
-		private readonly Task[] c_consumerTasks;
 
 
 		public Connected(
@@ -39,12 +38,11 @@ namespace PMCG.Messaging.Client.BusState
 				this.c_publisherTasks[_index] = _publisher.Start();
 			}
 
-			base.Logger.Info("ctor About to create consumer tasks");
-			this.c_consumerTasks = new Task[base.NumberOfConsumers];
-			for (var _index = 0; _index < this.c_consumerTasks.Length; _index++)
+			base.Logger.Info("ctor About to create consumers");
+			for (var _index = 0; _index < base.NumberOfConsumers; _index++)
 			{
 				var _consumer = new Consumer(base.ConnectionManager.Connection, base.Configuration, this.c_cancellationTokenSource.Token);
-				this.c_consumerTasks[_index] = _consumer.Start();
+				_consumer.Start();
 			}
 
 			base.Logger.Info("ctor Completed");
