@@ -13,7 +13,6 @@ namespace PMCG.Messaging.Client
 	{
 		private readonly ILog c_logger;
 		private readonly IEnumerable<string> c_connectionUris;
-		private readonly TimeSpan c_heartbeatInterval;
 		private readonly TimeSpan c_reconnectionPauseInterval;
 
 
@@ -32,7 +31,6 @@ namespace PMCG.Messaging.Client
 
 		public ConnectionManager(
 			IEnumerable<string> connectionUris,
-			TimeSpan heartbeatInterval,
 			TimeSpan reconnectionPauseInterval)
 		{
 			this.c_logger = LogManager.GetLogger(this.GetType());
@@ -42,7 +40,6 @@ namespace PMCG.Messaging.Client
 			Check.RequireArgument("reconnectionPauseInterval", reconnectionPauseInterval, reconnectionPauseInterval.Ticks > 0);
 
 			this.c_connectionUris = connectionUris;
-			this.c_heartbeatInterval = heartbeatInterval;
 			this.c_reconnectionPauseInterval = reconnectionPauseInterval;
 
 			this.c_logger.Info("ctor Completed");
@@ -64,7 +61,6 @@ namespace PMCG.Messaging.Client
 				{
 					var _connectionFactory = new ConnectionFactory {
 						Uri = new Uri(_connectionUri),
-						RequestedHeartbeat = (ushort)this.c_heartbeatInterval.TotalSeconds,
 						UseBackgroundThreadsForIO = false,
 						AutomaticRecoveryEnabled = false,
 						TopologyRecoveryEnabled = false };

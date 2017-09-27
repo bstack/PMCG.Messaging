@@ -7,7 +7,6 @@ namespace PMCG.Messaging.Client.Configuration
 	public class BusConfiguration
 	{
 		public readonly IEnumerable<string> ConnectionUris;
-		public readonly TimeSpan HeartbeatInterval;
 		public readonly TimeSpan ReconnectionPauseInterval;
 		public readonly ushort NumberOfPublishers;
 		public readonly ushort NumberOfConsumers;
@@ -19,7 +18,6 @@ namespace PMCG.Messaging.Client.Configuration
 
 		public BusConfiguration(
 			IEnumerable<string> connectionUris,
-			TimeSpan heartbeatInterval,
 			TimeSpan reconnectionPauseInterval,
 			ushort numberOfPublishers,
 			ushort numberOfConsumers,
@@ -38,7 +36,6 @@ namespace PMCG.Messaging.Client.Configuration
 			Check.RequireArgumentNotNull("messageConsumers", messageConsumers);
 			
 			this.ConnectionUris = connectionUris;
-			this.HeartbeatInterval = heartbeatInterval;
 			this.ReconnectionPauseInterval = reconnectionPauseInterval;
 			this.NumberOfPublishers = numberOfPublishers;
 			this.NumberOfConsumers = numberOfConsumers;

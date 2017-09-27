@@ -9,7 +9,6 @@ namespace PMCG.Messaging.Client.Interactive
 		{
 			var _SUT = new PMCG.Messaging.Client.ConnectionManager(
 				new[] { Configuration.LocalConnectionUri },
-				TimeSpan.FromSeconds(10),
 				TimeSpan.FromSeconds(4));
 
 			_SUT.Open();
@@ -20,7 +19,6 @@ namespace PMCG.Messaging.Client.Interactive
 		{
 			var _SUT = new PMCG.Messaging.Client.ConnectionManager(
 				new[] { Configuration.LocalConnectionUri },
-				TimeSpan.FromSeconds(10),
 				TimeSpan.FromSeconds(4));
 
 			_SUT.Open();
