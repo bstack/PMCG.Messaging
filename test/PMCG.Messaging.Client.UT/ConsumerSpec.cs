@@ -19,7 +19,6 @@ namespace PMCG.Messaging.Client.UT
 		private BusConfiguration c_busConfiguration;
 		private IConnection c_connection;
 		private IModel c_channel;
-		private CancellationTokenSource c_cancellationTokenSource;
 
 
 		[SetUp]
@@ -39,22 +38,19 @@ namespace PMCG.Messaging.Client.UT
 
 			this.c_connection = Substitute.For<IConnection>();
 			this.c_channel = Substitute.For<IModel>();
-			this.c_cancellationTokenSource = new CancellationTokenSource();
 
 			this.c_connection.CreateModel().Returns(this.c_channel);
 		}
 
 
 		[Test]
-		public void Start_Where_Cancellation_Token_Already_Canceled_Results_In_an_Exception()
+		public void Start_Where_Successful()
 		{
-			this.c_cancellationTokenSource.Cancel();
 			var _SUT = new Consumer(
 				this.c_connection,
-				this.c_busConfiguration,
-				this.c_cancellationTokenSource.Token);
-			
-			Assert.That(() => _SUT.Start(), Throws.TypeOf<ApplicationException>());
+				this.c_busConfiguration);
+
+			_SUT.Start();
 		}
 
 

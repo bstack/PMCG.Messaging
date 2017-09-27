@@ -41,7 +41,7 @@ namespace PMCG.Messaging.Client.BusState
 			base.Logger.Info("ctor About to create consumers");
 			for (var _index = 0; _index < base.NumberOfConsumers; _index++)
 			{
-				var _consumer = new Consumer(base.ConnectionManager.Connection, base.Configuration, this.c_cancellationTokenSource.Token);
+				var _consumer = new Consumer(base.ConnectionManager.Connection, base.Configuration);
 				_consumer.Start();
 			}
 

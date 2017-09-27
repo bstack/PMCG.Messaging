@@ -10,7 +10,6 @@ namespace PMCG.Messaging.Client.Interactive
 	public class Consumer
 	{
 		private IConnection c_connection;
-		private CancellationTokenSource c_cancellationTokenSource;
 		private PMCG.Messaging.Client.Consumer c_consumer;
 
 
@@ -51,7 +50,7 @@ namespace PMCG.Messaging.Client.Interactive
 
 			Console.WriteLine("You should see a new transient queue in the dashboard)");
 			Console.ReadLine();
-			this.c_cancellationTokenSource.Cancel();
+			Console.WriteLine("Close the connection from the dashboard");
 
 			Console.WriteLine("Hit enter to close connection (Channel should already be closed - check the dashboard)");
 			Console.ReadLine();
@@ -82,12 +81,9 @@ namespace PMCG.Messaging.Client.Interactive
 			};
 			this.c_connection = _connectionFactory.CreateConnection();
 
-			this.c_cancellationTokenSource = new CancellationTokenSource();
-
 			this.c_consumer = new PMCG.Messaging.Client.Consumer(
 				this.c_connection,
-				busConfiguration,
-				this.c_cancellationTokenSource.Token);
+				busConfiguration);
 			this.c_consumer.Start();
 		}
 	}

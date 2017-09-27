@@ -3,9 +3,7 @@ using PMCG.Messaging.Client.Configuration;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
-using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 
 
 namespace PMCG.Messaging.Client
@@ -15,7 +13,6 @@ namespace PMCG.Messaging.Client
 		private readonly ILog c_logger;
 		private readonly BusConfiguration c_configuration;
 		private readonly IModel c_channel;
-		private readonly CancellationToken c_cancellationToken;
 		private readonly ConsumerMessageProcessor c_messageProcessor;
 
 		private EventingBasicConsumer c_consumer;
@@ -23,14 +20,12 @@ namespace PMCG.Messaging.Client
 
 		public Consumer(
 			IConnection connection,
-			BusConfiguration configuration,
-			CancellationToken cancellationToken)
+			BusConfiguration configuration)
 		{
 			this.c_logger = LogManager.GetLogger(this.GetType());
 			this.c_logger.Info("ctor Starting");
 
 			this.c_configuration = configuration;
-			this.c_cancellationToken = cancellationToken;
 
 			this.c_logger.Info("ctor About to create channel");
 			this.c_channel = connection.CreateModel();
@@ -47,7 +42,6 @@ namespace PMCG.Messaging.Client
 		public void Start()
 		{
 			this.c_logger.Info("Start Starting");
-			Check.Ensure(!this.c_cancellationToken.IsCancellationRequested, "Cancellation token is already cancelled");
 
 			this.EnsureTransientQueuesExist();
 			this.CreateAndConfigureConsumer();

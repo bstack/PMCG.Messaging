@@ -71,7 +71,7 @@ namespace PMCG.Messaging.Client.Interactive
 
 			for(var _index = 0; _index < this.c_numberOfConsumers; _index++)
 			{
-				var _consumer = new PMCG.Messaging.Client.Consumer(this.c_connection, _busConfigurationBuilder.Build(), this.c_cancellationTokenSource.Token);
+				var _consumer = new PMCG.Messaging.Client.Consumer(this.c_connection, _busConfigurationBuilder.Build());
 				_consumer.Start();
 			}
 		}
