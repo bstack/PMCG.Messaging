@@ -16,6 +16,7 @@ namespace PMCG.Messaging.Client.UT
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
 			_busConfigurationBuilder.ConnectionUris.Add(TestingConfiguration.LocalConnectionUri);
+			_busConfigurationBuilder.ConnectionClientProvidedName = TestingConfiguration.ConnectionClientProvidedName;
 			var _busConfirguration = _busConfigurationBuilder.Build();
 
 			var _SUT = new Bus(_busConfirguration);
@@ -30,6 +31,7 @@ namespace PMCG.Messaging.Client.UT
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
 			_busConfigurationBuilder.ConnectionUris.Add(TestingConfiguration.LocalConnectionUri);
+			_busConfigurationBuilder.ConnectionClientProvidedName = TestingConfiguration.ConnectionClientProvidedName;
 			var _busConfirguration = _busConfigurationBuilder.Build();
 
 			var _SUT = new Bus(_busConfirguration);
@@ -48,6 +50,7 @@ namespace PMCG.Messaging.Client.UT
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
 			_busConfigurationBuilder.ConnectionUris.Add(TestingConfiguration.LocalConnectionUri);
+			_busConfigurationBuilder.ConnectionClientProvidedName = TestingConfiguration.ConnectionClientProvidedName;
 			var _busConfirguration = _busConfigurationBuilder.Build();
 
 			var _SUT = new Bus(_busConfirguration);
@@ -58,7 +61,7 @@ namespace PMCG.Messaging.Client.UT
 
 
 		[Test]
-		public void TestMockingingABus()
+		public void TestMockingABus()
 		{
 			var _bus = Substitute.For<IBus>();
 

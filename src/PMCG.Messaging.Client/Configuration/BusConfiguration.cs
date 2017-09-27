@@ -7,6 +7,7 @@ namespace PMCG.Messaging.Client.Configuration
 	public class BusConfiguration
 	{
 		public readonly IEnumerable<string> ConnectionUris;
+		public readonly string ConnectionClientProvidedName;
 		public readonly TimeSpan ReconnectionPauseInterval;
 		public readonly ushort NumberOfPublishers;
 		public readonly ushort NumberOfConsumers;
@@ -18,6 +19,7 @@ namespace PMCG.Messaging.Client.Configuration
 
 		public BusConfiguration(
 			IEnumerable<string> connectionUris,
+			string connectionClientProvidedName,
 			TimeSpan reconnectionPauseInterval,
 			ushort numberOfPublishers,
 			ushort numberOfConsumers,
@@ -27,6 +29,7 @@ namespace PMCG.Messaging.Client.Configuration
 			MessageConsumers messageConsumers)
 		{
 			Check.RequireArgumentNotEmptyAndNonEmptyItems("connectionUris", connectionUris);
+			Check.RequireArgumentNotEmpty("connectionClientProvidedName", connectionClientProvidedName);
 			Check.RequireArgument("reconnectionPauseInterval", reconnectionPauseInterval, reconnectionPauseInterval.TotalSeconds > 0);
 			Check.RequireArgument("numberOfPublishers", numberOfPublishers, numberOfPublishers > 0);
 			Check.RequireArgument("numberOfConsumers", numberOfConsumers, numberOfConsumers > 0);
@@ -36,6 +39,7 @@ namespace PMCG.Messaging.Client.Configuration
 			Check.RequireArgumentNotNull("messageConsumers", messageConsumers);
 			
 			this.ConnectionUris = connectionUris;
+			this.ConnectionClientProvidedName = connectionClientProvidedName;
 			this.ReconnectionPauseInterval = reconnectionPauseInterval;
 			this.NumberOfPublishers = numberOfPublishers;
 			this.NumberOfConsumers = numberOfConsumers;

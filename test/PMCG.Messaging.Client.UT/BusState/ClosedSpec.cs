@@ -2,10 +2,8 @@
 using NUnit.Framework;
 using PMCG.Messaging.Client.BusState;
 using PMCG.Messaging.Client.Configuration;
-using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 
 
 namespace PMCG.Messaging.Client.UT.BusState
@@ -18,6 +16,7 @@ namespace PMCG.Messaging.Client.UT.BusState
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
 			_busConfigurationBuilder.ConnectionUris.Add(TestingConfiguration.LocalConnectionUri);
+			_busConfigurationBuilder.ConnectionClientProvidedName = TestingConfiguration.ConnectionClientProvidedName;
 			var _busConfirguration = _busConfigurationBuilder.Build();
 
 			var _connectionManager = Substitute.For<IConnectionManager>();
@@ -37,6 +36,7 @@ namespace PMCG.Messaging.Client.UT.BusState
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
 			_busConfigurationBuilder.ConnectionUris.Add(TestingConfiguration.LocalConnectionUri);
+			_busConfigurationBuilder.ConnectionClientProvidedName = TestingConfiguration.ConnectionClientProvidedName;
 			var _busConfirguration = _busConfigurationBuilder.Build();
 
 			var _connectionManager = Substitute.For<IConnectionManager>();
@@ -63,6 +63,7 @@ namespace PMCG.Messaging.Client.UT.BusState
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
 			_busConfigurationBuilder.ConnectionUris.Add(TestingConfiguration.LocalConnectionUri);
+			_busConfigurationBuilder.ConnectionClientProvidedName = TestingConfiguration.ConnectionClientProvidedName;
 			var _busConfirguration = _busConfigurationBuilder.Build();
 
 			var _connectionManager = Substitute.For<IConnectionManager>();
@@ -88,6 +89,7 @@ namespace PMCG.Messaging.Client.UT.BusState
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
 			_busConfigurationBuilder.ConnectionUris.Add(TestingConfiguration.LocalConnectionUri);
+			_busConfigurationBuilder.ConnectionClientProvidedName = TestingConfiguration.ConnectionClientProvidedName;
 			var _busConfirguration = _busConfigurationBuilder.Build();
 
 			var _connectionManager = Substitute.For<IConnectionManager>();
@@ -107,6 +109,7 @@ namespace PMCG.Messaging.Client.UT.BusState
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
 			_busConfigurationBuilder.ConnectionUris.Add(TestingConfiguration.LocalConnectionUri);
+			_busConfigurationBuilder.ConnectionClientProvidedName = TestingConfiguration.ConnectionClientProvidedName;
 			var _busConfirguration = _busConfigurationBuilder.Build();
 
 			var _connectionManager = Substitute.For<IConnectionManager>();

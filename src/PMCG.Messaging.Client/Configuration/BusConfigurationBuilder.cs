@@ -8,6 +8,7 @@ namespace PMCG.Messaging.Client.Configuration
 	public class BusConfigurationBuilder
 	{
 		public IList<string> ConnectionUris;
+		public string ConnectionClientProvidedName;
 		public TimeSpan ReconnectionPauseInterval;
 		public ushort NumberOfPublishers;
 		public ushort NumberOfConsumers;
@@ -24,7 +25,6 @@ namespace PMCG.Messaging.Client.Configuration
 			this.NumberOfConsumers = 1;
 			this.ConsumerMessagePrefetchCount = 1;
 			this.ConsumerDequeueTimeout = TimeSpan.FromMilliseconds(100);
-
 			this.ConnectionUris = new List<string>();
 			this.MessagePublications = new Dictionary<Type, List<MessageDelivery>>();
 			this.MessageConsumers = new Dictionary<string, MessageConsumer>();
@@ -139,6 +139,7 @@ namespace PMCG.Messaging.Client.Configuration
 		{
 			return new BusConfiguration(
 				this.ConnectionUris,
+				this.ConnectionClientProvidedName,
 				this.ReconnectionPauseInterval,
 				this.NumberOfPublishers,
 				this.NumberOfConsumers,

@@ -23,6 +23,7 @@ namespace PMCG.Messaging.Client.UT
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
 			_busConfigurationBuilder.ConnectionUris.Add("....");
+			_busConfigurationBuilder.ConnectionClientProvidedName = TestingConfiguration.ConnectionClientProvidedName;
 			_busConfigurationBuilder.RegisterConsumer<MyEvent>(
 				TestingConfiguration.QueueName,
 				typeof(MyEvent).Name,
