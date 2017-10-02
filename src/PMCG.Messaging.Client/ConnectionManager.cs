@@ -13,16 +13,12 @@ namespace PMCG.Messaging.Client
 	{
 		private readonly ILog c_logger;
 		private readonly IEnumerable<string> c_connectionUris;
+		private readonly string c_connectionClientProvidedName;
 		private readonly TimeSpan c_reconnectionPauseInterval;
 
 
 		private IConnection c_connection;
 		private bool c_isCloseRequested;
-
-
-		public event EventHandler<ConnectionBlockedEventArgs> Blocked = (sender, eventArgs) => { };
-		public event EventHandler<ConnectionDisconnectedEventArgs> Disconnected = (sender, eventArgs) => { };
-		public event EventHandler<EventArgs> Unblocked = (sender, eventArgs) => { };
 
 
 		public bool IsOpen { get { return this.c_connection != null && this.c_connection.IsOpen; } }
@@ -31,15 +27,18 @@ namespace PMCG.Messaging.Client
 
 		public ConnectionManager(
 			IEnumerable<string> connectionUris,
+			string connectionClientProvidedName,
 			TimeSpan reconnectionPauseInterval)
 		{
 			this.c_logger = LogManager.GetLogger(this.GetType());
 			this.c_logger.Info("ctor Starting");
 			
 			Check.RequireArgumentNotEmptyAndNonEmptyItems("connectionUris", connectionUris);
+			Check.RequireArgumentNotEmpty("connectionClientProvidedName", connectionClientProvidedName);
 			Check.RequireArgument("reconnectionPauseInterval", reconnectionPauseInterval, reconnectionPauseInterval.Ticks > 0);
 
 			this.c_connectionUris = connectionUris;
+			this.c_connectionClientProvidedName = connectionClientProvidedName;
 			this.c_reconnectionPauseInterval = reconnectionPauseInterval;
 
 			this.c_logger.Info("ctor Completed");
@@ -62,18 +61,15 @@ namespace PMCG.Messaging.Client
 					var _connectionFactory = new ConnectionFactory {
 						Uri = new Uri(_connectionUri),
 						UseBackgroundThreadsForIO = false,
-						AutomaticRecoveryEnabled = false,
-						TopologyRecoveryEnabled = false };
+						AutomaticRecoveryEnabled = true,
+						TopologyRecoveryEnabled = true };
 
 					var _connectionInfo = string.Format("Host {0}, port {1}, vhost {2}", _connectionFactory.HostName, _connectionFactory.Port, _connectionFactory.VirtualHost);
 					this.c_logger.InfoFormat("Open Attempting to connect to ({0}), sequence {1}", _connectionInfo, _attemptSequence);
 
 					try
 					{
-						this.c_connection = _connectionFactory.CreateConnection();
-						this.c_connection.ConnectionBlocked += (m, args) => this.OnConnectionBlocked(args);
-						this.c_connection.ConnectionShutdown += (m, args) => this.OnConnectionShutdown(args);
-						this.c_connection.ConnectionUnblocked += (m, args) => this.OnConnectionUnblocked();
+						this.c_connection = _connectionFactory.CreateConnection(this.c_connectionClientProvidedName);
 
 						this.c_logger.InfoFormat("Open Connected to ({0}), sequence {1}", _connectionInfo, _attemptSequence);
 						break;
@@ -110,39 +106,9 @@ namespace PMCG.Messaging.Client
 			this.c_logger.Info("Close Starting");
 
 			this.c_isCloseRequested = true;
-			if (this.IsOpen)
-			{
-				this.c_connection.ConnectionShutdown -= (m, args) => this.OnConnectionShutdown(args);
-				this.c_connection.Close();
-			}
+			if (this.IsOpen) { this.c_connection.Close(); }
 
 			this.c_logger.Info("Close Completed");
-		}
-
-
-		private void OnConnectionBlocked(
-			RabbitMQ.Client.Events.ConnectionBlockedEventArgs reason)
-		{
-			this.c_logger.Warn("OnConnectionBlocked Starting");
-			this.Blocked(null, new ConnectionBlockedEventArgs(reason.Reason));
-			this.c_logger.Warn("OnConnectionBlocked Completed");
-		}
-
-
-		private void OnConnectionShutdown(
-			ShutdownEventArgs reason)
-		{
-			this.c_logger.Info("OnConnectionShutdown Starting");
-			this.Disconnected(null, new ConnectionDisconnectedEventArgs(reason.ReplyCode, reason.ReplyText));
-			this.c_logger.Info("OnConnectionShutdown Completed");
-		}
-
-
-		private void OnConnectionUnblocked()
-		{
-			this.c_logger.Info("OnConnectionUnblocked Starting");
-			this.Unblocked(null, new EventArgs());
-			this.c_logger.Info("OnConnectionUnblocked Completed");
 		}
 	}
 }

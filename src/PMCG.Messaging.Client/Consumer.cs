@@ -46,7 +46,12 @@ namespace PMCG.Messaging.Client
 			this.EnsureTransientQueuesExist();
 			this.CreateAndConfigureConsumer();
 
-			this.c_consumer.Received += (m, args) => this.c_messageProcessor.Process(this.c_channel, args);
+			this.c_consumer.Received += (m, args) =>
+			{
+				this.c_logger.Info("Consuming start AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+				this.c_messageProcessor.Process(this.c_channel, args);
+				this.c_logger.Info("Consuming End AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+			};
 
 			this.c_logger.Info("Start Completed consuming");
 		}

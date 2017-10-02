@@ -13,6 +13,7 @@ namespace PMCG.Messaging.Client.UT
 		{
 			var _SUT = new ConnectionManager(
 				new [] { TestingConfiguration.LocalConnectionUri.Replace("5672", "25672") },
+                "connectionClientProvidedName",
 				TimeSpan.FromSeconds(5));
 			_SUT.Open(1);
 
@@ -26,7 +27,8 @@ namespace PMCG.Messaging.Client.UT
 		{
 			var _SUT = new ConnectionManager(
 				new[] { TestingConfiguration.LocalConnectionUri },
-				TimeSpan.FromSeconds(5));
+                "connectionClientProvidedName",
+                TimeSpan.FromSeconds(5));
 			_SUT.Open();	// Requires a running instance of RabbitMQ
 
 			Assert.That(() => _SUT.Open(), Throws.TypeOf<ApplicationException>());

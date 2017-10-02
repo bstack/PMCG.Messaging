@@ -55,14 +55,6 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Bus.cs" />
-    <Compile Include="BusState\Closed.cs" />
-    <Compile Include="BusState\Connected.cs" />
-    <Compile Include="BusState\Connecting.cs" />
-    <Compile Include="BusState\Blocked.cs" />
-    <Compile Include="BusState\Disconnected.cs" />
-    <Compile Include="BusState\IBusContext.cs" />
-    <Compile Include="BusState\Initialised.cs" />
-    <Compile Include="BusState\State.cs" />
     <Compile Include="Configuration\BusConfiguration.cs" />
     <Compile Include="Configuration\BusConfigurationBuilder.cs" />
     <Compile Include="Configuration\ConnectionStringSettingsParser.cs" />

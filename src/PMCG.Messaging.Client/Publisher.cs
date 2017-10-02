@@ -6,7 +6,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -16,28 +15,18 @@ namespace PMCG.Messaging.Client
 	{
 		private readonly ILog c_logger;
 		private readonly BlockingCollection<Publication> c_publicationQueue;
-		private readonly CancellationToken c_cancellationToken;
 		private readonly IModel c_channel;
 		private readonly ConcurrentDictionary<ulong, Publication> c_unconfirmedPublications;
-
-
-		private bool c_hasBeenStarted;
-		private bool c_isCompleted;
-
-
-		public bool IsCompleted { get { return this.c_isCompleted; } }
-
+   
 
 		public Publisher(
 			IConnection connection,
-			BlockingCollection<Publication> publicationQueue,
-			CancellationToken cancellationToken)
+			BlockingCollection<Publication> publicationQueue)
 		{
 			this.c_logger = LogManager.GetLogger(this.GetType());
 			this.c_logger.Info("ctor Starting");
 
 			this.c_publicationQueue = publicationQueue;
-			this.c_cancellationToken = cancellationToken;
 
 			this.c_channel = connection.CreateModel();
 			this.c_channel.ConfirmSelect();
@@ -54,70 +43,27 @@ namespace PMCG.Messaging.Client
 		public Task Start()
 		{
 			this.c_logger.Info("Start Starting");
-			Check.Ensure(!this.c_hasBeenStarted, "Publisher has already been started, can only do so once");
-			Check.Ensure(!this.c_cancellationToken.IsCancellationRequested, "Cancellation token is already canceled");
 
 			var _result = new Task(
 				() =>
 					{
 						try
 						{
-							this.c_hasBeenStarted = true;
-							this.RunPublicationLoop();
-						}
+							foreach (var _publication in this.c_publicationQueue.GetConsumingEnumerable())
+                            {
+                                this.Publish(_publication);
+                            }
+                        }
 						catch (Exception exception)
 						{
 							this.c_logger.ErrorFormat("Start Exception : {0}", exception.InstrumentationString());
-							throw;
-						}
-						finally
-						{
-							if (this.c_channel.IsOpen)
-							{
-								// Cater for race condition, when stopping - Is open but when we get to this line it is closed
-								try { this.c_channel.Close(); } catch { }
-							}
-
-							this.c_isCompleted = true;
-							this.c_logger.Info("Start Publisher task completed");
 						}
 					},
-				this.c_cancellationToken,
 				TaskCreationOptions.LongRunning);
 			_result.Start();
 
 			this.c_logger.Info("Start Completed publishing");
 			return _result;
-		}
-
-
-		private void RunPublicationLoop()
-		{
-			// OperationCanceledException exception is thrown when the cancellation token is cancelled when using the consuming enumerable
-			try
-			{
-				foreach (var _publication in this.c_publicationQueue.GetConsumingEnumerable(this.c_cancellationToken))
-				{
-					try
-					{
-						this.Publish(_publication);
-					}
-					catch (OperationCanceledException)
-					{
-						this.c_publicationQueue.Add(_publication);
-						this.c_logger.Warn("RunPublicationLoop Operation canceled");
-					}
-					catch
-					{
-						this.c_publicationQueue.Add(_publication);
-						throw;
-					}
-				}
-			}
-			catch (OperationCanceledException)
-			{
-				this.c_logger.Warn("RunPublicationLoop Operation canceled");
-			}
 		}
 
 
@@ -133,27 +79,39 @@ namespace PMCG.Messaging.Client
 			_properties.MessageId = publication.Id;
 			// Only set if null, otherwise library will blow up, default is string.Empty, if set to null will blow up in library
 			if (publication.CorrelationId != null) { _properties.CorrelationId = publication.CorrelationId; }
+            var _deliveryTag = this.c_channel.NextPublishSeqNo;
 
-			var _messageJson = JsonConvert.SerializeObject(publication.Message);
-			var _messageBody = Encoding.UTF8.GetBytes(_messageJson);
-
-			var _deliveryTag = this.c_channel.NextPublishSeqNo;
-			try
+            try
 			{
-				this.c_unconfirmedPublications.TryAdd(_deliveryTag, publication);
-				this.c_channel.BasicPublish(
+                var _messageJson = JsonConvert.SerializeObject(publication.Message);
+                var _messageBody = Encoding.UTF8.GetBytes(_messageJson);
+
+                this.c_unconfirmedPublications.TryAdd(_deliveryTag, publication);
+				if (this.c_channel.IsOpen)
+				{
+					this.c_channel.BasicPublish(
 					publication.ExchangeName,
 					publication.RoutingKey,
 					_properties,
 					_messageBody);
+
+                    this.c_logger.DebugFormat("Publish Completed publishing message with Id {0} to exchange {1}", publication.Id, publication.ExchangeName);
+                }
+				else
+				{
+					this.c_unconfirmedPublications.TryRemove(_deliveryTag, out publication);
+					this.c_publicationQueue.Add(publication);
+
+                    this.c_logger.DebugFormat("Publish Failed publishing message with Id {0} to exchange {1}, channel was closed", publication.Id, publication.ExchangeName);
+                }
 			}
-			catch
+			catch (Exception exception)
 			{
 				this.c_unconfirmedPublications.TryRemove(_deliveryTag, out publication);
-				throw;
-			}
+                this.c_publicationQueue.Add(publication);
 
-			this.c_logger.DebugFormat("Publish Completed publishing message with Id {0} to exchange {1}", publication.Id, publication.ExchangeName);
+                this.c_logger.WarnFormat("Publish Failed publishing message with Id {0} to exchange {1}, unexpected exception {2}", publication.Id, publication.ExchangeName, exception.Message);
+			}
 		}
 
 

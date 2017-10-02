@@ -11,12 +11,13 @@ namespace PMCG.Messaging.Client.Interactive
 {
 	public class Bus
 	{
+
 		public void Run_Where_We_Instantiate_And_Try_To_Connect_To_Non_Existent_Broker()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
 			_busConfigurationBuilder.ConnectionUris.Add(Configuration.LocalConnectionUri.Replace("5672", "2567/"));	// Wrong port number
-
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+            _busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
+            var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
 			Console.WriteLine("Allow time for connection attempt to fail, check bus state which should be disconnected");
@@ -204,6 +205,7 @@ namespace PMCG.Messaging.Client.Interactive
 
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
 			_busConfigurationBuilder.ConnectionUris.Add(Configuration.LocalConnectionUri);
+			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
 				.RegisterPublication<MyEvent>(Configuration.ExchangeName1, typeof(MyEvent).Name)

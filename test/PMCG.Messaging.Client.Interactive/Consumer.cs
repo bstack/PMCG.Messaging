@@ -76,8 +76,8 @@ namespace PMCG.Messaging.Client.Interactive
 			var _connectionFactory = new ConnectionFactory {
 				Uri = new Uri(busConfiguration.ConnectionUris.First()),
 				UseBackgroundThreadsForIO = false,
-				AutomaticRecoveryEnabled = false,
-				TopologyRecoveryEnabled = false
+				AutomaticRecoveryEnabled = true,
+				TopologyRecoveryEnabled = true
 			};
 			this.c_connection = _connectionFactory.CreateConnection();
 
