@@ -86,11 +86,6 @@ namespace PMCG.Messaging.Client
 			catch (Exception exception)
 			{
 				this.c_logger.ErrorFormat("Start Exception : {0}", exception.InstrumentationString());
-				if (channel.IsOpen)
-				{
-					// Cater for race condition, when stopping - Is open but when we get to this line it is closed
-					try { channel.Close(); } catch { }
-				}
 			}
 		}
 	}
