@@ -7,8 +7,6 @@ namespace PMCG.Messaging
 	{
 		NoConfigurationFound,
 		Published,
-		Blocked,
-		Disconnected,
 		NotPublished
 	}
 }

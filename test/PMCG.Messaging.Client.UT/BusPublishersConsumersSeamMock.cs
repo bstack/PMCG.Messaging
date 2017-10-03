@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace PMCG.Messaging.Client.UT
 {
-    public class BusPublishersComsumersSeamMock : PMCG.Messaging.Client.IBusPublishersConsumersSeam
+    public class BusPublishersConsumersSeamMock : PMCG.Messaging.Client.IBusPublishersConsumersSeam
     {
         private readonly PublicationResultStatus c_publicationResultStatus;
 
 
-        public BusPublishersComsumersSeamMock(
+        public BusPublishersConsumersSeamMock(
             PublicationResultStatus publicationResultStatus)
         {
             this.c_publicationResultStatus = publicationResultStatus;
