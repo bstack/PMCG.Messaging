@@ -1,7 +1,7 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
-using PMCG.Messaging.Client;
 using PMCG.Messaging.Client.Configuration;
+using PMCG.Messaging.Client.UT.TestDoubles;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;

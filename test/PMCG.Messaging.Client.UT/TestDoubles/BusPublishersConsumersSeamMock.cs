@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
 
-namespace PMCG.Messaging.Client.UT
+namespace PMCG.Messaging.Client.UT.TestDoubles
 {
     public class BusPublishersConsumersSeamMock : PMCG.Messaging.Client.IBusPublishersConsumersSeam
     {

@@ -1,6 +1,7 @@
 # bin and obj directories at any depth
 bin/
 obj/
+.vs/
 
 # nuget packages
 packages

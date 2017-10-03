@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace PMCG.Messaging.Client.UT
+namespace PMCG.Messaging.Client.UT.TestDoubles
 {
 	public class TestingConfiguration
 	{
