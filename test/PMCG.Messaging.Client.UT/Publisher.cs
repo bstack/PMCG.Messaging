@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace PMCG.Messaging.Client.UT
 {
 	[TestFixture]
-	public class PublisherSpec
+	public class Publisher
 	{
 		[Test]
 		public void Publish_Where_Channel_Is_Closed_Results_In_Faulted_Publisher_Task()
@@ -32,7 +32,7 @@ namespace PMCG.Messaging.Client.UT
 			var _taskCompletionSource = new TaskCompletionSource<PublicationResult>();
 			var _publication = new Publication(_messageDelivery, _myEvent, _taskCompletionSource);
 
-			var _SUT = new Publisher(_connection, _publicationQueue);
+			var _SUT = new PMCG.Messaging.Client.Publisher(_connection, _publicationQueue);
 			var _publisherTask = _SUT.Start();
 
 			_publicationQueue.Add(_publication);
@@ -61,7 +61,7 @@ namespace PMCG.Messaging.Client.UT
 			var _taskCompletionSource = new TaskCompletionSource<PublicationResult>();
 			var _publication = new Publication(_messageDelivery, _myEvent, _taskCompletionSource);
 
-			var _SUT = new Publisher(_connection, _publicationQueue);
+			var _SUT = new PMCG.Messaging.Client.Publisher(_connection, _publicationQueue);
 			var _publisherTask = _SUT.Start();
 
 			_publicationQueue.Add(_publication);
@@ -88,7 +88,7 @@ namespace PMCG.Messaging.Client.UT
 				.When(channel => channel.BasicPublish(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IBasicProperties>(), Arg.Any<byte[]>()))
 				.Do(callInfo => _waitHandle.Set());
 
-			var _SUT = new Publisher(_connection, _publicationQueue);
+			var _SUT = new PMCG.Messaging.Client.Publisher(_connection, _publicationQueue);
 			_SUT.Start(); 	// Can't capture result due to compiler treating warnings as errors - var is not used
 
 			var _messageDelivery = new MessageDelivery("test_publisher_confirms", typeof(MyEvent).Name, MessageDeliveryMode.Persistent, message => "ARoutingKey");
@@ -125,7 +125,7 @@ namespace PMCG.Messaging.Client.UT
 				.When(channel => channel.BasicPublish(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IBasicProperties>(), Arg.Any<byte[]>()))
 				.Do(callInfo => _waitHandle.Signal());
 
-			var _SUT = new Publisher(_connection, _publicationQueue);
+			var _SUT = new PMCG.Messaging.Client.Publisher(_connection, _publicationQueue);
 			_SUT.Start();	// Can't capture due to compiler treating warnings as errors
 
 			var _publications = new List<Publication>();
@@ -166,7 +166,7 @@ namespace PMCG.Messaging.Client.UT
 				.When(channel => channel.BasicPublish(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IBasicProperties>(), Arg.Any<byte[]>()))
 				.Do(callInfo => _waitHandle.Signal());
 
-			var _SUT = new Publisher(_connection, _publicationQueue);
+			var _SUT = new PMCG.Messaging.Client.Publisher(_connection, _publicationQueue);
 			_SUT.Start();
 
 			var _publications = new List<Publication>();
@@ -206,7 +206,7 @@ namespace PMCG.Messaging.Client.UT
 				.When(channel => channel.BasicPublish(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IBasicProperties>(), Arg.Any<byte[]>()))
 				.Do(callInfo => _waitHandle.Set());
 
-			var _SUT = new Publisher(_connection, _publicationQueue);
+			var _SUT = new PMCG.Messaging.Client.Publisher(_connection, _publicationQueue);
 			_SUT.Start();
 
 			var _messageDelivery = new MessageDelivery("test_publisher_confirms", typeof(MyEvent).Name, MessageDeliveryMode.Persistent, message => "ARoutingKey");
@@ -238,7 +238,7 @@ namespace PMCG.Messaging.Client.UT
 				.When(channel => channel.BasicPublish(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IBasicProperties>(), Arg.Any<byte[]>()))
 				.Do(callInfo => _waitHandle.Signal());
 
-			var _SUT = new Publisher(_connection, _publicationQueue);
+			var _SUT = new PMCG.Messaging.Client.Publisher(_connection, _publicationQueue);
 			_SUT.Start();
 
 			var _messageDelivery = new MessageDelivery("test_publisher_confirms", typeof(MyEvent).Name, MessageDeliveryMode.Persistent, message => "ARoutingKey");
@@ -278,7 +278,7 @@ namespace PMCG.Messaging.Client.UT
 				.When(channel => channel.BasicPublish(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IBasicProperties>(), Arg.Any<byte[]>()))
 				.Do(callInfo => _waitHandle.Set());
 
-			var _SUT = new Publisher(_connection, _publicationQueue);
+			var _SUT = new PMCG.Messaging.Client.Publisher(_connection, _publicationQueue);
 			_SUT.Start();
 
 			var _messageDelivery = new MessageDelivery("NON_EXISTENT_EXCHANGE", typeof(MyEvent).Name, MessageDeliveryMode.Persistent, message => "ARoutingKey");

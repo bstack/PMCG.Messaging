@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace PMCG.Messaging.Client.UT
 {
 	[TestFixture]
-	public class ConsumerSpec
+	public class Consumer
 	{
 		private BusConfiguration c_busConfiguration;
 		private IConnection c_connection;
@@ -47,7 +47,7 @@ namespace PMCG.Messaging.Client.UT
 		[Test]
 		public void Start_Where_Successful()
 		{
-			var _SUT = new Consumer(
+			var _SUT = new PMCG.Messaging.Client.Consumer(
 				this.c_connection,
 				this.c_busConfiguration);
 

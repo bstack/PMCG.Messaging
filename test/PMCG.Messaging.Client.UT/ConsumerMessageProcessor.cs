@@ -11,10 +11,10 @@ using System.Threading;
 namespace PMCG.Messaging.Client.UT
 {
 	[TestFixture]
-	public class ConsumerMessageProcessorSpec
+	public class ConsumerMessageProcessor
 	{
 		private IModel c_channel;
-		private ConsumerMessageProcessor c_SUT;
+		private PMCG.Messaging.Client.ConsumerMessageProcessor c_SUT;
 		private ConsumerHandlerResult c_messageProcessrResult;
 
 
@@ -62,7 +62,7 @@ namespace PMCG.Messaging.Client.UT
 			this.c_channel = Substitute.For<IModel>();
 			_connection.CreateModel().Returns(this.c_channel);
 
-			this.c_SUT = new ConsumerMessageProcessor(_busConfiguration);
+			this.c_SUT = new PMCG.Messaging.Client.ConsumerMessageProcessor(_busConfiguration);
 
 			this.c_messageProcessrResult = ConsumerHandlerResult.None;
 		}

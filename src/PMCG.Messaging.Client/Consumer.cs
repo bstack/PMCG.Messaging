@@ -60,7 +60,7 @@ namespace PMCG.Messaging.Client
 		private void OnChannelShutdown(
 			ShutdownEventArgs reason)
 		{
-			this.c_logger.InfoFormat("OnChannelShuutdown Code = {0} and text = {1}", reason.ReplyCode, reason.ReplyText);
+			this.c_logger.InfoFormat("OnChannelShutdown Code = {0} and text = {1}", reason.ReplyCode, reason.ReplyText);
 		}
 
 
