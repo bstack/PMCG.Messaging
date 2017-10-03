@@ -71,6 +71,8 @@
     <Compile Include="Consumer.cs" />
     <Compile Include="ConsumerMessageProcessor.cs" />
     <Compile Include="ConnectionBlockedEventArgs.cs" />
+    <Compile Include="BusPublishersConsumersSeam.cs" />
+    <Compile Include="IBusPublishersConsumersSeam.cs" />
     <Compile Include="PublicationResultStatus.cs" />
     <Compile Include="PublicationResult.cs" />
     <Compile Include="ExceptionExt.cs" />

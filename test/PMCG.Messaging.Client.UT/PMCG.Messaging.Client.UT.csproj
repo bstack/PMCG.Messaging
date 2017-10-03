@@ -56,7 +56,8 @@
     <Compile Include="..\..\src\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="BusSpec.cs" />
+    <Compile Include="Bus.cs" />
+    <Compile Include="BusPublishersComsumersSeamMock.cs" />
     <Compile Include="BusState\ConnectedSpec.cs" />
     <Compile Include="Configuration\BusConfigurationBuilderSpec.cs" />
     <Compile Include="Configuration\ConnectionStringSettingsParserSpec.cs" />

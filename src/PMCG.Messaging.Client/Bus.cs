@@ -11,31 +11,52 @@ namespace PMCG.Messaging.Client
 {
 	public class Bus : IBusController, IBus
 	{
-		private readonly BusConfiguration c_configuration;
-		private readonly ILog c_logger;
-		private readonly IConnectionManager c_connectionManager;
+        private readonly ILog c_logger;
+        private readonly BusConfiguration c_configuration;
+        private readonly IBusPublishersConsumersSeam c_publishersConsumersSeam;
+        private readonly IConnectionManager c_connectionManager;
 		private readonly BlockingCollection<Publication> c_publicationQueue;
-		private readonly Task[] c_publisherTasks;
 
 
-		public Bus(
-			BusConfiguration configuration)
+        public BlockingCollection<Publication> PublicationQueue { get { return this.c_publicationQueue; } }
+
+
+        public Bus(
+			BusConfiguration configuration) : this(configuration, 
+                new BusPublishersConsumersSeam(),
+                new ConnectionManager(
+                    configuration.ConnectionUris,
+                    configuration.ConnectionClientProvidedName,
+                    configuration.ReconnectionPauseInterval))
 		{
-			this.c_logger = LogManager.GetLogger(this.GetType());
-			this.c_logger.Info("ctor Starting");
-
-			Check.RequireArgumentNotNull("configuration", configuration);
-
-			this.c_configuration = configuration;
-			this.c_connectionManager = ServiceLocator.GetConnectionManager(this.c_configuration);
-			this.c_publicationQueue = new BlockingCollection<Publication>();
-			this.c_publisherTasks = new Task[this.c_configuration.NumberOfPublishers];
-
-			this.c_logger.Info("ctor Completed");
+            // NOTE: We dont have a DBC check for BusConfiguration here as it does not execute before the call to the chained ctor. 
+            // However there are ample DBC checks elsewhere to cover this and throw an exception which will surface on startup - this is behaviour which is desired
+            // Lastly, we only want a single parameter i.e. bus configuration to be passed by the consumer of this library - need to keep usage as simple as possible
 		}
 
 
-		public void Connect()
+        public Bus(
+            BusConfiguration configuration,
+            IBusPublishersConsumersSeam publishersConsumersSeam,
+            IConnectionManager connectionManager)
+        {
+            this.c_logger = LogManager.GetLogger(this.GetType());
+            this.c_logger.Info("ctor Starting");
+
+            Check.RequireArgumentNotNull("configuration", configuration);
+            Check.RequireArgumentNotNull("publishersConsumersSeam", publishersConsumersSeam);
+            Check.RequireArgumentNotNull("connectionManager", connectionManager);
+
+            this.c_configuration = configuration;
+            this.c_publishersConsumersSeam = publishersConsumersSeam;
+            this.c_connectionManager = connectionManager;
+            this.c_publicationQueue = new BlockingCollection<Publication>();
+
+            this.c_logger.Info("ctor Completed");
+        }
+
+
+        public void Connect()
 		{
 			this.c_logger.Info("Connect Starting");
 			this.c_connectionManager.Open(numberOfTimesToTry: 3);
@@ -47,20 +68,12 @@ namespace PMCG.Messaging.Client
             }
 
 			this.c_logger.Info("Connect About to create publisher tasks");
-			for (var _index = 0; _index < this.c_publisherTasks.Length; _index++)
-			{
-				var _publisher = new Publisher(this.c_connectionManager.Connection, this.c_publicationQueue);
-				this.c_publisherTasks[_index] = _publisher.Start();
-			}
+            this.c_publishersConsumersSeam.CreatePublishers(this.c_configuration, this.c_connectionManager, this.c_publicationQueue);
 
 			this.c_logger.Info("Connect About to create consumers");
-			for (var _index = 0; _index < this.c_configuration.NumberOfConsumers; _index++)
-			{
-				var _consumer = new Consumer(this.c_connectionManager.Connection, this.c_configuration);
-				_consumer.Start();
-			}
+            this.c_publishersConsumersSeam.CreateConsumers(this.c_configuration, this.c_connectionManager, this.c_publicationQueue);
 
-			this.c_logger.Info("Connect Completed");
+            this.c_logger.Info("Connect Completed");
 		}
 
 
@@ -76,6 +89,8 @@ namespace PMCG.Messaging.Client
 			TMessage message)
 			where TMessage : Message
 		{
+            Check.RequireArgumentNotNull("message", message);
+
 			this.c_logger.DebugFormat("PublishAsync Publishing message ({0}) with Id {1}", message, message.Id);
 
 			var _result = new TaskCompletionSource<PMCG.Messaging.PublicationResult>();
@@ -102,12 +117,12 @@ namespace PMCG.Messaging.Client
 					this.c_publicationQueue.Add(_publication);
 					_tasks.Add(_publication.ResultTask);
 				}
-				Task.WhenAll(_tasks).ContinueWith(taskResults =>
-				{
-					if (taskResults.IsFaulted) { _result.SetException(taskResults.Exception); }
-					else { _result.SetResult(this.CreateNonFaultedPublicationResult(message, taskResults)); }
-				});
-			}
+                Task.WhenAll(_tasks).ContinueWith(taskResults =>
+                {
+                    if (taskResults.IsFaulted) { _result.SetException(taskResults.Exception); }
+                    else { _result.SetResult(this.CreateNonFaultedPublicationResult(message, taskResults)); }
+                });
+            }
 
 			this.c_logger.Debug("PublishAsync Completed");
 			return _result.Task;
