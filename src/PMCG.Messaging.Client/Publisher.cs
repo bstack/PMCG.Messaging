@@ -17,7 +17,7 @@ namespace PMCG.Messaging.Client
 		private readonly BlockingCollection<Publication> c_publicationQueue;
 		private readonly IModel c_channel;
 		private readonly ConcurrentDictionary<ulong, Publication> c_unconfirmedPublications;
-   
+
 
 		public Publisher(
 			IConnection connection,
@@ -50,13 +50,14 @@ namespace PMCG.Messaging.Client
 						try
 						{
 							foreach (var _publication in this.c_publicationQueue.GetConsumingEnumerable())
-                            {
-                                this.Publish(_publication);
-                            }
-                        }
+							{
+								this.Publish(_publication);
+							}
+						}
 						catch (Exception exception)
 						{
 							this.c_logger.ErrorFormat("Start Exception : {0}", exception.InstrumentationString());
+							throw;
 						}
 					},
 				TaskCreationOptions.LongRunning);
@@ -72,6 +73,7 @@ namespace PMCG.Messaging.Client
 		{
 			this.c_logger.DebugFormat("Publish About to publish message with Id {0} to exchange {1}", publication.Id, publication.ExchangeName);
 
+		
 			var _properties = this.c_channel.CreateBasicProperties();
 			_properties.ContentType = "application/json";
 			_properties.DeliveryMode = publication.DeliveryMode;
@@ -79,14 +81,15 @@ namespace PMCG.Messaging.Client
 			_properties.MessageId = publication.Id;
 			// Only set if null, otherwise library will blow up, default is string.Empty, if set to null will blow up in library
 			if (publication.CorrelationId != null) { _properties.CorrelationId = publication.CorrelationId; }
-            var _deliveryTag = this.c_channel.NextPublishSeqNo;
 
-            try
+			var _messageJson = JsonConvert.SerializeObject(publication.Message);
+			var _messageBody = Encoding.UTF8.GetBytes(_messageJson);
+
+			var _deliveryTag = this.c_channel.NextPublishSeqNo;
+
+			try
 			{
-                var _messageJson = JsonConvert.SerializeObject(publication.Message);
-                var _messageBody = Encoding.UTF8.GetBytes(_messageJson);
-
-                this.c_unconfirmedPublications.TryAdd(_deliveryTag, publication);
+				this.c_unconfirmedPublications.TryAdd(_deliveryTag, publication);
 				if (this.c_channel.IsOpen)
 				{
 					this.c_channel.BasicPublish(
@@ -95,22 +98,24 @@ namespace PMCG.Messaging.Client
 					_properties,
 					_messageBody);
 
-                    this.c_logger.DebugFormat("Publish Completed publishing message with Id {0} to exchange {1}", publication.Id, publication.ExchangeName);
-                }
+					this.c_logger.DebugFormat("Publish Completed publishing message with Id {0} to exchange {1}", publication.Id, publication.ExchangeName);
+				}
 				else
 				{
+					Task.Delay(1000).Wait();
 					this.c_unconfirmedPublications.TryRemove(_deliveryTag, out publication);
 					this.c_publicationQueue.Add(publication);
 
-                    this.c_logger.DebugFormat("Publish Failed publishing message with Id {0} to exchange {1}, channel was closed", publication.Id, publication.ExchangeName);
-                }
+					this.c_logger.DebugFormat("Publish Failed publishing message with Id {0} to exchange {1}, channel was closed", publication.Id, publication.ExchangeName);
+				}
 			}
 			catch (Exception exception)
 			{
-				this.c_unconfirmedPublications.TryRemove(_deliveryTag, out publication);
-                this.c_publicationQueue.Add(publication);
+				Task.Delay(1000).Wait();
+				this.c_unconfirmedPublications.TryRemove(_deliveryTag, out Publication removedPublication);
+				this.c_publicationQueue.Add(publication);
 
-                this.c_logger.WarnFormat("Publish Failed publishing message with Id {0} to exchange {1}, unexpected exception {2}", publication.Id, publication.ExchangeName, exception.Message);
+				this.c_logger.ErrorFormat("Publish Failed publishing message with Id {0} to exchange {1}, unexpected exception {2}", publication.Id, publication.ExchangeName, exception.Message);
 			}
 		}
 

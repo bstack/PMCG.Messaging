@@ -3,7 +3,6 @@ using PMCG.Messaging.Client.Configuration;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
-using System.Threading;
 
 
 namespace PMCG.Messaging.Client

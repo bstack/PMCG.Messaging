@@ -18,7 +18,7 @@ namespace PMCG.Messaging.Client.UT
 	public class Publisher
 	{
 		[Test]
-		public void Publish_Where_Channel_Is_Closed_Results_In_Faulted_Publisher_Task()
+		public void Publish_Failure_Unhandled_Exception_Task_Terminates()
 		{
 			var _connection = Substitute.For<IConnection>();
 			var _channel = Substitute.For<IModel>();
@@ -45,10 +45,11 @@ namespace PMCG.Messaging.Client.UT
 
 
 		[Test]
-		public void Publish_Where_Channel_Publication_Fails_Results_In_A_Non_Completed_Publication_Task_Which_Is_Placed_Back_On_The_Publication_Queue()
+		public void Publish_Failure_Handled_Exception_Task_Continues()
 		{
 			var _connection = Substitute.For<IConnection>();
 			var _channel = Substitute.For<IModel>();
+			_channel.IsOpen.Returns(true);
 			var _publicationQueue = new BlockingCollection<Publication>();
 
 			_connection.CreateModel().Returns(_channel);
@@ -65,18 +66,47 @@ namespace PMCG.Messaging.Client.UT
 			var _publisherTask = _SUT.Start();
 
 			_publicationQueue.Add(_publication);
-			try { _publisherTask.Wait(); } catch { }
 
+			// We wait 5 seconds to show that the task is still running and working - adding meesage back on to collection and trying to publish again in a continuous loop
+			// Assert that the task has not completed as it is long lived.
+			Thread.Sleep(TimeSpan.FromSeconds(5));
 			Assert.IsFalse(_publication.ResultTask.IsCompleted);
-			Assert.AreSame(_publication, _publicationQueue.First());
+		}
+
+
+
+		[Test]
+		public void Publish_Failure_Channel_Is_Closed_Task_Continues()
+		{
+			var _connection = Substitute.For<IConnection>();
+			var _channel = Substitute.For<IModel>();
+			_channel.IsOpen.Returns(false);
+			var _publicationQueue = new BlockingCollection<Publication>();
+			_connection.CreateModel().Returns(_channel);
+
+			var _messageDelivery = new MessageDelivery("EXCHANGE", typeof(MyEvent).Name, MessageDeliveryMode.Persistent, message => "ARoutingKey");
+			var _myEvent = new MyEvent(Guid.NewGuid(), "CorrlationId_1", "Detail", 1);
+			var _taskCompletionSource = new TaskCompletionSource<PublicationResult>();
+			var _publication = new Publication(_messageDelivery, _myEvent, _taskCompletionSource);
+
+			var _SUT = new PMCG.Messaging.Client.Publisher(_connection, _publicationQueue);
+			var _publisherTask = _SUT.Start();
+
+			_publicationQueue.Add(_publication);
+
+			// We wait 5 seconds to show that the task is still running and working - adding meesage back on to collection and trying to publish again in a continuous loop
+			// Assert that the task has not completed as it is long lived.
+			Thread.Sleep(TimeSpan.FromSeconds(5));
+			Assert.IsFalse(_publication.ResultTask.IsCompleted);
 		}
 
 
 		[Test]
-		public void Publish_Where_Single_Publication_Published_And_Acked_Results_In_Task_Completion()
+		public void Publish_Success_Task_Completes()
 		{
 			var _connection = Substitute.For<IConnection>();
 			var _channel = Substitute.For<IModel>();
+			_channel.IsOpen.Returns(true);
 			var _publicationQueue = new BlockingCollection<Publication>();
 			var _messageProperties = Substitute.For<IBasicProperties>();
 			var _waitHandle = new AutoResetEvent(false);
@@ -111,10 +141,11 @@ namespace PMCG.Messaging.Client.UT
 
 
 		[Test]
-		public void Publish_Where_Multiple_Publications_Published_And_A_Single_Ack_Results_In_Completed_Tasks()
+		public void Publish_Success_Multiple_Publications_Task_Completes()
 		{
 			var _connection = Substitute.For<IConnection>();
 			var _channel = Substitute.For<IModel>();
+			_channel.IsOpen.Returns(true);
 			var _publicationQueue = new BlockingCollection<Publication>();
 			var _waitHandle = new CountdownEvent(10);
 
@@ -152,10 +183,11 @@ namespace PMCG.Messaging.Client.UT
 
 
 		[Test]
-		public void Publish_Where_100_Messages_Published_And_A_Single_Multi_Ack_For_Some_Messages_Results_In_Some_Completed_Tasks_And_Some_Still_Pending()
+		public void Publish_Success_Multiple_Publications_Only_Some_Acked_Task_Continues()
 		{
 			var _connection = Substitute.For<IConnection>();
 			var _channel = Substitute.For<IModel>();
+			_channel.IsOpen.Returns(true);
 			var _publicationQueue = new BlockingCollection<Publication>();
 			var _waitHandle = new CountdownEvent(100);
 
@@ -193,10 +225,11 @@ namespace PMCG.Messaging.Client.UT
 
 
 		[Test]
-		public void Publish_Where_Single_Message_Published_And_Nacked_Results_In_Nacked_Task_Result()
+		public void Publish_Success_Nacked_Task_Completes()
 		{
 			var _connection = Substitute.For<IConnection>();
 			var _channel = Substitute.For<IModel>();
+			_channel.IsOpen.Returns(true);
 			var _publicationQueue = new BlockingCollection<Publication>();
 			var _waitHandle = new AutoResetEvent(false);
 
