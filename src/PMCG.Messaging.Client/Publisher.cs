@@ -102,7 +102,7 @@ namespace PMCG.Messaging.Client
 				}
 				else
 				{
-					Task.Delay(1000).Wait();
+					Task.Delay(1000).Wait(); // We delay for short period to allow automatic recovery to reconnect, otherwise will keep looping adding/removing from blocking colection
 					this.c_unconfirmedPublications.TryRemove(_deliveryTag, out publication);
 					this.c_publicationQueue.Add(publication);
 
