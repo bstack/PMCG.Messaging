@@ -78,7 +78,7 @@ namespace PMCG.Messaging.Client.UT
 
 
 		[Test]
-		public void Publish_Failure_Channel_Is_Closed_Task_Result_Is_Completed()
+		public void Publish_Failure_Channel_Is_Closed_Task_Continues()
 		{
 			this.c_channel.IsOpen.Returns(false);
 			var _publication = new Publication(this.c_messageDelivery, this.c_myEvent, this.c_taskCompletionSource);
@@ -95,7 +95,7 @@ namespace PMCG.Messaging.Client.UT
 
 
 		[Test]
-		public void Publish_Success_With_Ack_Task_Result_Is_Completed()
+		public void Publish_Success_With_Ack()
 		{
 			var _waitHandle = new AutoResetEvent(false);
 			var _messageProperties = Substitute.For<IBasicProperties>();
@@ -123,7 +123,7 @@ namespace PMCG.Messaging.Client.UT
 
 
 		[Test]
-		public void Publish_Success_Multiple_Publications_Task_Result_Is_Completed()
+		public void Publish_Success_Multiple_Publications_All_Acked()
 		{
 			var _waitHandle = new CountdownEvent(10);
 			var _nextPublishSeqNo = 1UL;
@@ -157,7 +157,7 @@ namespace PMCG.Messaging.Client.UT
 
 
 		[Test]
-		public void Publish_Success_Multiple_Publications_Only_Some_Acked_Task_Result_Is_Completed()
+		public void Publish_Success_Multiple_Publications_Only_Some_Acked()
 		{
 			var _waitHandle = new CountdownEvent(100);
 			var _nextPublishSeqNo = 1UL;
@@ -190,7 +190,7 @@ namespace PMCG.Messaging.Client.UT
 
 
 		[Test]
-		public void Publish_Success_Nacked_Task_Completes()
+		public void Publish_Success_Nacked()
 		{
 			var _waitHandle = new AutoResetEvent(false);
 			this.c_channel.NextPublishSeqNo.Returns(1Ul);
@@ -212,7 +212,7 @@ namespace PMCG.Messaging.Client.UT
 
 
 		[Test]
-		public void Publish_Success_Channel_Shutdown_Before_Acks_Received_Task_Completes()
+		public void Publish_Success_Channel_Shutdown_Before_Acked()
 		{
 			var _waitHandle = new CountdownEvent(2);
 			this.c_channel.NextPublishSeqNo.Returns(1Ul, 2UL);
@@ -242,7 +242,7 @@ namespace PMCG.Messaging.Client.UT
 
 
 		[Test]
-		public void Publish_Success_Channel_Closed_And_Then_Opened_Task_Completes()
+		public void Publish_Success_Channel_Closed_And_Then_Opened()
 		{
 			this.c_channel.IsOpen.Returns(false);
 			var _publicationQueue = new BlockingCollection<Publication>();
