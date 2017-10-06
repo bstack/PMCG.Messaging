@@ -44,11 +44,11 @@ namespace PMCG.Messaging.Client.Interactive
 				AutomaticRecoveryEnabled = true,
 				TopologyRecoveryEnabled = true
 			};
-			this.c_connection = _connectionFactory.CreateConnection();
+			this.c_connection = _connectionFactory.CreateConnection(Configuration.ConnectionClientProvidedName);
 
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
 			_busConfigurationBuilder.ConnectionUris.Add(_connectionUri);
-
+			_busConfigurationBuilder.ConnectionClientProvidedName = Configuration.ConnectionClientProvidedName;
 			for(var _index = 0; _index < this.c_numberOfConsumers; _index++)
 			{
 				var _consumer = new PMCG.Messaging.Client.Consumer(this.c_connection, _busConfigurationBuilder.Build());

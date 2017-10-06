@@ -15,9 +15,9 @@ namespace PMCG.Messaging.Client.Interactive
 		public void Run_Where_We_Instantiate_And_Try_To_Connect_To_Non_Existent_Broker()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
-			_busConfigurationBuilder.ConnectionUris.Add(Configuration.LocalConnectionUri.Replace("5672", "2567/"));	// Wrong port number
-            _busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
-            var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			_busConfigurationBuilder.ConnectionUris.Add(Configuration.LocalConnectionUri.Replace("5672", "2567/")); // Wrong port number
+			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
+			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
 			Console.WriteLine("Allow time for connection attempt to fail, check bus state which should be disconnected");
@@ -419,7 +419,7 @@ namespace PMCG.Messaging.Client.Interactive
 			Console.ReadLine();
 
 			var _sequence = 1;
-			while(true)
+			while (true)
 			{
 				Console.WriteLine("About to publish {0}", _sequence);
 				var _message = new MyEvent(Guid.NewGuid(), "Correlation Id", "R1", _sequence, "09:01", "...");
@@ -477,7 +477,7 @@ namespace PMCG.Messaging.Client.Interactive
 			}
 
 			var _stopwatch = Stopwatch.StartNew();
-			foreach(var _task in _tasks) { _task.Start(); }
+			foreach (var _task in _tasks) { _task.Start(); }
 			Task.WaitAll(_tasks);
 
 			_stopwatch.Stop();
