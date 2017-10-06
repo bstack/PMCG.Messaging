@@ -89,6 +89,7 @@ namespace PMCG.Messaging.Client
 
 			try
 			{
+				// TODO: BS 06/10/2017  Do we need to have the ability to see if unconfirmed publications are on this queue for prolonged periods - i.e. time based
 				this.c_unconfirmedPublications.TryAdd(_deliveryTag, publication);
 				if (this.c_channel.IsOpen)
 				{
@@ -111,7 +112,7 @@ namespace PMCG.Messaging.Client
 			}
 			catch (Exception exception)
 			{
-				Task.Delay(1000).Wait();
+				Task.Delay(1000).Wait(); // We delay for short period to allow automatic recovery to reconnect, otherwise will keep looping adding/removing from blocking colection
 				this.c_unconfirmedPublications.TryRemove(_deliveryTag, out Publication removedPublication);
 				this.c_publicationQueue.Add(publication);
 

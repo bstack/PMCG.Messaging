@@ -76,7 +76,6 @@ namespace PMCG.Messaging.Client.UT
 		}
 
 
-
 		[Test]
 		public void Publish_Failure_Channel_Is_Closed_Task_Continues()
 		{
@@ -231,7 +230,7 @@ namespace PMCG.Messaging.Client.UT
 			_waitHandle.Wait();     // Allow channel publications to complete
 			this.c_channel.ModelShutdown += Raise.EventWith(this.c_channel, new ShutdownEventArgs(ShutdownInitiator.Peer, 1, "Bang!"));
 
-			// Since all running on the same thread we do not need to wait - this is also not relaistic as we know the channel shutdown event will happen on a different thread
+			// Since all running on the same thread we do not need to wait - this is also not realistic as we know the channel shutdown event will happen on a different thread
 			Assert.IsTrue(_publication1.ResultTask.IsCompleted);
 			Assert.AreEqual(PublicationResultStatus.ChannelShutdown, _publication1.ResultTask.Result.Status);
 			Assert.IsTrue(_publication1.ResultTask.Result.StatusContext.Contains("Bang!"));
