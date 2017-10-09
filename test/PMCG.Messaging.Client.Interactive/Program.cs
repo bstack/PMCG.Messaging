@@ -26,7 +26,7 @@ namespace PMCG.Messaging.Client.Interactive
 			//new Bus().Run_Where_We_Instantiate_And_Try_To_Connect_To_Non_Existent_Broker();
 			//new Bus().Run_Where_We_Publish_A_Message_To_A_Queue_Using_The_Direct_Exchange();
 			//new Bus().Run_Where_We_Publish_1000_Messages_Waiting_On_Result();
-			//new Bus().Run_Where_We_Publish_A_Message_And_Consume_For_The_Same_Messsage();
+			new Bus().Run_Where_We_Publish_A_Message_And_Consume_For_The_Same_Messsage();
 			//new Bus().Run_Where_We_Publish_A_Message_And_Consume_For_The_Same_Messsage_On_A_Transient_Queue();
 			//new Bus().Run_Where_We_Publish_A_Message_Subject_To_A_Timeout_And_Consume_The_Same_Messsage();
 			//new Bus().Run_Where_We_Publish_A_Message_To_Two_Exchanges_No_Consumption_For_The_Same_Messsage();
@@ -34,7 +34,7 @@ namespace PMCG.Messaging.Client.Interactive
 			//new Bus().Run_Where_We_Publish_Multiple_Messages_And_Consume_For_The_Same_Messsages();
 			//new Bus().Run_Where_We_Transition_Between_States_By_Instructing_The_Broker();
 
-			new ConnectionManager().Run_Open();
+			//new ConnectionManager().Run_Open();
 			//new ConnectionManager().Run_Open_Where_Server_Is_Already_Stopped_And_Instruct_To_Start_Server();
 			// new ConnectionManager().Run_Open_Where_Server_Is_Already_Started_Then_Blocked_And_Then_Unblocked();
 

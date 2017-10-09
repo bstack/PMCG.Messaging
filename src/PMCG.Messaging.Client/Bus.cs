@@ -111,7 +111,7 @@ namespace PMCG.Messaging.Client
 							message,
 							new TaskCompletionSource<PublicationResult>()));
 
-				var _tasks = new List<Task<PublicationResult>>();
+				var _tasks = new ConcurrentBag<Task<PublicationResult>>();
 				foreach (var _publication in _thisPublicationsPublications)
 				{
 					this.c_publicationQueue.Add(_publication);

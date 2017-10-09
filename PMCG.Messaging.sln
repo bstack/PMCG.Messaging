@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMCG.Messaging.Client.UT", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMCG.Messaging.Inv", "test\PMCG.Messaging.Inv\PMCG.Messaging.Inv.csproj", "{9A860E41-5F4C-41AC-9ACD-A98CB408304A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMCG.Messaging.Client.AT", "PMCG.Messaging.Client.AT\PMCG.Messaging.Client.AT.csproj", "{98470DA1-E69C-4C4C-A0B0-9AF30CF805FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{9A860E41-5F4C-41AC-9ACD-A98CB408304A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A860E41-5F4C-41AC-9ACD-A98CB408304A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A860E41-5F4C-41AC-9ACD-A98CB408304A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98470DA1-E69C-4C4C-A0B0-9AF30CF805FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98470DA1-E69C-4C4C-A0B0-9AF30CF805FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98470DA1-E69C-4C4C-A0B0-9AF30CF805FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98470DA1-E69C-4C4C-A0B0-9AF30CF805FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
