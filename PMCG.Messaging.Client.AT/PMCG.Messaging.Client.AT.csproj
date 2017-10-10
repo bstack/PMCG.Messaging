@@ -49,17 +49,18 @@
     <Compile Include="Accessories\Configuration.cs" />
     <Compile Include="Accessories\MyEvent.cs" />
     <Compile Include="Accessories\MyOtherEvent.cs" />
+    <Compile Include="Consume\Tests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Publish\Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="create-local-messaging-configuration.ps1" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Connect\" />
-    <Folder Include="Consume\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\PMCG.Messaging.Client\PMCG.Messaging.Client.csproj">

@@ -252,7 +252,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 			//		5 - Observe that the connection is automatically recovered after a period of time (via UI)
 			//		6 - Observe that all failed messages have since published successfully (via logs)
 
-		var _tasks = new ConcurrentBag<Task<PMCG.Messaging.PublicationResult>>();
+			var _tasks = new ConcurrentBag<Task<PMCG.Messaging.PublicationResult>>();
 			for (int count = 0; count < 60; count++)
 			{
 				Thread.Sleep(1000);
@@ -282,8 +282,8 @@ namespace PMCG.Messaging.Client.AT.Publish
 			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
-			var _message = new Accessories.MyEvent(Guid.NewGuid(), "", "R1", 1, "09:00", "DDD....");
-			var _result = _SUT.PublishAsync(null);
+			Accessories.MyEvent _message = null;
+			var _result = _SUT.PublishAsync(_message);
 			_result.Wait(TimeSpan.FromSeconds(1));
 
 			Console.WriteLine(string.Format("TaskStatus expected: (RanToCompletion), actual: ({0})", _result.Status));
@@ -291,5 +291,28 @@ namespace PMCG.Messaging.Client.AT.Publish
 			Console.Read();
 		}
 
+
+		public void Publish_A_Message_That_Expires_Ends_Up_In_Dead_Letter_Queue()
+		{
+			var _capturedMessageId = string.Empty;
+
+			var _busConfigurationBuilder = new BusConfigurationBuilder();
+			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
+			_busConfigurationBuilder.NumberOfConsumers = 2;
+			_busConfigurationBuilder
+				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName2, "test.queue.2", MessageDeliveryMode.Persistent, message => "test.queue.2");
+			
+			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			_SUT.Connect();
+
+			var _messageId = Guid.NewGuid();
+			var _message = new Accessories.MyEvent(_messageId, null, "R1", 1, "09:00", "DDD....");
+			_SUT.PublishAsync(_message);
+
+			Console.WriteLine(string.Format("Ensure message with id: ({0}) no longer exists in the queue", _messageId));
+			Console.WriteLine(string.Format("Ensure message with id: ({0}) exists in the dead letter queue - expired", _messageId));
+			Console.Read();
+		}
 	}
 }
