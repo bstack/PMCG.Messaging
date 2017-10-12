@@ -37,35 +37,35 @@ namespace PMCG.Messaging.Client.Interactive
 		}
 
 
-		public void Run_Where_We_Publish_A_Message_To_A_Non_Existent_Exchange_Will_Close_The_Internal_Channel()
-		{
-			this.InstantiateAndStartPublisher();
+		//public void Run_Where_We_Publish_A_Message_To_A_Non_Existent_Exchange_Will_Close_The_Internal_Channel()
+		//{
+		//	this.InstantiateAndStartPublisher();
 
-			Console.WriteLine("Hit enter to publish");
-			Console.ReadLine();
+		//	Console.WriteLine("Hit enter to publish");
+		//	Console.ReadLine();
 
-			var _publication = new Publication(
-				new MessageDelivery("NON_EXISTENT_EXCHANGE", "H", MessageDeliveryMode.Persistent, m => "Ted"),
-				new MyEvent(Guid.NewGuid(), "", "R1", 1, "09:00", "DDD...."),
-				new TaskCompletionSource<PublicationResult>());
-			this.c_publicationQueue.Add(_publication);
+		//	var _publication = new Publication(
+		//		new MessageDelivery("NON_EXISTENT_EXCHANGE", "H", MessageDeliveryMode.Persistent, m => "Ted"),
+		//		new MyEvent(Guid.NewGuid(), "", "R1", 1, "09:00", "DDD...."),
+		//		new TaskCompletionSource<PublicationResult>());
+		//	this.c_publicationQueue.Add(_publication);
 
-			try
-			{
-				_publication.ResultTask.Wait();
-			}
-			catch (AggregateException exception)
-			{
-				Console.WriteLine("Exception - should be 404 channel sutdown - {0}", exception.InnerExceptions[0].Message);
-			}
+		//	try
+		//	{
+		//		_publication.ResultTask.Wait();
+		//	}
+		//	catch (AggregateException exception)
+		//	{
+		//		Console.WriteLine("Exception - should be 404 channel sutdown - {0}", exception.InnerExceptions[0].Message);
+		//	}
 
-			Console.WriteLine("Hit enter to close connection (Channel should already be closed - check the dashboard)");
-			Console.ReadLine();
-			this.c_connection.Close();
+		//	Console.WriteLine("Hit enter to close connection (Channel should already be closed - check the dashboard)");
+		//	Console.ReadLine();
+		//	this.c_connection.Close();
 
-			Console.WriteLine("Hit enter to exit");
-			Console.ReadLine();
-		}
+		//	Console.WriteLine("Hit enter to exit");
+		//	Console.ReadLine();
+		//}
 
 
 		public void InstantiateAndStartPublisher()

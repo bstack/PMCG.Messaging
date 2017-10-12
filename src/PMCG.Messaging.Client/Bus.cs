@@ -107,6 +107,7 @@ namespace PMCG.Messaging.Client
 					.Configurations
 					.Select(deliveryConfiguration =>
 						new Publication(
+							this.c_logger,
 							deliveryConfiguration,
 							message,
 							new TaskCompletionSource<PublicationResult>()));

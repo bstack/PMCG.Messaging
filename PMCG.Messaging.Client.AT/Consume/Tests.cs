@@ -11,7 +11,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 {
 	public class Tests
 	{
-		public void Publish_A_Message_And_Consume_For_The_Same_Messsage_With_Ack()
+		public void Publish_A_Message_And_Consume_For_The_Same_Message_With_Ack()
 		{
 			var _capturedMessageId = string.Empty;
 
@@ -39,7 +39,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 		}
 
 
-		public void Publish_A_Message_And_Consume_For_The_Same_Messsage_With_Nack()
+		public void Publish_A_Message_And_Consume_For_The_Same_Message_With_Nack()
 		{
 			var _capturedMessageId = string.Empty;
 
@@ -67,7 +67,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 		}
 
 
-		public void Publish_A_Message_And_Consume_For_The_Same_Messsage_With_Nack_And_Dead_Letter_Queue()
+		public void Publish_A_Message_And_Consume_For_The_Same_Message_With_Nack_And_Dead_Letter_Queue()
 		{
 			var _capturedMessageId = string.Empty;
 
@@ -96,7 +96,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 		}
 
 
-		public void Publish_1000_Messages_And_Consume_For_The_Same_Messsages_With_Ack()
+		public void Publish_1000_Messages_And_Consume_For_The_Same_Messages_With_Ack()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
 			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
@@ -124,7 +124,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 		}
 
 
-		public void Publish_1000_Messages_And_Consume_For_The_Same_Messsages_With_Nack()
+		public void Publish_1000_Messages_And_Consume_For_The_Same_Messages_With_Nack()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
 			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
@@ -152,7 +152,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 		}
 
 
-		public void Publish_1000_Messages_And_Consume_For_The_Same_Messsages_With_Half_Acked_Half_Nacked()
+		public void Publish_1000_Messages_And_Consume_For_The_Same_Messages_With_Half_Acked_Half_Nacked()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
 			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
@@ -179,6 +179,128 @@ namespace PMCG.Messaging.Client.AT.Consume
 			Console.WriteLine("Ensure 500 messages exists in the dead letter queue - rejected");
 			Console.Read();
 		}
+
+
+		public void Publish_10000_Messages_And_Consume_For_The_Same_Messages_With_Ack_Blocked_Then_Unblocked()
+		{
+			var _busConfigurationBuilder = new BusConfigurationBuilder();
+			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
+			_busConfigurationBuilder.NumberOfConsumers = 2;
+			_busConfigurationBuilder
+				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName2, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => "test.queue.2")
+				.RegisterConsumer<Accessories.MyEvent>(
+					Accessories.Configuration.QueueName2,
+					typeof(Accessories.MyEvent).Name,
+					message => { return ConsumerHandlerResult.Completed; });
+			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			_SUT.Connect();
+
+			for (int count = 0; count < 10000; count++)
+			{
+				if (count == 300)
+				{
+					Console.WriteLine("Set high water mark to very low value (i.e. block)");
+					Console.WriteLine("\t rabbitmqctl.bat set_vm_memory_high_watermark 0.0000001");
+					Console.ReadKey();
+				}
+
+				if (count == 9800)
+				{
+					Console.WriteLine("Set high water mark to very low value (i.e. unblock)");
+					Console.WriteLine("\t rabbitmqctl.bat set_vm_memory_high_watermark 0.4");
+					Console.ReadKey();
+				}
+
+				var _messageId = Guid.NewGuid();
+				var _message = new Accessories.MyEvent(_messageId, null, "R1", 1, "09:00", "DDD....");
+				_SUT.PublishAsync(_message);
+			}
+
+
+			Console.WriteLine("Ensure there are no messages in the queue");
+			Console.WriteLine("Ensure there are no messages in the dead letter queue");
+			Console.ReadKey();
+		}
+
+
+		public void Publish_10000_Messages_And_Consume_For_The_Same_Messages_With_Ack_Connection_Closed_By_Server_Recovers_Automatically()
+		{
+			var _busConfigurationBuilder = new BusConfigurationBuilder();
+			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
+			_busConfigurationBuilder.NumberOfConsumers = 2;
+			_busConfigurationBuilder
+				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName2, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => "test.queue.2")
+				.RegisterConsumer<Accessories.MyEvent>(
+					Accessories.Configuration.QueueName2,
+					typeof(Accessories.MyEvent).Name,
+					message => { return ConsumerHandlerResult.Completed; });
+			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			_SUT.Connect();
+
+			Console.WriteLine("Close connection via rabbitmq management ui while loop is executing");
+
+			for (int count = 0; count < 10000; count++)
+			{
+				var _messageId = Guid.NewGuid();
+				var _message = new Accessories.MyEvent(_messageId, null, "R1", 1, "09:00", "DDD....");
+				_SUT.PublishAsync(_message);
+			}
+
+
+			Console.WriteLine("Ensure there are no messages in the queue");
+			Console.WriteLine("Ensure there are no messages in the dead letter queue");
+			Console.ReadKey();
+		}
+
+
+		public void Publish_10000_Messages_And_Consume_On_Separate_Bus_For_The_Same_Messages_Consumer_Connection_Closed_By_Server_Recovers_Automatically()
+		{
+			var _publisherBusConfigurationBuilder = new BusConfigurationBuilder();
+			_publisherBusConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			_publisherBusConfigurationBuilder.ConnectionClientProvidedName = "publisher";
+			_publisherBusConfigurationBuilder
+				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName2, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => "test.queue.2");
+			var _publisherBus = new PMCG.Messaging.Client.Bus(_publisherBusConfigurationBuilder.Build());
+			_publisherBus.Connect();
+
+			var _consumerBusConfigurationBuilder = new BusConfigurationBuilder();
+			_consumerBusConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			_consumerBusConfigurationBuilder.ConnectionClientProvidedName = "consumer";
+			_consumerBusConfigurationBuilder.NumberOfConsumers = 2;
+			_consumerBusConfigurationBuilder
+				.RegisterConsumer<Accessories.MyEvent>(
+					Accessories.Configuration.QueueName2,
+					typeof(Accessories.MyEvent).Name,
+					message => { return ConsumerHandlerResult.Completed; });
+			var _consumerBus = new PMCG.Messaging.Client.Bus(_consumerBusConfigurationBuilder.Build());
+			_consumerBus.Connect();
+
+			for (int count = 0; count < 10000; count++)
+			{
+				if (count == 1000)
+				{
+					Console.WriteLine("Close consumer connection via rabbitmq management ui");
+					Console.ReadKey();
+				}
+
+				var _messageId = Guid.NewGuid();
+				var _message = new Accessories.MyEvent(_messageId, null, "R1", 1, "09:00", "DDD....");
+				_publisherBus.PublishAsync(_message);
+			}
+
+			Console.WriteLine("Ensure there are no messages in the queue");
+			Console.WriteLine("Ensure there are no messages in the dead letter queue");
+			Console.ReadKey();
+		}
+
+
+
+
+
+
+
 
 
 

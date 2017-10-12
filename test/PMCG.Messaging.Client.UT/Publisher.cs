@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using log4net;
+using NSubstitute;
 using NUnit.Framework;
 using PMCG.Messaging.Client.Configuration;
 using PMCG.Messaging.Client.UT.TestDoubles;
@@ -17,6 +18,7 @@ namespace PMCG.Messaging.Client.UT
 	[TestFixture]
 	public class Publisher
 	{
+		private ILog c_logger;
 		private IConnection c_connection;
 		private IModel c_channel;
 		private BlockingCollection<Publication> c_publicationQueue;
@@ -28,6 +30,7 @@ namespace PMCG.Messaging.Client.UT
 		[SetUp]
 		public void SetUp()
 		{
+			this.c_logger = Substitute.For<ILog>();
 			this.c_connection = Substitute.For<IConnection>();
 			this.c_channel = Substitute.For<IModel>();
 			this.c_channel.IsOpen.Returns(true);
@@ -44,7 +47,7 @@ namespace PMCG.Messaging.Client.UT
 		public void Publish_Failure_Unhandled_Exception_Task_Terminates()
 		{
 			this.c_channel.CreateBasicProperties().Returns(callInfo => { throw new Exception("Channel not open !"); });
-			var _publication = new Publication(this.c_messageDelivery, this.c_myEvent, this.c_taskCompletionSource);
+			var _publication = new Publication(this.c_logger, this.c_messageDelivery, this.c_myEvent, this.c_taskCompletionSource);
 			var _SUT = new PMCG.Messaging.Client.Publisher(this.c_connection, this.c_publicationQueue);
 			var _publisherTask = _SUT.Start();
 
@@ -62,7 +65,7 @@ namespace PMCG.Messaging.Client.UT
 			this.c_channel
 				.When(channel => channel.BasicPublish(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IBasicProperties>(), Arg.Any<byte[]>()))
 				.Do(callInfo => { throw new ApplicationException("Bang !"); });
-			var _publication = new Publication(this.c_messageDelivery, this.c_myEvent, this.c_taskCompletionSource);
+			var _publication = new Publication(this.c_logger, this.c_messageDelivery, this.c_myEvent, this.c_taskCompletionSource);
 			var _SUT = new PMCG.Messaging.Client.Publisher(this.c_connection, this.c_publicationQueue);
 			var _publisherTask = _SUT.Start();
 
@@ -80,7 +83,7 @@ namespace PMCG.Messaging.Client.UT
 		public void Publish_Failure_Channel_Is_Closed_Task_Continues()
 		{
 			this.c_channel.IsOpen.Returns(false);
-			var _publication = new Publication(this.c_messageDelivery, this.c_myEvent, this.c_taskCompletionSource);
+			var _publication = new Publication(this.c_logger, this.c_messageDelivery, this.c_myEvent, this.c_taskCompletionSource);
 			var _SUT = new PMCG.Messaging.Client.Publisher(this.c_connection, this.c_publicationQueue);
 			var _publisherTask = _SUT.Start();
 
@@ -105,7 +108,7 @@ namespace PMCG.Messaging.Client.UT
 				.Do(callInfo => _waitHandle.Set());
 			var _SUT = new PMCG.Messaging.Client.Publisher(this.c_connection, this.c_publicationQueue);
 			_SUT.Start(); 	// Can't capture result due to compiler treating warnings as errors - var is not used
-			var _publication = new Publication(this.c_messageDelivery, this.c_myEvent, this.c_taskCompletionSource);
+			var _publication = new Publication(this.c_logger, this.c_messageDelivery, this.c_myEvent, this.c_taskCompletionSource);
 
 			this.c_publicationQueue.Add(_publication);
 			_waitHandle.WaitOne();  // Allow publication to complete
@@ -138,7 +141,7 @@ namespace PMCG.Messaging.Client.UT
 			{
 				var _myEvent = new MyEvent(Guid.NewGuid(), "CorrlationId_1", "Detail", _index);
 				var _taskCompletionSource = new TaskCompletionSource<PublicationResult>();
-				var _publication = new Publication(this.c_messageDelivery, this.c_myEvent, _taskCompletionSource);
+				var _publication = new Publication(this.c_logger, this.c_messageDelivery, this.c_myEvent, _taskCompletionSource);
 
 				this.c_publicationQueue.Add(_publication);
 				_publications.Add(_publication);
@@ -172,7 +175,7 @@ namespace PMCG.Messaging.Client.UT
 			{
 				var _myEvent = new MyEvent(Guid.NewGuid(), "CorrlationId_1", "Detail", _index);
 				var _taskCompletionSource = new TaskCompletionSource<PublicationResult>();
-				var _publication = new Publication(this.c_messageDelivery, _myEvent, _taskCompletionSource);
+				var _publication = new Publication(this.c_logger, this.c_messageDelivery, _myEvent, _taskCompletionSource);
 
 				this.c_publicationQueue.Add(_publication);
 				_publications.Add(_publication);
@@ -199,7 +202,7 @@ namespace PMCG.Messaging.Client.UT
 			var _SUT = new PMCG.Messaging.Client.Publisher(this.c_connection, this.c_publicationQueue);
 			_SUT.Start();
 			
-			var _publication = new Publication(this.c_messageDelivery, this.c_myEvent, this.c_taskCompletionSource);
+			var _publication = new Publication(this.c_logger, this.c_messageDelivery, this.c_myEvent, this.c_taskCompletionSource);
 			this.c_publicationQueue.Add(_publication);
 			_waitHandle.WaitOne();      // Allow channel publication to complete
 			this.c_channel.BasicNacks += Raise.EventWith(this.c_channel, new BasicNackEventArgs { Multiple = true, DeliveryTag = 1UL });
@@ -221,9 +224,9 @@ namespace PMCG.Messaging.Client.UT
 			var _SUT = new PMCG.Messaging.Client.Publisher(this.c_connection, this.c_publicationQueue);
 			_SUT.Start();
 			var _taskCompletionSource1 = new TaskCompletionSource<PublicationResult>();
-			var _publication1 = new Publication(this.c_messageDelivery, this.c_myEvent, _taskCompletionSource1);
+			var _publication1 = new Publication(this.c_logger, this.c_messageDelivery, this.c_myEvent, _taskCompletionSource1);
 			var _taskCompletionSource2 = new TaskCompletionSource<PublicationResult>();
-			var _publication2 = new Publication(this.c_messageDelivery, this.c_myEvent, _taskCompletionSource2);
+			var _publication2 = new Publication(this.c_logger, this.c_messageDelivery, this.c_myEvent, _taskCompletionSource2);
 
 			this.c_publicationQueue.Add(_publication1);
 			this.c_publicationQueue.Add(_publication2);
@@ -255,7 +258,7 @@ namespace PMCG.Messaging.Client.UT
 			var _SUT = new PMCG.Messaging.Client.Publisher(this.c_connection, _publicationQueue);
 			_SUT.Start();   // Can't capture result due to compiler treating warnings as errors - var is not used
 
-			var _publication = new Publication(this.c_messageDelivery, this.c_myEvent, this.c_taskCompletionSource);
+			var _publication = new Publication(this.c_logger, this.c_messageDelivery, this.c_myEvent, this.c_taskCompletionSource);
 			_publicationQueue.Add(_publication);
 			Task.Delay(2000).Wait();
 			this.c_channel.IsOpen.Returns(true); // Simulate channel recovering

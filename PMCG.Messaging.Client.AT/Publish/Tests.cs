@@ -167,26 +167,26 @@ namespace PMCG.Messaging.Client.AT.Publish
 
 			// This test manually takes the following steps:
 
-			//		1 - We publish every second for 1 minute
+			//		1 - We publish continuously for 40,000 messages
 			//		2 - We close the connection via the UI by clicking on connections, forcing close
 			//		3 - Observe that for a period of time it fails to publish , retrying every second (via logs)
 			//		4 - Observe that the connection is automatically recovered after a period of time (via UI)
 			//		5 - Observe that all failed messages have since published successfully (via logs)
 
 			var _tasks = new ConcurrentBag<Task<PMCG.Messaging.PublicationResult>>();
-			for (int count = 0; count < 60; count++)
+			for (int count = 0; count < 40000; count++)
 			{
-				Thread.Sleep(1000);
 				var _message = new Accessories.MyEvent(Guid.NewGuid(), "", "R1", 1, "09:00", "DDD....");
 				_tasks.Add(_SUT.PublishAsync(_message));
+				Console.WriteLine(count);
 			}
 
 			Task.WhenAll(_tasks).ContinueWith(a =>
 			{
 				var _taskStatusCount = _tasks.Count(result => result.Status == TaskStatus.RanToCompletion);
 				var _messagePublishedCount = _tasks.Count(result => result.Result.Status == Messaging.PublicationResultStatus.Published);
-				Console.WriteLine(string.Format("RanToCompletionTaskCount expected: (60), actual: ({0})", _taskStatusCount));
-				Console.WriteLine(string.Format("MessagePublishedCount expected: (60), actual: ({0})", _messagePublishedCount));
+				Console.WriteLine(string.Format("RanToCompletionTaskCount expected: (40000), actual: ({0})", _taskStatusCount));
+				Console.WriteLine(string.Format("MessagePublishedCount expected: (40000), actual: ({0})", _messagePublishedCount));
 			});
 
 			Console.Read();
