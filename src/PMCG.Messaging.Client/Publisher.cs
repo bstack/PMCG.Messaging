@@ -106,7 +106,7 @@ namespace PMCG.Messaging.Client
 					this.c_unconfirmedPublications.TryRemove(_deliveryTag, out Publication removedPublication);
 					this.c_publicationQueue.Add(publication);
 
-					this.c_logger.DebugFormat("Publish Failed publishing message with Id {0} to exchange {1}, channel was closed", publication.Id, publication.ExchangeName);
+					this.c_logger.WarnFormat("Publish Failed publishing message with Id {0} to exchange {1}, channel was closed", publication.Id, publication.ExchangeName);
 				}
 			}
 			catch (Exception exception)
