@@ -12,8 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{D858A88F-1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMCG.Messaging.Client", "src\PMCG.Messaging.Client\PMCG.Messaging.Client.csproj", "{8D3F71E3-22BF-41AB-86AA-80702D74B4D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMCG.Messaging.Client.Interactive", "test\PMCG.Messaging.Client.Interactive\PMCG.Messaging.Client.Interactive.csproj", "{7B81E458-F56D-418E-A51F-210B94B73175}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMCG.Messaging.Client.UT", "test\PMCG.Messaging.Client.UT\PMCG.Messaging.Client.UT.csproj", "{8117DD63-8F69-4C5C-A473-BBD71CD4437E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMCG.Messaging.Inv", "test\PMCG.Messaging.Inv\PMCG.Messaging.Inv.csproj", "{9A860E41-5F4C-41AC-9ACD-A98CB408304A}"
@@ -34,10 +32,6 @@ Global
 		{8D3F71E3-22BF-41AB-86AA-80702D74B4D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D3F71E3-22BF-41AB-86AA-80702D74B4D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D3F71E3-22BF-41AB-86AA-80702D74B4D9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7B81E458-F56D-418E-A51F-210B94B73175}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B81E458-F56D-418E-A51F-210B94B73175}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B81E458-F56D-418E-A51F-210B94B73175}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B81E458-F56D-418E-A51F-210B94B73175}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8117DD63-8F69-4C5C-A473-BBD71CD4437E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8117DD63-8F69-4C5C-A473-BBD71CD4437E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8117DD63-8F69-4C5C-A473-BBD71CD4437E}.Release|Any CPU.ActiveCfg = Release|Any CPU

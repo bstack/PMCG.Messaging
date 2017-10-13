@@ -297,72 +297,32 @@ namespace PMCG.Messaging.Client.AT.Consume
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		public void Publish_A_Message_To_A_Queue_Using_The_Direct_Exchange()
+		public void Publish_100_Messages_And_Consume_For_The_Same_Messsage_On_A_Transient_Queue()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder();
 			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
+			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
 			_busConfigurationBuilder
-				.RegisterPublication<Accessories.MyEvent>("", typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1)
+				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name)
 				.RegisterConsumer<Accessories.MyEvent>(
 					typeof(Accessories.MyEvent).Name,
 					message => { return ConsumerHandlerResult.Completed; },
-				Accessories.Configuration.ExchangeName1);
-
+					Accessories.Configuration.ExchangeName1);
 			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
-			var _message = new Accessories.MyEvent(Guid.NewGuid(), "", "R1", 1, "09:00", "DDD....");
-			var _result = _SUT.PublishAsync(_message);
-			_result.Wait(TimeSpan.FromSeconds(1));
+			Console.WriteLine("Wait for transient queue to appear on management ui");
+			Console.ReadKey();
 
-			Console.WriteLine(string.Format("TaskStatus expected: (RanToCompletion), actual: ({0})", _result.Status));
-			Console.WriteLine(string.Format("PublicationResultStatus expected: (Published), actual: ({0})", _result.Result.Status));
-			Console.Read();
+			var _message = new Accessories.MyEvent(Guid.NewGuid(), "Correlation Id", "R1", 1, "09:00", "....");
+			for (int count = 0; count < 1000; count++)
+			{
+				_SUT.PublishAsync(_message);
+			}
+
+			Console.WriteLine("Ensure there are no messages in the queue");
+			Console.WriteLine("Ensure transient queue appears and disappears");
+			Console.ReadKey();
 		}
-
-
-		public void Publish_A_Message_To_A_Queue_Using_Custom_Exchange()
-		{
-			var _busConfigurationBuilder = new BusConfigurationBuilder();
-			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
-			_busConfigurationBuilder
-				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
-			_SUT.Connect();
-
-			var _message = new Accessories.MyEvent(Guid.NewGuid(), "", "R1", 1, "09:00", "DDD....");
-			var _result = _SUT.PublishAsync(_message);
-			_result.Wait(TimeSpan.FromSeconds(1));
-
-			Console.WriteLine(string.Format("TaskStatus expected: (RanToCompletion), actual: ({0})", _result.Status));
-			Console.WriteLine(string.Format("PublicationResultStatus expected: (Published), actual: ({0})", _result.Result.Status));
-			Console.Read();
-		}
-	
 	}
 }

@@ -59,7 +59,7 @@ namespace PMCG.Messaging.Client
 		public void Connect()
 		{
 			this.c_logger.Info("Connect Starting");
-			this.c_connectionManager.Open(numberOfTimesToTry: 3);
+			this.c_connectionManager.Open();
 
 			if (!this.c_connectionManager.IsOpen)
 			{

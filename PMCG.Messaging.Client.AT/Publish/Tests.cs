@@ -50,6 +50,29 @@ namespace PMCG.Messaging.Client.AT.Publish
 		}
 
 
+		public void Publish_A_Message_To_Two_Exchanges()
+		{
+			var _busConfigurationBuilder = new BusConfigurationBuilder();
+			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
+			_busConfigurationBuilder
+				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1)
+				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName2, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName2);
+			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			_SUT.Connect();
+
+			var _message = new Accessories.MyEvent(Guid.NewGuid(), "", "R1", 1, "09:00", "DDD....");
+			var _result = _SUT.PublishAsync(_message);
+			_result.Wait(TimeSpan.FromSeconds(1));
+
+			Console.WriteLine(string.Format("TaskStatus expected: (RanToCompletion), actual: ({0})", _result.Status));
+			Console.WriteLine(string.Format("PublicationResultStatus expected: (Published), actual: ({0})", _result.Result.Status));
+			Console.WriteLine("Verify on management ui that queue1 and queue 2 recieve 1 message");
+			Console.Read();
+		}
+
+
+
 		public void Publish_A_Message_To_An_Exchange_That_Doesnt_Exist()
 		{
 			// The channel shutdown event is invoked by RabbitMQ server as the exchange does not exist.
