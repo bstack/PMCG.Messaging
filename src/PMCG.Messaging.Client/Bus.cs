@@ -25,7 +25,7 @@ namespace PMCG.Messaging.Client
 			BusConfiguration configuration) : this(configuration,
 				new BusPublishersConsumersSeam(),
 				new ConnectionManager(
-					configuration.ConnectionUris,
+					configuration.ConnectionSettings,
 					configuration.ConnectionClientProvidedName,
 					configuration.ReconnectionPauseInterval))
 		{

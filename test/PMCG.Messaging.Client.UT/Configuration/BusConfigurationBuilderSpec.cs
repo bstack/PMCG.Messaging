@@ -16,7 +16,7 @@ namespace PMCG.Messaging.Client.UT.Configuration
 		[SetUp]
 		public void SetUp()
 		{
-			this.c_SUT = new BusConfigurationBuilder();
+			this.c_SUT = new BusConfigurationBuilder("hosts=localhost;port=5672;virtualhost=/;username=guest;ispasswordencrypted=false;password=Pass");
 		}
 
 

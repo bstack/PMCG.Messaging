@@ -15,9 +15,9 @@ namespace PMCG.Messaging.Client.AT
 			GlobalContext.Properties["pid"] = Process.GetCurrentProcess().Id;   // See http://stackoverflow.com/questions/2075603/log4net-process-id-information
 
 			//new PMCG.Messaging.Client.AT.Connect.Tests().Run_Where_We_Instantiate_And_Try_To_Connect_To_Non_Existent_Broker();
-			//new PMCG.Messaging.Client.AT.Connect.Tests().Connect_Restart_Broker_Connection_Reestablished_Automatically();
+			new PMCG.Messaging.Client.AT.Connect.Tests().Connect_Restart_Broker_Connection_Reestablished_Automatically();
 			//new PMCG.Messaging.Client.AT.Connect.Tests().Connect_Close_The_Connection_Using_The_Management_UI_Connection_Reestablished_Automatically();
-			new PMCG.Messaging.Client.AT.Connect.Tests().Connect_Is_Already_Started_Then_Blocked_And_Then_Unblocked();
+			//new PMCG.Messaging.Client.AT.Connect.Tests().Connect_Is_Already_Started_Then_Blocked_And_Then_Unblocked();
 
 			//new PMCG.Messaging.Client.AT.Publish.Tests().Publish_A_Message_To_A_Queue_Using_The_Direct_Exchange();
 			//new PMCG.Messaging.Client.AT.Publish.Tests().Publish_A_Message_To_A_Queue_Using_Custom_Exchange();

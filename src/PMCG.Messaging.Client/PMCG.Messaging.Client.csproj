@@ -57,7 +57,8 @@
     <Compile Include="Bus.cs" />
     <Compile Include="Configuration\BusConfiguration.cs" />
     <Compile Include="Configuration\BusConfigurationBuilder.cs" />
-    <Compile Include="Configuration\ConnectionStringSettingsParser.cs" />
+    <Compile Include="Configuration\ConnectionSettings.cs" />
+    <Compile Include="Configuration\ConnectionSettingsParser.cs" />
     <Compile Include="Configuration\IPasswordParser.cs" />
     <Compile Include="Configuration\DefaultPasswordParser.cs" />
     <Compile Include="Configuration\MessageDelivery.cs" />

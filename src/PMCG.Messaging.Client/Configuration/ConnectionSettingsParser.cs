@@ -5,18 +5,18 @@ using System.Linq;
 
 namespace PMCG.Messaging.Client.Configuration
 {
-	public class ConnectionStringSettingsParser
+	public class ConnectionSettingsParser
 	{
 		private readonly IPasswordParser c_passwordParser;
 
 
-		public ConnectionStringSettingsParser()
+		public ConnectionSettingsParser()
 			: this(new DefaultPasswordParser())
 		{
 		}
 
 
-		public ConnectionStringSettingsParser(
+		public ConnectionSettingsParser(
 			IPasswordParser passwordParser)
 		{
 			Check.RequireArgumentNotNull("passwordParser", passwordParser);
@@ -25,23 +25,22 @@ namespace PMCG.Messaging.Client.Configuration
 		}
 
 
-		public IEnumerable<string> Parse(
+		public ConnectionSettings Parse(
 			string connectionStringSettings)
 		{
 			Check.RequireArgumentNotEmpty("connectionStringSettings", connectionStringSettings);
 
 			var _settings = connectionStringSettings.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-			var _hosts = this.GetSetting(_settings, "hosts", "localhost").Split(',');
-			var _port = this.GetSetting(_settings, "port", "5672");
+			var _hostNames = this.GetSetting(_settings, "hosts", "localhost").Split(',').ToList();
+			var _port = int.Parse(this.GetSetting(_settings, "port", "5672"));
 			var _virtualHost = this.GetSetting(_settings, "virtualhost", "/");
 			var _userName = this.GetSetting(_settings, "username", "guest");
 			var _isPasswordEncrypted = this.GetSetting(_settings, "ispasswordencrypted", "false");
 			var _password = this.GetSetting(_settings, "password", "guest");
 
 			if (bool.Parse(_isPasswordEncrypted)) { _password = this.c_passwordParser.Parse(_password); }
-
-			var _connectionStringTemplate = "amqp://{0}:{1}@{2}:{3}{4}";
-			return _hosts.Select(host => string.Format(_connectionStringTemplate, _userName, _password, host, _port, _virtualHost)).ToArray();
+			
+			return new ConnectionSettings(_hostNames, _port, _virtualHost, _userName, _password);
 		}
 
 

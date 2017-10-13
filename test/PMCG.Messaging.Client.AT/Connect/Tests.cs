@@ -8,8 +8,8 @@ namespace PMCG.Messaging.Client.AT.Connect
 	{
 		public void Connect_Non_Existent_Broker_Indefinitely()
 		{
-			var _busConfigurationBuilder = new BusConfigurationBuilder();
-			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri.Replace("5672", "2567/")); // Wrong port number
+			var _connectionSettingsString = Accessories.Configuration.ConnectionSettingsString.Replace("5672", "2567/"); // Wrong port number
+			var _busConfigurationBuilder = new BusConfigurationBuilder(_connectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
 			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
@@ -20,8 +20,7 @@ namespace PMCG.Messaging.Client.AT.Connect
 
 		public void Connect_Restart_Broker_Connection_Reestablished_Automatically()
 		{
-			var _busConfigurationBuilder = new BusConfigurationBuilder();
-			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
@@ -35,8 +34,7 @@ namespace PMCG.Messaging.Client.AT.Connect
 
 		public void Connect_Close_The_Connection_Using_The_Management_UI_Connection_Reestablished_Automatically()
 		{
-			var _busConfigurationBuilder = new BusConfigurationBuilder();
-			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 
 			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
@@ -47,10 +45,10 @@ namespace PMCG.Messaging.Client.AT.Connect
 			Console.Read();
 		}
 
+
 		public void Connect_Is_Already_Started_Then_Blocked_And_Then_Unblocked()
 		{
-			var _busConfigurationBuilder = new BusConfigurationBuilder();
-			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 
 			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());

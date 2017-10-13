@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using PMCG.Messaging.Client.UT.TestDoubles;
 using System;
+using System.Collections.Generic;
 
 
 namespace PMCG.Messaging.Client.UT
@@ -11,10 +12,11 @@ namespace PMCG.Messaging.Client.UT
 		[Test]
 		public void Open_Where_Only_Allowed_One_Attempt_But_Using_Wrong_Port_Number_Results_In_Connection_Not_Being_Opened()
 		{
+			var _connectionSettings = new PMCG.Messaging.Client.UT.TestDoubles.ConnectionSettingsBuilder().Build(port:2222);
 			var _SUT = new PMCG.Messaging.Client.ConnectionManager(
-				new [] { TestingConfiguration.LocalConnectionUri.Replace("5672", "25672") },
-                "connectionClientProvidedName",
-                TimeSpan.FromSeconds(5));
+				_connectionSettings,
+				"connectionClientProvidedName",
+				TimeSpan.FromSeconds(5));
 			_SUT.Open(1);
 
 			Assert.IsFalse(_SUT.IsOpen);
@@ -25,11 +27,12 @@ namespace PMCG.Messaging.Client.UT
 		[Category("RequiresRunningInstance")]
 		public void Open_Where_Already_Opened_And_Second_Open_Call_Made_Results_In_Connection_Not_Being_Opened()
 		{
+			var _connectionSettings = new PMCG.Messaging.Client.UT.TestDoubles.ConnectionSettingsBuilder().Build();
 			var _SUT = new PMCG.Messaging.Client.ConnectionManager(
-				new[] { TestingConfiguration.LocalConnectionUri },
-                "connectionClientProvidedName",
-                TimeSpan.FromSeconds(5));
-			_SUT.Open();	// Requires a running instance of RabbitMQ
+				_connectionSettings,
+				"connectionClientProvidedName",
+				TimeSpan.FromSeconds(5));
+			_SUT.Open();    // Requires a running instance of RabbitMQ
 
 			Assert.That(() => _SUT.Open(), Throws.TypeOf<ApplicationException>());
 		}

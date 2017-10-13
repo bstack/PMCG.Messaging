@@ -5,7 +5,7 @@ namespace PMCG.Messaging.Client.AT.Accessories
 {
 	public class Configuration
 	{
-		public const string LocalConnectionUri = "amqp://guest:guest@localhost:5672/";
+		public const string ConnectionSettingsString = "hosts=localhost,anotherhost;port=5672;virtualhost=/;username=guest";
 		public const string ConnectionClientProvidedName = "myTestConnection";
 		public const string ExchangeName1 = "test.exchange.1";
 		public const string QueueName1 = "test.queue.1";

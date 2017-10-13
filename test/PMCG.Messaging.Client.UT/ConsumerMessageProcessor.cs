@@ -88,8 +88,7 @@ namespace PMCG.Messaging.Client.UT
 		private PMCG.Messaging.Client.ConsumerMessageProcessor BuildSUT(
 			Func<MyEvent, ConsumerHandlerResult> action = null)
 		{
-			var _busConfigurationBuilder = new BusConfigurationBuilder();
-			_busConfigurationBuilder.ConnectionUris.Add("....");
+			var _busConfigurationBuilder = new BusConfigurationBuilder("hosts=localhost;port=5672;virtualhost=/;username=guest;ispasswordencrypted=false;password=Pass");
 			_busConfigurationBuilder.ConnectionClientProvidedName = TestingConfiguration.ConnectionClientProvidedName;
 			_busConfigurationBuilder.RegisterConsumer(
 				TestingConfiguration.QueueName,

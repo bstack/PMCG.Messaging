@@ -15,8 +15,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 		{
 			var _capturedMessageId = string.Empty;
 
-			var _busConfigurationBuilder = new BusConfigurationBuilder();
-			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
@@ -43,8 +42,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 		{
 			var _capturedMessageId = string.Empty;
 
-			var _busConfigurationBuilder = new BusConfigurationBuilder();
-			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
@@ -71,8 +69,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 		{
 			var _capturedMessageId = string.Empty;
 
-			var _busConfigurationBuilder = new BusConfigurationBuilder();
-			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
@@ -98,8 +95,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 
 		public void Publish_1000_Messages_And_Consume_For_The_Same_Messages_With_Ack()
 		{
-			var _busConfigurationBuilder = new BusConfigurationBuilder();
-			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
@@ -126,8 +122,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 
 		public void Publish_1000_Messages_And_Consume_For_The_Same_Messages_With_Nack()
 		{
-			var _busConfigurationBuilder = new BusConfigurationBuilder();
-			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
@@ -154,8 +149,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 
 		public void Publish_1000_Messages_And_Consume_For_The_Same_Messages_With_Half_Acked_Half_Nacked()
 		{
-			var _busConfigurationBuilder = new BusConfigurationBuilder();
-			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
@@ -183,8 +177,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 
 		public void Publish_10000_Messages_And_Consume_For_The_Same_Messages_With_Ack_Blocked_Then_Unblocked()
 		{
-			var _busConfigurationBuilder = new BusConfigurationBuilder();
-			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
@@ -226,8 +219,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 
 		public void Publish_10000_Messages_And_Consume_For_The_Same_Messages_With_Ack_Connection_Closed_By_Server_Recovers_Automatically()
 		{
-			var _busConfigurationBuilder = new BusConfigurationBuilder();
-			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
@@ -257,16 +249,14 @@ namespace PMCG.Messaging.Client.AT.Consume
 
 		public void Publish_10000_Messages_And_Consume_On_Separate_Bus_For_The_Same_Messages_Consumer_Connection_Closed_By_Server_Recovers_Automatically()
 		{
-			var _publisherBusConfigurationBuilder = new BusConfigurationBuilder();
-			_publisherBusConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			var _publisherBusConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_publisherBusConfigurationBuilder.ConnectionClientProvidedName = "publisher";
 			_publisherBusConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName2, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => "test.queue.2");
 			var _publisherBus = new PMCG.Messaging.Client.Bus(_publisherBusConfigurationBuilder.Build());
 			_publisherBus.Connect();
 
-			var _consumerBusConfigurationBuilder = new BusConfigurationBuilder();
-			_consumerBusConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			var _consumerBusConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_consumerBusConfigurationBuilder.ConnectionClientProvidedName = "consumer";
 			_consumerBusConfigurationBuilder.NumberOfConsumers = 2;
 			_consumerBusConfigurationBuilder
@@ -299,8 +289,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 
 		public void Publish_100_Messages_And_Consume_For_The_Same_Messsage_On_A_Transient_Queue()
 		{
-			var _busConfigurationBuilder = new BusConfigurationBuilder();
-			_busConfigurationBuilder.ConnectionUris.Add(Accessories.Configuration.LocalConnectionUri);
+			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name)
