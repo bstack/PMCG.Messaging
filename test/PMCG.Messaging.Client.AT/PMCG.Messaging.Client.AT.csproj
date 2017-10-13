@@ -65,11 +65,11 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\src\PMCG.Messaging.Client\PMCG.Messaging.Client.csproj">
+    <ProjectReference Include="..\..\src\PMCG.Messaging.Client\PMCG.Messaging.Client.csproj">
       <Project>{8d3f71e3-22bf-41ab-86aa-80702d74b4d9}</Project>
       <Name>PMCG.Messaging.Client</Name>
     </ProjectReference>
-    <ProjectReference Include="..\src\PMCG.Messaging\PMCG.Messaging.csproj">
+    <ProjectReference Include="..\..\src\PMCG.Messaging\PMCG.Messaging.csproj">
       <Project>{961aba37-a451-4137-a1a5-1a6a7d25af09}</Project>
       <Name>PMCG.Messaging</Name>
     </ProjectReference>

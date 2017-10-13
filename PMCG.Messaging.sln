@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMCG.Messaging.Client.UT", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMCG.Messaging.Inv", "test\PMCG.Messaging.Inv\PMCG.Messaging.Inv.csproj", "{9A860E41-5F4C-41AC-9ACD-A98CB408304A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMCG.Messaging.Client.AT", "PMCG.Messaging.Client.AT\PMCG.Messaging.Client.AT.csproj", "{98470DA1-E69C-4C4C-A0B0-9AF30CF805FE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMCG.Messaging.Client.AT", "test\PMCG.Messaging.Client.AT\PMCG.Messaging.Client.AT.csproj", "{98470DA1-E69C-4C4C-A0B0-9AF30CF805FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
