@@ -32,7 +32,7 @@ namespace PMCG.Messaging.Client.UT
 				_connectionSettings,
 				"connectionClientProvidedName",
 				TimeSpan.FromSeconds(5));
-			_SUT.Open();    // Requires a running instance of RabbitMQ
+			_SUT.Open();	// Requires a running instance of RabbitMQ
 
 			Assert.That(() => _SUT.Open(), Throws.TypeOf<ApplicationException>());
 		}

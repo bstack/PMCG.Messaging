@@ -129,12 +129,12 @@ namespace PMCG.Messaging.Client.UT
 		{
 			var _waitHandle = new CountdownEvent(10);
 			var _nextPublishSeqNo = 1UL;
-			this.c_channel.NextPublishSeqNo.Returns(callInfo => _nextPublishSeqNo++);       // Would not work when I used .Returns(1Ul, 2UL, 3UL); Not sure why this works !
+			this.c_channel.NextPublishSeqNo.Returns(callInfo => _nextPublishSeqNo++);		// Would not work when I used .Returns(1Ul, 2UL, 3UL); Not sure why this works !
 			this.c_channel
 				.When(channel => channel.BasicPublish(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IBasicProperties>(), Arg.Any<byte[]>()))
 				.Do(callInfo => _waitHandle.Signal());
 			var _SUT = new PMCG.Messaging.Client.Publisher(this.c_connection, this.c_publicationQueue);
-			_SUT.Start();   // Can't capture due to compiler treating warnings as errors
+			_SUT.Start();	// Can't capture due to compiler treating warnings as errors
 
 			var _publications = new List<Publication>();
 			for (var _index = 1; _index <= 10; _index++)
@@ -163,7 +163,7 @@ namespace PMCG.Messaging.Client.UT
 		{
 			var _waitHandle = new CountdownEvent(100);
 			var _nextPublishSeqNo = 1UL;
-			this.c_channel.NextPublishSeqNo.Returns(callInfo => _nextPublishSeqNo++);       // Would not work when I used .Returns(1Ul, 2UL, 3UL); Not sure why this works !
+			this.c_channel.NextPublishSeqNo.Returns(callInfo => _nextPublishSeqNo++);		// Would not work when I used .Returns(1Ul, 2UL, 3UL); Not sure why this works !
 			this.c_channel
 				.When(channel => channel.BasicPublish(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IBasicProperties>(), Arg.Any<byte[]>()))
 				.Do(callInfo => _waitHandle.Signal());
@@ -204,7 +204,7 @@ namespace PMCG.Messaging.Client.UT
 			
 			var _publication = new Publication(this.c_logger, this.c_messageDelivery, this.c_myEvent, this.c_taskCompletionSource);
 			this.c_publicationQueue.Add(_publication);
-			_waitHandle.WaitOne();      // Allow channel publication to complete
+			_waitHandle.WaitOne();		// Allow channel publication to complete
 			this.c_channel.BasicNacks += Raise.EventWith(this.c_channel, new BasicNackEventArgs { Multiple = true, DeliveryTag = 1UL });
 
 			Assert.IsTrue(_publication.ResultTask.IsCompleted);
@@ -230,7 +230,7 @@ namespace PMCG.Messaging.Client.UT
 
 			this.c_publicationQueue.Add(_publication1);
 			this.c_publicationQueue.Add(_publication2);
-			_waitHandle.Wait();     // Allow channel publications to complete
+			_waitHandle.Wait();		// Allow channel publications to complete
 			this.c_channel.ModelShutdown += Raise.EventWith(this.c_channel, new ShutdownEventArgs(ShutdownInitiator.Peer, 1, "Bang!"));
 
 			// Since all running on the same thread we do not need to wait - this is also not realistic as we know the channel shutdown event will happen on a different thread
