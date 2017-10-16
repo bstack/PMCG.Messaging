@@ -206,9 +206,8 @@ namespace PMCG.Messaging.Client.AT.Consume
 				_SUT.PublishAsync(_message);
 			}
 
-
 			Console.WriteLine("Ensure there are no messages in the queue");
-			Console.WriteLine("Ensure there are no messages in the dead letter queue");
+			Console.WriteLine("Ensure there are some messages in the dead letter queue(reason expired)");
 			Console.ReadKey();
 		}
 
@@ -228,7 +227,6 @@ namespace PMCG.Messaging.Client.AT.Consume
 			_SUT.Connect();
 
 			Console.WriteLine("Close connection via rabbitmq management ui while loop is executing");
-
 			for (int count = 0; count < 10000; count++)
 			{
 				var _messageId = Guid.NewGuid();
@@ -236,9 +234,8 @@ namespace PMCG.Messaging.Client.AT.Consume
 				_SUT.PublishAsync(_message);
 			}
 
-
 			Console.WriteLine("Ensure there are no messages in the queue");
-			Console.WriteLine("Ensure there are no messages in the dead letter queue");
+			Console.WriteLine("Ensure there are some messages in the dead letter queue(reason expired)");
 			Console.ReadKey();
 		}
 
@@ -277,13 +274,12 @@ namespace PMCG.Messaging.Client.AT.Consume
 			}
 
 			Console.WriteLine("Ensure there are no messages in the queue");
-			Console.WriteLine("Ensure there are no messages in the dead letter queue");
+			Console.WriteLine("Ensure there are some messages in the dead letter queue(reason expired)");
 			Console.ReadKey();
 		}
 
 
-
-		public void Publish_100_Messages_And_Consume_For_The_Same_Messsage_On_A_Transient_Queue()
+		public void Publish_1000_Messages_And_Consume_For_The_Same_Messsage_On_A_Transient_Queue()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
