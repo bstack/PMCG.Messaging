@@ -66,7 +66,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 
 			Console.WriteLine(string.Format("TaskStatus expected: (RanToCompletion), actual: ({0})", _result.Status));
 			Console.WriteLine(string.Format("PublicationResultStatus expected: (Published), actual: ({0})", _result.Result.Status));
-			Console.WriteLine("Verify that queue1 and queue 2 recieve 1 message each on management ui");
+			Console.WriteLine("Verify that queue1 and queue 2 receive 1 message each on management ui");
 			Console.Read();
 		}
 
@@ -90,7 +90,6 @@ namespace PMCG.Messaging.Client.AT.Publish
 
 			Console.WriteLine(string.Format("TaskStatus expected: (RanToCompletion), actual: ({0})", _result.Status));
 			Console.WriteLine(string.Format("PublicationResultStatus expected: (NotPublished), actual: ({0})", _result.Result.Status));
-			Console.WriteLine("Verify that queue1 and queue 2 recieve 1 message each on management ui");
 			Console.Read();
 		}
 
@@ -132,7 +131,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 			Console.Read();
 		}
 
-
+		// TODO: What is this test for???
 		public void Publish_With_Timeout()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
