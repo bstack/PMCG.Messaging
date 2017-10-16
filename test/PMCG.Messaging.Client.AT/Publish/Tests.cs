@@ -16,7 +16,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>("", typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
 			var _message = new Accessories.MyEvent(Guid.NewGuid(), "", "R1", 1, "09:00", "DDD....");
@@ -25,6 +25,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 
 			Console.WriteLine(string.Format("TaskStatus expected: (RanToCompletion), actual: ({0})", _result.Status));
 			Console.WriteLine(string.Format("PublicationResultStatus expected: (Published), actual: ({0})", _result.Result.Status));
+			Console.WriteLine("Verify a message was sent to AMPQ default exchange in management ui");
 			Console.Read();
 		}
 
@@ -35,7 +36,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
 			var _message = new Accessories.MyEvent(Guid.NewGuid(), "", "R1", 1, "09:00", "DDD....");
@@ -44,6 +45,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 
 			Console.WriteLine(string.Format("TaskStatus expected: (RanToCompletion), actual: ({0})", _result.Status));
 			Console.WriteLine(string.Format("PublicationResultStatus expected: (Published), actual: ({0})", _result.Result.Status));
+			Console.WriteLine("Verify a message is on the queue in management ui");
 			Console.Read();
 		}
 
@@ -55,7 +57,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1)
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName2, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName2);
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
 			var _message = new Accessories.MyEvent(Guid.NewGuid(), "", "R1", 1, "09:00", "DDD....");
@@ -64,7 +66,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 
 			Console.WriteLine(string.Format("TaskStatus expected: (RanToCompletion), actual: ({0})", _result.Status));
 			Console.WriteLine(string.Format("PublicationResultStatus expected: (Published), actual: ({0})", _result.Result.Status));
-			Console.WriteLine("Verify on management ui that queue1 and queue 2 recieve 1 message");
+			Console.WriteLine("Verify that queue1 and queue 2 recieve 1 message each on management ui");
 			Console.Read();
 		}
 
@@ -79,7 +81,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>("exchange_that_doesnt_exist", typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
 			var _message = new Accessories.MyEvent(Guid.NewGuid(), "", "R1", 1, "09:00", "DDD....");
@@ -88,6 +90,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 
 			Console.WriteLine(string.Format("TaskStatus expected: (RanToCompletion), actual: ({0})", _result.Status));
 			Console.WriteLine(string.Format("PublicationResultStatus expected: (NotPublished), actual: ({0})", _result.Result.Status));
+			Console.WriteLine("Verify that queue1 and queue 2 recieve 1 message each on management ui");
 			Console.Read();
 		}
 
@@ -107,7 +110,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
 			var _tasks = new ConcurrentBag<Task<PMCG.Messaging.PublicationResult>>();
@@ -123,6 +126,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 				var _messagePublishedCount = _tasks.Count(result => result.Result.Status == Messaging.PublicationResultStatus.Published);
 				Console.WriteLine(string.Format("RanToCompletionTaskCount expected: (1000), actual: ({0})", _taskStatusCount));
 				Console.WriteLine(string.Format("MessagePublishedCount expected: (1000), actual: ({0})", _messagePublishedCount));
+				Console.WriteLine("Verify that 1000 messages on queue on management ui");
 			});
 			
 			Console.Read();
@@ -135,7 +139,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
 			var _message = new Accessories.MyEvent(Guid.NewGuid(), "", "R1", 1, "09:00", "DDD....");
@@ -146,6 +150,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 				Console.WriteLine(string.Format("TaskStatus expected: (WaitingForActivation), actual: ({0})", _result.Status));
 			}
 
+			Console.WriteLine("Verify that 1 message on queue on management ui");
 			Console.Read();
 		}
 
@@ -157,16 +162,16 @@ namespace PMCG.Messaging.Client.AT.Publish
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 			_SUT.Close();
 
 			var _message = new Accessories.MyEvent(Guid.NewGuid(), "", "R1", 1, "09:00", "DDD....");
 			var _result = _SUT.PublishAsync(_message);
-
 			
 			Console.WriteLine("Should keep retrying to publish every second indefinitely");
 			Console.WriteLine("This is due to the fact that the application initiated the close");
+			Console.WriteLine("Normally, close is only called when application is closing down");
 			Console.Read();
 		}
 
@@ -177,15 +182,14 @@ namespace PMCG.Messaging.Client.AT.Publish
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
 			// This test manually takes the following steps:
-
 			//		1 - We publish continuously for 40,000 messages
 			//		2 - We close the connection via the UI by clicking on connections, forcing close
 			//		3 - Observe that for a period of time it fails to publish , retrying every second (via logs)
-			//		4 - Observe that the connection is automatically recovered after a period of time (via UI)
+			//		4 - Observe that the connection is automatically recovered after a period of time (via management ui)
 			//		5 - Observe that all failed messages have since published successfully (via logs)
 
 			var _tasks = new ConcurrentBag<Task<PMCG.Messaging.PublicationResult>>();
@@ -214,7 +218,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
 			// This test manually takes the following steps:
@@ -251,7 +255,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
 			// This test manually takes the following steps:
@@ -291,7 +295,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
 			Accessories.MyEvent _message = null;
@@ -309,12 +313,12 @@ namespace PMCG.Messaging.Client.AT.Publish
 			var _capturedMessageId = string.Empty;
 
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
+			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName2, "test.queue.2", MessageDeliveryMode.Persistent, message => "test.queue.2");
 			
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
 			var _messageId = Guid.NewGuid();

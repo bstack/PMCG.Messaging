@@ -8,10 +8,10 @@ namespace PMCG.Messaging.Client.AT.Connect
 	{
 		public void Connect_Non_Existent_Broker_Indefinitely()
 		{
-			var _connectionSettingsString = Accessories.Configuration.ConnectionSettingsString.Replace("5672", "2567/"); // Wrong port number
+			var _connectionSettingsString = Accessories.Configuration.ConnectionSettingsString.Replace("5672", "2567"); // Wrong port number
 			var _busConfigurationBuilder = new BusConfigurationBuilder(_connectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = "testconnectionname";
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
+			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
 			Console.WriteLine("Allow time for connection attempts to fail, should see retries indefinitely");
@@ -22,12 +22,12 @@ namespace PMCG.Messaging.Client.AT.Connect
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
-			Console.WriteLine("Stop the broker by running the following command 'rabbitmqctl.bat stop'");
-			Console.WriteLine("Start the broker by running the following command 'rabbitmq-server.bat -detached'");
-			Console.WriteLine("Connection should be re-established automatically via automatic recovery");
+			Console.WriteLine(@"Stop the broker by running the following command '.\rabbitmqctl.bat stop'");
+			Console.WriteLine(@"Start the broker by running the following command '.\rabbitmq-server.bat -detached'");
+			Console.WriteLine("Verify connection in management ui is re-established automatically via automatic recovery");
 			Console.Read();
 		}
 
@@ -37,11 +37,11 @@ namespace PMCG.Messaging.Client.AT.Connect
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
-			Console.WriteLine("Close the connection from the dashboard");
-			Console.WriteLine("Connection should be re-established automatically via automatic recovery");
+			Console.WriteLine("Close the connection from the management ui");
+			Console.WriteLine("Verify connection in management ui is re-established automatically via automatic recovery ");
 			Console.Read();
 		}
 
@@ -51,15 +51,15 @@ namespace PMCG.Messaging.Client.AT.Connect
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 
-			var _SUT = new PMCG.Messaging.Client.Bus(_busConfigurationBuilder.Build());
+			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
-			Console.WriteLine("Block the broker by running the following command as an admin");
-			Console.WriteLine("\t .\rabbitmqctl.bat set_vm_memory_high_watermark 0.0000001");
+			Console.WriteLine("Block the broker by running the following command");
+			Console.WriteLine(@".\rabbitmqctl.bat set_vm_memory_high_watermark 0.0000001");
 			Console.WriteLine("Verify connection state is blocked");
 			Console.Read();
 
-			Console.WriteLine("Unblock the broker by running the following command as an admin");
+			Console.WriteLine("Unblock the broker by running the following command");
 			Console.WriteLine("\t .\rabbitmqctl.bat set_vm_memory_high_watermark 0.4");
 			Console.Read();
 			Console.WriteLine("Verify connection state is running");
