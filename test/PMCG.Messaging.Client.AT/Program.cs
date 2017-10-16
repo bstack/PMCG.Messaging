@@ -35,7 +35,7 @@ namespace PMCG.Messaging.Client.AT
 			//_publishTests.Publish_Connection_Closed_By_Server_Restart_Unpublished_Messages_Are_Republished_Successfully();
 			//_publishTests.Publish_Connection_Blocked_Then_Unblocked_Unpublished_Messages_Are_Republished_Successfully();
 			//_publishTests.Publish_Invalid_Message_Is_Null();
-			_publishTests.Publish_A_Message_That_Expires_Ends_Up_In_Dead_Letter_Queue();
+			//_publishTests.Publish_A_Message_That_Expires_Ends_Up_In_Dead_Letter_Queue();
 
 			//_consumeTests.Publish_A_Message_And_Consume_For_The_Same_Message_With_Ack();
 			//_consumeTests.Publish_A_Message_And_Consume_For_The_Same_Message_With_Nack();
@@ -46,6 +46,7 @@ namespace PMCG.Messaging.Client.AT
 			//_consumeTests.Publish_10000_Messages_And_Consume_For_The_Same_Messages_With_Ack_Blocked_Then_Unblocked();
 			//_consumeTests.Publish_10000_Messages_And_Consume_For_The_Same_Messages_With_Ack_Connection_Closed_By_Server_Recovers_Automatically();
 			//_consumeTests.Publish_10000_Messages_And_Consume_On_Separate_Bus_For_The_Same_Messages_Consumer_Connection_Closed_By_Server_Recovers_Automatically();
+			_consumeTests.Publish_500000_Messages_And_Then_Consume_On_Separate_Bus_For_The_Same_Messages();
 			//_consumeTests.Publish_1000_Messages_And_Consume_For_The_Same_Messsage_On_A_Transient_Queue();
 
 			//TODO should we verify consumer counts, also should we update ttl to higher than 10 secs?

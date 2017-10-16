@@ -279,6 +279,47 @@ namespace PMCG.Messaging.Client.AT.Consume
 		}
 
 
+		public void Publish_500000_Messages_And_Then_Consume_On_Separate_Bus_For_The_Same_Messages()
+		{
+			var _publisherBusConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
+			_publisherBusConfigurationBuilder.ConnectionClientProvidedName = "publisher";
+			_publisherBusConfigurationBuilder
+				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => "test.queue.1");
+			var _publisherBus = new Bus(_publisherBusConfigurationBuilder.Build());
+			_publisherBus.Connect();
+
+			for (int count = 0; count < 50000; count++)
+			{
+				var _messageId = Guid.NewGuid();
+				var _message = new Accessories.MyEvent(_messageId, null, "R1", 1, "09:00", "DDD....");
+				_publisherBus.PublishAsync(_message);
+			}
+
+			Console.WriteLine("Verify 50000 messages in the queue");
+			Console.ReadKey();
+
+			var _consumedMessageCount = 0;
+			var _consumerBusConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
+			_consumerBusConfigurationBuilder.ConnectionClientProvidedName = "consumer";
+			_consumerBusConfigurationBuilder.NumberOfConsumers = 2;
+			_consumerBusConfigurationBuilder
+				.RegisterConsumer<Accessories.MyEvent>(
+					Accessories.Configuration.QueueName1,
+					typeof(Accessories.MyEvent).Name,
+					message => {
+						_consumedMessageCount++;
+						return ConsumerHandlerResult.Completed; });
+			var _consumerBus = new Bus(_consumerBusConfigurationBuilder.Build());
+			_consumerBus.Connect();
+
+			Thread.Sleep(20000);
+			Console.WriteLine("Ensure there are no messages in the queue");
+			Console.WriteLine("Ensure there are some messages in the dead letter queue(reason expired)");
+			Console.WriteLine(string.Format("Consumed message count expected: (50000), actual: ({0})", _consumedMessageCount));
+			Console.ReadKey();
+		}
+
+
 		public void Publish_1000_Messages_And_Consume_For_The_Same_Messsage_On_A_Transient_Queue()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
