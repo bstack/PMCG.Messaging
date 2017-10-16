@@ -32,9 +32,10 @@ namespace PMCG.Messaging.Client.AT
 			//_publishTests.Publish_With_Timeout();
 			//_publishTests.Publish_Connection_Closed_By_Application_Never_Recovers();
 			// TODO Messages disappearing, not expected when running slow??????????
-			_publishTests.Publish_Connection_Closed_By_Server_Recovers_Automatically();
+			//_publishTests.Publish_Connection_Closed_By_Server_Recovers_Automatically();
 			//_publishTests.Publish_Connection_Closed_By_Server_Restart_Unpublished_Messages_Are_Republished_Successfully();
 			//_publishTests.Publish_Connection_Blocked_Then_Unblocked_Unpublished_Messages_Are_Republished_Successfully();
+			_publishTests.Publish_Invalid_Message_Is_Null();
 			//_publishTests.Publish_A_Message_That_Expires_Ends_Up_In_Dead_Letter_Queue();
 
 			//_consumeTests.Publish_A_Message_And_Consume_For_The_Same_Message_With_Ack();

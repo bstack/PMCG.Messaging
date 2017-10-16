@@ -155,7 +155,6 @@ namespace PMCG.Messaging.Client.AT.Publish
 		}
 
 
-
 		public void Publish_Connection_Closed_By_Application_Never_Recovers()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
@@ -222,11 +221,10 @@ namespace PMCG.Messaging.Client.AT.Publish
 			_SUT.Connect();
 
 			// This test manually takes the following steps:
-
 			//		1 - We publish every second for 1 minute
 			//		2 - We restart the rabbitmq server
 			//		3 - Observe that for a period of time it fails to publish , retrying every second (via logs)
-			//		4 - Observe that the connection is automatically recovered after a period of time (via UI)
+			//		4 - Observe that the connection is automatically recovered after a period of time (via management ui)
 			//		5 - Observe that all failed messages have since published successfully (via logs)
 
 			var _tasks = new ConcurrentBag<Task<PMCG.Messaging.PublicationResult>>();
@@ -243,6 +241,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 				var _messagePublishedCount = _tasks.Count(result => result.Result.Status == Messaging.PublicationResultStatus.Published);
 				Console.WriteLine(string.Format("RanToCompletionTaskCount expected: (60), actual: ({0})", _taskStatusCount));
 				Console.WriteLine(string.Format("MessagePublishedCount expected: (60), actual: ({0})", _messagePublishedCount));
+				Console.WriteLine("Verify that 60 message on queue on management ui");
 			});
 
 			Console.Read();
@@ -259,7 +258,6 @@ namespace PMCG.Messaging.Client.AT.Publish
 			_SUT.Connect();
 
 			// This test manually takes the following steps:
-
 			//		1 - We publish every second for 1 minute
 			//		2 - We block connection by setting memory high watermark to a very low setting 
 			//			./rabbitmqctl.bat set_vm_memory_high_watermark 0.0000001
@@ -283,6 +281,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 				var _messagePublishedCount = _tasks.Count(result => result.Result.Status == Messaging.PublicationResultStatus.Published);
 				Console.WriteLine(string.Format("RanToCompletionTaskCount expected: (60), actual: ({0})", _taskStatusCount));
 				Console.WriteLine(string.Format("MessagePublishedCount expected: (60), actual: ({0})", _messagePublishedCount));
+				Console.WriteLine("Verify that 60 message on queue on management ui");
 			});
 
 			Console.Read();
@@ -298,12 +297,18 @@ namespace PMCG.Messaging.Client.AT.Publish
 			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
-			Accessories.MyEvent _message = null;
-			var _result = _SUT.PublishAsync(_message);
-			_result.Wait(TimeSpan.FromSeconds(1));
+			// This is an unrecoverable scenario that we cannot cater for, however it should never happen anyway as there should never be a null message
+			try
+			{
+				Accessories.MyEvent _message = null;
+				var _result = _SUT.PublishAsync(_message);
+				_result.Wait(TimeSpan.FromSeconds(1));
+			}
+			catch (Exception exception)
+			{
+				Console.WriteLine(string.Format("Exception expected: (Value cannot be null.Parameter name: message), actual: ({0})", exception.Message));
+			}
 
-			Console.WriteLine(string.Format("TaskStatus expected: (RanToCompletion), actual: ({0})", _result.Status));
-			Console.WriteLine(string.Format("PublicationResultStatus expected: (Published), actual: ({0})", _result.Result.Status));
 			Console.Read();
 		}
 
