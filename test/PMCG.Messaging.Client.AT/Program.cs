@@ -48,6 +48,8 @@ namespace PMCG.Messaging.Client.AT
 			//_consumeTests.Publish_10000_Messages_And_Consume_For_The_Same_Messages_With_Ack_Connection_Closed_By_Server_Recovers_Automatically();
 			//_consumeTests.Publish_10000_Messages_And_Consume_On_Separate_Bus_For_The_Same_Messages_Consumer_Connection_Closed_By_Server_Recovers_Automatically();
 			_consumeTests.Publish_1000_Messages_And_Consume_For_The_Same_Messsage_On_A_Transient_Queue();
+
+			//TODO should we verify consumer counts, also should we update ttl to higher than 10 secs?
 		}
 	}
 }
