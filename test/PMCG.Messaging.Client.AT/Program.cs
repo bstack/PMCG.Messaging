@@ -21,7 +21,7 @@ namespace PMCG.Messaging.Client.AT
 			//_connectTests.Connect_Non_Existent_Broker_Indefinitely();
 			//_connectTests.Connect_Restart_Broker_Connection_Reestablished_Automatically();
 			//_connectTests.Connect_Close_The_Connection_Using_The_Management_UI_Connection_Reestablished_Automatically();
-			//_connectTests.Connect_Is_Already_Started_Then_Blocked_And_Then_Unblocked();
+			_connectTests.Connect_Is_Already_Started_Then_Blocked_And_Then_Unblocked();
 
 			//_publishTests.Publish_A_Message_To_A_Queue_Using_The_Direct_Exchange();
 			//_publishTests.Publish_A_Message_To_A_Queue_Using_Custom_Exchange();
@@ -32,7 +32,7 @@ namespace PMCG.Messaging.Client.AT
 			//_publishTests.Publish_With_Timeout();
 			//_publishTests.Publish_Connection_Closed_By_Application_Never_Recovers();
 			// TODO Messages disappearing, not expected when running slow??????????
-			_publishTests.Publish_Connection_Closed_By_Server_Recovers_Automatically();
+			//_publishTests.Publish_Connection_Closed_By_Server_Recovers_Automatically();
 			//_publishTests.Publish_Connection_Closed_By_Server_Restart_Unpublished_Messages_Are_Republished_Successfully();
 			//_publishTests.Publish_Connection_Blocked_Then_Unblocked_Unpublished_Messages_Are_Republished_Successfully();
 			//_publishTests.Publish_A_Message_That_Expires_Ends_Up_In_Dead_Letter_Queue();
