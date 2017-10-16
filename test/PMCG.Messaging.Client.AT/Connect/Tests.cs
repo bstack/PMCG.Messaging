@@ -8,6 +8,9 @@ namespace PMCG.Messaging.Client.AT.Connect
 	{
 		public void Connect_Non_Existent_Broker_Indefinitely()
 		{
+			// NOTE: With this test, we provide two connection strings which have invalid ports. We are using the default connection retry mechanism
+			// thats built into the RabbitMQ library - retries each connection randomly and then throws a BrokerUnreachableException if it has failed
+			// to retry on all connections provided. Our own library catches this exception, and then retries all again
 			var _connectionSettingsString = Accessories.Configuration.ConnectionSettingsString.Replace("5672", "2567"); // Wrong port number
 			var _busConfigurationBuilder = new BusConfigurationBuilder(_connectionSettingsString);
 			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
@@ -15,6 +18,7 @@ namespace PMCG.Messaging.Client.AT.Connect
 			_SUT.Connect();
 
 			Console.WriteLine("Allow time for connection attempts to fail, should see retries indefinitely");
+			Console.WriteLine("Observe that BrokerUnreachableException is thrown");
 		}
 
 
@@ -41,7 +45,8 @@ namespace PMCG.Messaging.Client.AT.Connect
 			_SUT.Connect();
 
 			Console.WriteLine("Close the connection from the management ui");
-			Console.WriteLine("Verify connection in management ui is re-established automatically via automatic recovery ");
+			Console.WriteLine("Verify connection in management ui is re-established automatically via automatic recovery");
+			Console.WriteLine("Verify the correct connection close reason is output to the console - 'Closed via management plugin'");
 			Console.Read();
 		}
 
@@ -56,13 +61,13 @@ namespace PMCG.Messaging.Client.AT.Connect
 
 			Console.WriteLine("Block the broker by running the following command");
 			Console.WriteLine(@".\rabbitmqctl.bat set_vm_memory_high_watermark 0.0000001");
-			Console.WriteLine("Verify connection state is blocked");
+			Console.WriteLine("Verify connection state is 'blocking' via management ui");
 			Console.Read();
 
 			Console.WriteLine("Unblock the broker by running the following command");
 			Console.WriteLine("\t .\rabbitmqctl.bat set_vm_memory_high_watermark 0.4");
 			Console.Read();
-			Console.WriteLine("Verify connection state is running");
+			Console.WriteLine("Verify connection state is 'running' via management ui");
 			Console.Read();
 		}
 	}
