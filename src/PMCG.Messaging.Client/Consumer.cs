@@ -42,10 +42,10 @@ namespace PMCG.Messaging.Client
 		{
 			this.c_logger.Info("Start Starting");
 
+			this.c_consumer = new EventingBasicConsumer(this.c_channel);
+			this.c_consumer.Received += (m, args) => { this.c_messageProcessor.Process(this.c_channel, args); };
 			this.EnsureTransientQueuesExist();
 			this.CreateAndConfigureConsumer();
-
-			this.c_consumer.Received += (m, args) => this.c_messageProcessor.Process(this.c_channel, args);
 
 			this.c_logger.Info("Start Completed consuming");
 		}
@@ -71,7 +71,6 @@ namespace PMCG.Messaging.Client
 
 		private void CreateAndConfigureConsumer()
 		{
-			this.c_consumer = new EventingBasicConsumer(this.c_channel);
 			foreach (var _queueName in this.c_configuration.MessageConsumers.GetDistinctQueueNames())
 			{
 				this.c_logger.InfoFormat("CreateAndConfigureConsumer Consume for queue {0}", _queueName);

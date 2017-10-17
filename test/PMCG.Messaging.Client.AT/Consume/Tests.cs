@@ -279,7 +279,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 		}
 
 
-		public void Publish_500000_Messages_And_Then_Consume_On_Separate_Bus_For_The_Same_Messages()
+		public void Publish_50000_Messages_And_Then_Consume_On_Separate_Bus_For_The_Same_Messages()
 		{
 			var _publisherBusConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
 			_publisherBusConfigurationBuilder.ConnectionClientProvidedName = "publisher";
