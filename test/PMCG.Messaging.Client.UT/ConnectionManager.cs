@@ -15,7 +15,6 @@ namespace PMCG.Messaging.Client.UT
 			var _connectionSettings = new PMCG.Messaging.Client.UT.TestDoubles.ConnectionSettingsBuilder().Build(port:2222);
 			var _SUT = new PMCG.Messaging.Client.ConnectionManager(
 				_connectionSettings,
-				"connectionClientProvidedName",
 				TimeSpan.FromSeconds(5));
 			_SUT.Open(1);
 
@@ -30,7 +29,6 @@ namespace PMCG.Messaging.Client.UT
 			var _connectionSettings = new PMCG.Messaging.Client.UT.TestDoubles.ConnectionSettingsBuilder().Build();
 			var _SUT = new PMCG.Messaging.Client.ConnectionManager(
 				_connectionSettings,
-				"connectionClientProvidedName",
 				TimeSpan.FromSeconds(5));
 			_SUT.Open();	// Requires a running instance of RabbitMQ
 

@@ -26,7 +26,6 @@ namespace PMCG.Messaging.Client
 				new BusPublishersConsumersSeam(),
 				new ConnectionManager(
 					configuration.ConnectionSettings,
-					configuration.ConnectionClientProvidedName,
 					configuration.ReconnectionPauseInterval))
 		{
 			// NOTE: We dont have a DBC check for BusConfiguration here as it does not execute before the call to the chained ctor. 

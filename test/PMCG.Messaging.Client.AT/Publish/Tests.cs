@@ -13,7 +13,6 @@ namespace PMCG.Messaging.Client.AT.Publish
 		public void Publish_A_Message_To_A_Queue_Using_The_Direct_Exchange()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>("", typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
 			var _SUT = new Bus(_busConfigurationBuilder.Build());
@@ -33,7 +32,6 @@ namespace PMCG.Messaging.Client.AT.Publish
 		public void Publish_A_Message_To_A_Queue_Using_Custom_Exchange()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
 			var _SUT = new Bus(_busConfigurationBuilder.Build());
@@ -53,7 +51,6 @@ namespace PMCG.Messaging.Client.AT.Publish
 		public void Publish_A_Message_To_Two_Exchanges()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1)
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName2, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName2);
@@ -78,7 +75,6 @@ namespace PMCG.Messaging.Client.AT.Publish
 			// This is an unrecoverable scenario that we cannot cater for, however it should never happen anyway as there should never be an incorrectly configured exchange
 
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>("exchange_that_doesnt_exist", typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
 			var _SUT = new Bus(_busConfigurationBuilder.Build());
@@ -106,7 +102,6 @@ namespace PMCG.Messaging.Client.AT.Publish
 		public void Publish_1000_Messages_To_A_Queue_Using_Custom_Exchange()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
 			var _SUT = new Bus(_busConfigurationBuilder.Build());
@@ -135,7 +130,6 @@ namespace PMCG.Messaging.Client.AT.Publish
 		public void Publish_With_Timeout()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
 			var _SUT = new Bus(_busConfigurationBuilder.Build());
@@ -157,7 +151,6 @@ namespace PMCG.Messaging.Client.AT.Publish
 		public void Publish_Connection_Closed_By_Application_Never_Recovers()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
 			var _SUT = new Bus(_busConfigurationBuilder.Build());
@@ -177,7 +170,6 @@ namespace PMCG.Messaging.Client.AT.Publish
 		public void Publish_Connection_Closed_By_Server_Recovers_Automatically()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
 			var _SUT = new Bus(_busConfigurationBuilder.Build());
@@ -213,7 +205,6 @@ namespace PMCG.Messaging.Client.AT.Publish
 		public void Publish_Connection_Closed_By_Server_Restart_Unpublished_Messages_Are_Republished_Successfully()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
 			var _SUT = new Bus(_busConfigurationBuilder.Build());
@@ -250,7 +241,6 @@ namespace PMCG.Messaging.Client.AT.Publish
 		public void Publish_Connection_Blocked_Then_Unblocked_Unpublished_Messages_Are_Republished_Successfully()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
 			var _SUT = new Bus(_busConfigurationBuilder.Build());
@@ -290,7 +280,6 @@ namespace PMCG.Messaging.Client.AT.Publish
 		public void Publish_Invalid_Message_Is_Null()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
 			var _SUT = new Bus(_busConfigurationBuilder.Build());
@@ -317,7 +306,6 @@ namespace PMCG.Messaging.Client.AT.Publish
 			var _capturedMessageId = string.Empty;
 
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName2, "test.queue.2", MessageDeliveryMode.Persistent, message => "test.queue.2");

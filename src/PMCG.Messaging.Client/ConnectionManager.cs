@@ -14,7 +14,6 @@ namespace PMCG.Messaging.Client
 	{
 		private readonly ILog c_logger;
 		private readonly Configuration.ConnectionSettings c_connectionSettings;
-		private readonly string c_connectionClientProvidedName;
 		private readonly TimeSpan c_reconnectionPauseInterval;
 
 
@@ -28,18 +27,15 @@ namespace PMCG.Messaging.Client
 
 		public ConnectionManager(
 			Configuration.ConnectionSettings connectionSettings,
-			string connectionClientProvidedName,
 			TimeSpan reconnectionPauseInterval)
 		{
 			this.c_logger = LogManager.GetLogger(this.GetType());
 			this.c_logger.Info("ctor Starting");
 			
 			Check.RequireArgumentNotNull("connectionSettings", connectionSettings);
-			Check.RequireArgumentNotEmpty("connectionClientProvidedName", connectionClientProvidedName);
 			Check.RequireArgument("reconnectionPauseInterval", reconnectionPauseInterval, reconnectionPauseInterval.Ticks > 0);
 
 			this.c_connectionSettings = connectionSettings;
-			this.c_connectionClientProvidedName = connectionClientProvidedName;
 			this.c_reconnectionPauseInterval = reconnectionPauseInterval;
 
 			this.c_logger.Info("ctor Completed");
@@ -76,7 +72,7 @@ namespace PMCG.Messaging.Client
 				{
 					this.c_connection = _connectionFactory.CreateConnection(
 						this.c_connectionSettings.HostNames,
-						this.c_connectionClientProvidedName);
+						this.c_connectionSettings.ClientProvidedName);
 
 					this.c_logger.InfoFormat("Open Connected to ({0}), sequence {1}", _connectionInfo, _attemptSequence);
 				}

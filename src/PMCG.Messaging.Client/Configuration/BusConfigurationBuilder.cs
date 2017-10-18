@@ -8,7 +8,6 @@ namespace PMCG.Messaging.Client.Configuration
 	public class BusConfigurationBuilder
 	{
 		public ConnectionSettings ConnectionSettings;
-		public string ConnectionClientProvidedName;
 		public TimeSpan ReconnectionPauseInterval;
 		public ushort NumberOfPublishers;
 		public ushort NumberOfConsumers;
@@ -140,7 +139,6 @@ namespace PMCG.Messaging.Client.Configuration
 		{
 			return new BusConfiguration(
 				this.ConnectionSettings,
-				this.ConnectionClientProvidedName,
 				this.ReconnectionPauseInterval,
 				this.NumberOfPublishers,
 				this.NumberOfConsumers,

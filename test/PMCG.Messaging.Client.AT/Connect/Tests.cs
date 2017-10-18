@@ -13,7 +13,6 @@ namespace PMCG.Messaging.Client.AT.Connect
 			// to retry on all connections provided. Our own library catches this exception, and then retries all again
 			var _connectionSettingsString = Accessories.Configuration.ConnectionSettingsString.Replace("5672", "2567"); // Wrong port number
 			var _busConfigurationBuilder = new BusConfigurationBuilder(_connectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
@@ -25,7 +24,6 @@ namespace PMCG.Messaging.Client.AT.Connect
 		public void Connect_Restart_Broker_Connection_Reestablished_Automatically()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
@@ -39,7 +37,6 @@ namespace PMCG.Messaging.Client.AT.Connect
 		public void Connect_Close_The_Connection_Using_The_Management_UI_Connection_Reestablished_Automatically()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 
 			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
@@ -54,7 +51,6 @@ namespace PMCG.Messaging.Client.AT.Connect
 		public void Connect_Is_Already_Started_Then_Blocked_And_Then_Unblocked()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 
 			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();

@@ -9,6 +9,7 @@ namespace PMCG.Messaging.Client.Configuration
 		public readonly IList<string> HostNames;
 		public readonly int Port;
 		public readonly string VirtualHost;
+		public readonly string ClientProvidedName;
 		public readonly string UserName;
 		public readonly string Password;
 
@@ -17,6 +18,7 @@ namespace PMCG.Messaging.Client.Configuration
 			IList<string> hostNames,
 			int port,
 			string virtualHost,
+			string clientProvidedName,
 			string userName,
 			string password)
 		{

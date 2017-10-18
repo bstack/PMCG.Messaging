@@ -19,7 +19,6 @@ namespace PMCG.Messaging.Client.UT
 		public void SetUp()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(TestingConfiguration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = TestingConfiguration.ConnectionClientProvidedName;
 			_busConfigurationBuilder.RegisterPublication<MyEvent>("", typeof(MyEvent).Name, MessageDeliveryMode.Persistent, message => "test.queue.1");
 			this.c_busConfiguration = _busConfigurationBuilder.Build();
 			this.c_connectionManager = Substitute.For<IConnectionManager>();
@@ -81,7 +80,6 @@ namespace PMCG.Messaging.Client.UT
 		public void PublishAsync_Valid_Does_Publication_Configuration_Exists()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(TestingConfiguration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = TestingConfiguration.ConnectionClientProvidedName;
 			var _busConfiguration = _busConfigurationBuilder.Build();
 			var _busPublishersConsumersSeam = new BusPublishersConsumersSeamMock(PublicationResultStatus.None);
 			var _connectionManager = Substitute.For<IConnectionManager>();
@@ -150,7 +148,6 @@ namespace PMCG.Messaging.Client.UT
 		public void PublishAsync_Where_Multiple_Publication_Configurations_Valid_Acked()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(TestingConfiguration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = TestingConfiguration.ConnectionClientProvidedName;
 			_busConfigurationBuilder.RegisterPublication<MyEvent>("", typeof(MyEvent).Name, MessageDeliveryMode.Persistent, message => "test.queue.1");
 			_busConfigurationBuilder.RegisterPublication<MyEvent>("", typeof(MyEvent).Name, MessageDeliveryMode.Persistent, message => "test.queue.1");
 			var _busConfiguration = _busConfigurationBuilder.Build();
