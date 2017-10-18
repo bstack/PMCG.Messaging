@@ -92,6 +92,11 @@ namespace PMCG.Messaging.Client
 				this.c_unconfirmedPublications.TryAdd(_deliveryTag, publication);
 				if (this.c_channel.IsOpen)
 				{
+					// NOTE: There is issues around here in relation to when automatic recovery happens:
+					//		This call does not throw an exception
+					//		OnChannelAcked never gets called as connection to server gone
+					//		Results in messages get lost during publishing and automatic recovery happening
+					// See for more detailhttps://groups.google.com/forum/#!topic/rabbitmq-users/HrJDi9Octr4
 					this.c_channel.BasicPublish(
 					publication.ExchangeName,
 					publication.RoutingKey,
