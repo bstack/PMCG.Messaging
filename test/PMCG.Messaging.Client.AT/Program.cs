@@ -30,7 +30,7 @@ namespace PMCG.Messaging.Client.AT
 			//_publishTests.Publish_1000_Messages_To_A_Queue_Using_Custom_Exchange();
 			//_publishTests.Publish_With_Timeout();
 			//_publishTests.Publish_Connection_Closed_By_Application_Never_Recovers();
-			_publishTests.Publish_Connection_Closed_By_Server_Recovers_Automatically();
+			//_publishTests.Publish_Connection_Closed_By_Server_Recovers_Automatically();
 			//_publishTests.Publish_Connection_Closed_By_Server_Restart_Unpublished_Messages_Are_Republished_Successfully();
 			//_publishTests.Publish_Connection_Blocked_Then_Unblocked_Unpublished_Messages_Are_Republished_Successfully();
 			//_publishTests.Publish_Invalid_Message_Is_Null();
@@ -44,7 +44,7 @@ namespace PMCG.Messaging.Client.AT
 			//_consumeTests.Publish_1000_Messages_And_Consume_For_The_Same_Messages_With_Half_Acked_Half_Nacked();
 			//_consumeTests.Publish_10000_Messages_And_Consume_For_The_Same_Messages_With_Ack_Blocked_Then_Unblocked();
 			//_consumeTests.Publish_10000_Messages_And_Consume_For_The_Same_Messages_With_Ack_Connection_Closed_By_Server_Recovers_Automatically();
-			//_consumeTests.Publish_10000_Messages_And_Consume_On_Separate_Bus_For_The_Same_Messages_Consumer_Connection_Closed_By_Server_Recovers_Automatically();
+			_consumeTests.Publish_10000_Messages_And_Consume_On_Separate_Bus_For_The_Same_Messages_Consumer_Connection_Closed_By_Server_Recovers_Automatically();
 			//_consumeTests.Publish_50000_Messages_And_Then_Consume_On_Separate_Bus_For_The_Same_Messages();
 			//_consumeTests.Publish_1000_Messages_And_Consume_For_The_Same_Messsage_On_A_Transient_Queue();
 		}

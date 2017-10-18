@@ -25,12 +25,14 @@ namespace PMCG.Messaging.Client.Configuration
 			Check.RequireArgumentNotNull("hostNames", hostNames);
 			Check.RequireArgument("port", port, port > 0);
 			Check.RequireArgumentNotEmpty("virtualHost", virtualHost);
+			Check.RequireArgumentNotEmpty("clientProvidedName", clientProvidedName);
 			Check.RequireArgumentNotEmpty("userName", userName);
 			Check.RequireArgumentNotEmpty("password", password);
 
 			this.HostNames = hostNames;
 			this.Port = port;
 			this.VirtualHost = virtualHost;
+			this.ClientProvidedName = clientProvidedName;
 			this.UserName = userName;
 			this.Password = password;
 		}

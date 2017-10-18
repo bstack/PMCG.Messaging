@@ -29,7 +29,7 @@ namespace PMCG.Messaging.Client.UT.Configuration
 		[Test]
 		public void Parse_Where_Single_Host_Results_In_A_Single_ConnectionSettings_Object()
 		{
-			var _result = this.c_SUT.Parse("hosts=localhost;port=5672;virtualhost=/;username=guest;clientProvidedName=app1;ispasswordencrypted=false;password=Pass");
+			var _result = this.c_SUT.Parse("hosts=localhost;port=5672;virtualhost=/;username=guest;clientprovidedname=app1;ispasswordencrypted=false;password=Pass");
 
 			Assert.IsNotNull(_result);
 			Assert.AreEqual(1, _result.HostNames.Count());

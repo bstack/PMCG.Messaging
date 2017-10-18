@@ -12,7 +12,6 @@ namespace PMCG.Messaging.Client.AT.Consume
 			var _capturedMessageId = string.Empty;
 
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name)
@@ -39,7 +38,6 @@ namespace PMCG.Messaging.Client.AT.Consume
 			var _capturedMessageId = string.Empty;
 
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name)
@@ -66,7 +64,6 @@ namespace PMCG.Messaging.Client.AT.Consume
 			var _capturedMessageId = string.Empty;
 
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName2, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => "test.queue.2")
@@ -92,7 +89,6 @@ namespace PMCG.Messaging.Client.AT.Consume
 		public void Publish_1000_Messages_And_Consume_For_The_Same_Messages_With_Ack()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName2, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => "test.queue.2")
@@ -119,7 +115,6 @@ namespace PMCG.Messaging.Client.AT.Consume
 		public void Publish_1000_Messages_And_Consume_For_The_Same_Messages_With_Nack()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName2, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => "test.queue.2")
@@ -146,7 +141,6 @@ namespace PMCG.Messaging.Client.AT.Consume
 		public void Publish_1000_Messages_And_Consume_For_The_Same_Messages_With_Half_Acked_Half_Nacked()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName2, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => "test.queue.2")
@@ -174,7 +168,6 @@ namespace PMCG.Messaging.Client.AT.Consume
 		public void Publish_10000_Messages_And_Consume_For_The_Same_Messages_With_Ack_Blocked_Then_Unblocked()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName2, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => "test.queue.2")
@@ -215,7 +208,6 @@ namespace PMCG.Messaging.Client.AT.Consume
 		public void Publish_10000_Messages_And_Consume_For_The_Same_Messages_With_Ack_Connection_Closed_By_Server_Recovers_Automatically()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder.NumberOfConsumers = 2;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName2, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => "test.queue.2")
@@ -242,15 +234,13 @@ namespace PMCG.Messaging.Client.AT.Consume
 
 		public void Publish_10000_Messages_And_Consume_On_Separate_Bus_For_The_Same_Messages_Consumer_Connection_Closed_By_Server_Recovers_Automatically()
 		{
-			var _publisherBusConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_publisherBusConfigurationBuilder.ConnectionClientProvidedName = "publisher";
+			var _publisherBusConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString.Replace("myTestConnection", "publisher"));
 			_publisherBusConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName2, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => "test.queue.2");
 			var _publisherBus = new Bus(_publisherBusConfigurationBuilder.Build());
 			_publisherBus.Connect();
 
-			var _consumerBusConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_consumerBusConfigurationBuilder.ConnectionClientProvidedName = "consumer";
+			var _consumerBusConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString.Replace("myTestConnection", "consumer"));
 			_consumerBusConfigurationBuilder.NumberOfConsumers = 2;
 			_consumerBusConfigurationBuilder
 				.RegisterConsumer<Accessories.MyEvent>(
@@ -281,8 +271,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 
 		public void Publish_50000_Messages_And_Then_Consume_On_Separate_Bus_For_The_Same_Messages()
 		{
-			var _publisherBusConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_publisherBusConfigurationBuilder.ConnectionClientProvidedName = "publisher";
+			var _publisherBusConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString.Replace("myTestConnection", "publisher"));
 			_publisherBusConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => "test.queue.1");
 			var _publisherBus = new Bus(_publisherBusConfigurationBuilder.Build());
@@ -299,8 +288,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 			Console.ReadKey();
 
 			var _consumedMessageCount = 0;
-			var _consumerBusConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_consumerBusConfigurationBuilder.ConnectionClientProvidedName = "consumer";
+			var _consumerBusConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString.Replace("myTestConnection", "consumer"));
 			_consumerBusConfigurationBuilder.NumberOfConsumers = 2;
 			_consumerBusConfigurationBuilder
 				.RegisterConsumer<Accessories.MyEvent>(
@@ -323,7 +311,6 @@ namespace PMCG.Messaging.Client.AT.Consume
 		public void Publish_1000_Messages_And_Consume_For_The_Same_Messsage_On_A_Transient_Queue()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
-			_busConfigurationBuilder.ConnectionClientProvidedName = Accessories.Configuration.ConnectionClientProvidedName;
 			_busConfigurationBuilder
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name)
 				.RegisterConsumer<Accessories.MyEvent>(

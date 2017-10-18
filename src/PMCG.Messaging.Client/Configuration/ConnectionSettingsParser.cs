@@ -34,7 +34,7 @@ namespace PMCG.Messaging.Client.Configuration
 			var _hostNames = this.GetSetting(_settings, "hosts", "localhost").Split(',').ToList();
 			var _port = int.Parse(this.GetSetting(_settings, "port", "5672"));
 			var _virtualHost = this.GetSetting(_settings, "virtualhost", "/");
-			var _clientProvidedName = this.GetSetting(_settings, "clientProvidedName", "clientProvidedName");
+			var _clientProvidedName = this.GetSetting(_settings, "clientprovidedname", "clientProvidedName");
 			var _userName = this.GetSetting(_settings, "username", "guest");
 			var _isPasswordEncrypted = this.GetSetting(_settings, "ispasswordencrypted", "false");
 			var _password = this.GetSetting(_settings, "password", "guest");
