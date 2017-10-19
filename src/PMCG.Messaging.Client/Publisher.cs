@@ -97,11 +97,7 @@ namespace PMCG.Messaging.Client
 					//		OnChannelAcked never gets called as connection to server gone
 					//		Results in messages get lost during publishing and automatic recovery happening
 					// See for more detailhttps://groups.google.com/forum/#!topic/rabbitmq-users/HrJDi9Octr4
-					this.c_channel.BasicPublish(
-					publication.ExchangeName,
-					publication.RoutingKey,
-					_properties,
-					_messageBody);
+					this.c_channel.BasicPublish(publication.ExchangeName, publication.RoutingKey, _properties, _messageBody);
 
 					this.c_logger.DebugFormat("Publish Completed publishing message with Id {0} to exchange {1}", publication.Id, publication.ExchangeName);
 				}
