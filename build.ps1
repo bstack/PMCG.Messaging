@@ -8,7 +8,7 @@ if ($args.Count -ne 1) { write-host "Usage is $($MyInvocation.MyCommand.Path) ve
 
 
 write-host "### Is environment available"
-if (!(test-path c:\windows\microsoft.net\framework64\v4.0.30319\msbuild.exe)) { write-host 'msbuild not available !'; exit 1 }
+if (!(test-path 'c:\program files (x86)\microsoft visual studio\2017\*\msbuild\15.0\bin\msbuild.exe')) { write-host 'msbuild not available !'; exit 1 }
 
 
 write-host "### Paths"
@@ -29,7 +29,7 @@ write-host "### Compile"
 # Change version attribute - Assembly and file
 (get-content $versionAttributeFilePath) | % { $_ -replace 'Version\("[\d.]*"', "Version(`"$version`"" } | set-content $versionAttributeFilePath -encoding utf8
 # Build
-c:\windows\microsoft.net\framework64\v4.0.30319\msbuild.exe $solutionFilePath /target:ReBuild /property:Configuration=Release
+& 'c:\program files (x86)\microsoft visual studio\2017\*\msbuild\15.0\bin\msbuild.exe' $solutionFilePath /target:ReBuild /property:Configuration=Release
 if ($LastExitCode -ne 0) { write-host 'Compile failure !'; exit 1 }
 # Restore version attribute file
 git checkout $versionAttributeFilePath
@@ -38,7 +38,7 @@ git checkout $versionAttributeFilePath
 write-host "### Run tests"
 # Ensure we have NUnit.Runners and get console app path
 nuget install NUnit.Runners -outputdirectory packages -verbosity detailed
-$nunitConsoleFilePath=(dir packages -r -include 'nunit-console.exe')[0].Fullname
+$nunitConsoleFilePath=(dir packages -r -include 'nunit3-console.exe')[0].Fullname
 # Test all release UT assemblies within the test directory
 dir test -recurse -include *.UT.dll | ? { $_.FullName.IndexOf('bin\Release') -gt -1 } | % {
 	& $nunitConsoleFilePath -framework:net-4.5 $_.FullName

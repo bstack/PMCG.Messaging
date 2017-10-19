@@ -5,11 +5,6 @@ VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMCG.Messaging", "src\PMCG.Messaging\PMCG.Messaging.csproj", "{961ABA37-A451-4137-A1A5-1A6A7D25AF09}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{D858A88F-1B6C-456F-93DF-CDC6C11E89E5}"
-	ProjectSection(SolutionItems) = preProject
-		Readme.txt = Readme.txt
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMCG.Messaging.Client", "src\PMCG.Messaging.Client\PMCG.Messaging.Client.csproj", "{8D3F71E3-22BF-41AB-86AA-80702D74B4D9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMCG.Messaging.Client.UT", "test\PMCG.Messaging.Client.UT\PMCG.Messaging.Client.UT.csproj", "{8117DD63-8F69-4C5C-A473-BBD71CD4437E}"
