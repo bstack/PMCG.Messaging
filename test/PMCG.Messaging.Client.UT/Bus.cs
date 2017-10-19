@@ -35,10 +35,10 @@ namespace PMCG.Messaging.Client.UT
 		}
 
 
-		// NOTE: Unusual to expected an exception of NullReferenceException, see ctor note
 		[Test]
 		public void Ctor_Invalid_Null_BusConfiguration_Exception()
 		{
+			// NOTE: Unusual to expect an exception of NullReferenceException, see ctor note
 			Assert.That(() => new PMCG.Messaging.Client.Bus(null), Throws.TypeOf<NullReferenceException>());
 		}
 

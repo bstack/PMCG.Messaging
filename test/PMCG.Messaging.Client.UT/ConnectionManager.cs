@@ -1,7 +1,5 @@
 ﻿using NUnit.Framework;
-using PMCG.Messaging.Client.UT.TestDoubles;
 using System;
-using System.Collections.Generic;
 
 
 namespace PMCG.Messaging.Client.UT

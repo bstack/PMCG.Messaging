@@ -19,7 +19,7 @@ namespace PMCG.Messaging.Client.AT
 			var _consumeTests = new PMCG.Messaging.Client.AT.Consume.Tests();
 
 			//_connectTests.Connect_Non_Existent_Broker_Indefinitely();
-			_connectTests.Connect_Restart_Broker_Connection_Reestablished_Automatically();
+			//_connectTests.Connect_Restart_Broker_Connection_Reestablished_Automatically();
 			//_connectTests.Connect_Close_The_Connection_Using_The_Management_UI_Connection_Reestablished_Automatically();
 			//_connectTests.Connect_Is_Already_Started_Then_Blocked_And_Then_Unblocked();
 

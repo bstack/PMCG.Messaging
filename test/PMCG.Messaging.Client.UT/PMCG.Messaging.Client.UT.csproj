@@ -62,13 +62,13 @@
     </Compile>
     <Compile Include="Bus.cs" />
     <Compile Include="TestDoubles\BusPublishersConsumersSeamMock.cs" />
-    <Compile Include="Configuration\BusConfigurationBuilderSpec.cs" />
-    <Compile Include="Configuration\ConnectionSettingsParserSpec.cs" />
-    <Compile Include="Configuration\MessageDeliverySpec.cs" />
-    <Compile Include="Configuration\DefaultPasswordParserSpec.cs" />
-    <Compile Include="Configuration\MessageConsumerSpec.cs" />
-    <Compile Include="Configuration\MessageConsumersSpec.cs" />
-    <Compile Include="Configuration\MessagePublicationSpec.cs" />
+    <Compile Include="Configuration\BusConfigurationBuilder.cs" />
+    <Compile Include="Configuration\ConnectionSettingsParser.cs" />
+    <Compile Include="Configuration\MessageDelivery.cs" />
+    <Compile Include="Configuration\DefaultPasswordParser.cs" />
+    <Compile Include="Configuration\MessageConsumer.cs" />
+    <Compile Include="Configuration\MessageConsumers.cs" />
+    <Compile Include="Configuration\MessagePublication.cs" />
     <Compile Include="ConnectionManager.cs" />
     <Compile Include="ConsumerMessageProcessor.cs" />
     <Compile Include="Consumer.cs" />

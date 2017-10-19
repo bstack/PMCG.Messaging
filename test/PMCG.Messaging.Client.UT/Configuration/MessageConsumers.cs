@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using PMCG.Messaging.Client.Configuration;
 using PMCG.Messaging.Client.UT.TestDoubles;
 using System;
 using System.Linq;
@@ -8,15 +7,15 @@ using System.Linq;
 namespace PMCG.Messaging.Client.UT.Configuration
 {
 	[TestFixture]
-	public class MessageConsumersSpec
+	public class MessageConsumers
 	{
-		private MessageConsumers c_SUT;
+		private PMCG.Messaging.Client.Configuration.MessageConsumers c_SUT;
 
 
 		[Test]
 		public void Ctor_Where_Empty_Seed_Results_In_Empty_Collection()
 		{
-			this.c_SUT = new MessageConsumers(new MessageConsumer[0]);
+			this.c_SUT = new PMCG.Messaging.Client.Configuration.MessageConsumers(new PMCG.Messaging.Client.Configuration.MessageConsumer[0]);
 
 			Assert.IsNotNull(this.c_SUT);
 			Assert.AreEqual(0, this.c_SUT.Count());
@@ -26,10 +25,10 @@ namespace PMCG.Messaging.Client.UT.Configuration
 		[Test]
 		public void Ctor_Where_Single_Item_Seed_Results_In_Single_Item_Collection()
 		{
-			this.c_SUT = new MessageConsumers(
+			this.c_SUT = new PMCG.Messaging.Client.Configuration.MessageConsumers(
 				new []
 					{
-						new  MessageConsumer(
+						new  PMCG.Messaging.Client.Configuration.MessageConsumer(
 							typeof(MyEvent),
 							TestingConfiguration.QueueName,
 							typeof(MyEvent).Name,
@@ -48,15 +47,15 @@ namespace PMCG.Messaging.Client.UT.Configuration
 		public void Ctor_Where_Duplicate_Seed_Item_Type_Headers_Results_In_An_Exception()
 		{
 			Assert.That(() => {
-				this.c_SUT = new MessageConsumers(
+				this.c_SUT = new PMCG.Messaging.Client.Configuration.MessageConsumers(
 				new[]
 					{
-							new  MessageConsumer(
+							new PMCG.Messaging.Client.Configuration.MessageConsumer(
 								typeof(MyEvent),
 								TestingConfiguration.QueueName,
 								"** DUPLICATE_TYPE_HEADER ***",
 								message => ConsumerHandlerResult.Completed),
-							new  MessageConsumer(
+							new PMCG.Messaging.Client.Configuration.MessageConsumer(
 								typeof(MyEvent),
 								TestingConfiguration.QueueName,
 								"** DUPLICATE_TYPE_HEADER ***",
@@ -69,15 +68,15 @@ namespace PMCG.Messaging.Client.UT.Configuration
 		[Test]
 		public void Ctor_Where_Seed_Has_Same_Message_Types_But_Using_Different_Type_Headers_Results_In_An_Collection_With_Two_Items()
 		{
-			this.c_SUT = new MessageConsumers(
+			this.c_SUT = new PMCG.Messaging.Client.Configuration.MessageConsumers(
 				new[]
 					{
-						new  MessageConsumer(
+						new PMCG.Messaging.Client.Configuration.MessageConsumer(
 							typeof(MyEvent),
 							"Q_1",
 							"TYPE_HEADER_1",
 							message => ConsumerHandlerResult.Completed),
-						new  MessageConsumer(
+						new PMCG.Messaging.Client.Configuration.MessageConsumer(
 							typeof(MyEvent),
 							"Q_2",
 							"TYPE_HEADER_2",

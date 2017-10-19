@@ -176,7 +176,7 @@ namespace PMCG.Messaging.Client
 			ulong highestDeliveryTag,
 			Action<Publication> action)
 		{
-			// Critical section -What if an ack followed by a nack and the two trying to do work at the same time
+			// Critical section - What if an ack followed by a nack and the two trying to do work at the same time
 			var _deliveryTags = new[] { highestDeliveryTag };
 			if (isMultiple)
 			{

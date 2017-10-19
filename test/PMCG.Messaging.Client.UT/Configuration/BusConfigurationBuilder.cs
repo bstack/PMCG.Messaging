@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using PMCG.Messaging.Client.Configuration;
 using PMCG.Messaging.Client.UT.TestDoubles;
 using System;
 using System.Linq;
@@ -8,15 +7,15 @@ using System.Linq;
 namespace PMCG.Messaging.Client.UT.Configuration
 {
 	[TestFixture]
-	public class BusConfigurationBuilderSpec
+	public class BusConfigurationBuilder
 	{
-		private BusConfigurationBuilder c_SUT;
+		private PMCG.Messaging.Client.Configuration.BusConfigurationBuilder c_SUT;
 
 
 		[SetUp]
 		public void SetUp()
 		{
-			this.c_SUT = new BusConfigurationBuilder("hosts=localhost;port=5672;virtualhost=/;username=guest;ispasswordencrypted=false;password=Pass");
+			this.c_SUT = new PMCG.Messaging.Client.Configuration.BusConfigurationBuilder("hosts=localhost;port=5672;virtualhost=/;username=guest;ispasswordencrypted=false;password=Pass");
 		}
 
 

@@ -68,7 +68,6 @@ namespace PMCG.Messaging.Client.AT.Publish
 		}
 
 
-
 		public void Publish_A_Message_To_An_Exchange_That_Doesnt_Exist()
 		{
 			// The channel shutdown event is invoked by RabbitMQ server as the exchange does not exist.

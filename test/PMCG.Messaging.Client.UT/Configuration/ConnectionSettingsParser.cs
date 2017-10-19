@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using PMCG.Messaging.Client.Configuration;
 using System;
 using System.Linq;
 
@@ -7,9 +6,9 @@ using System.Linq;
 namespace PMCG.Messaging.Client.UT.Configuration
 {
 	[TestFixture]
-	public class ConnectionSettingsParserSpec
+	public class ConnectionSettingsParser
 	{
-		private ConnectionSettingsParser c_SUT = new ConnectionSettingsParser();
+		private PMCG.Messaging.Client.Configuration.ConnectionSettingsParser c_SUT = new PMCG.Messaging.Client.Configuration.ConnectionSettingsParser();
 
 
 		[Test]
@@ -66,7 +65,7 @@ namespace PMCG.Messaging.Client.UT.Configuration
 		[Test]
 		public void Parse_Where_Single_Host_With_Encrypted_Password_Results_In_A_Single_Connection_String()
 		{
-			var _passwordCipher = new DefaultPasswordParser().Encrypt("ThePassword");
+			var _passwordCipher = new PMCG.Messaging.Client.Configuration.DefaultPasswordParser().Encrypt("ThePassword");
 			var _connectionStringSettings = string.Format("hosts=localhost;port=5672;virtualhost=/;username=guest;ispasswordencrypted=true;password={0}:{1}", Environment.MachineName, _passwordCipher);
 
 			var _result = this.c_SUT.Parse(_connectionStringSettings);
@@ -79,7 +78,6 @@ namespace PMCG.Messaging.Client.UT.Configuration
 			Assert.AreEqual("ThePassword", _result.Password);
 			Assert.AreEqual("/", _result.VirtualHost);
 		}
-
 
 
 		[Test]

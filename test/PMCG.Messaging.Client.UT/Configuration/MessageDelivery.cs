@@ -6,12 +6,12 @@ using System;
 namespace PMCG.Messaging.Client.UT.Configuration
 {
 	[TestFixture]
-	public class MessageDeliverySpec
+	public class MessageDelivery
 	{
 		[Test]
 		public void Ctor_Cater_For_Direct_Exchange_Delivery()
 		{
-			var _SUT = new MessageDelivery(
+			var _SUT = new PMCG.Messaging.Client.Configuration.MessageDelivery(
 				string.Empty,
 				"TypeHeader",
 				MessageDeliveryMode.Persistent,

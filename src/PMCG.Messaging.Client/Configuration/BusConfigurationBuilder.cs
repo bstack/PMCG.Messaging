@@ -102,7 +102,6 @@ namespace PMCG.Messaging.Client.Configuration
 			where TMessage : Message
 		{
 			// Check that no existing entry for the typeHeader
-
 			Func<Message, ConsumerHandlerResult> _actionWrapper = message => action(message as TMessage);
 
 			this.MessageConsumers[typeHeader] = new MessageConsumer(
@@ -122,7 +121,6 @@ namespace PMCG.Messaging.Client.Configuration
 			where TMessage : Message
 		{
 			// Check that no existing entry for the typeHeader
-
 			Func<Message, ConsumerHandlerResult> _actionWrapper = message => action(message as TMessage);
 
 			this.MessageConsumers[typeHeader] = new MessageConsumer(

@@ -23,8 +23,8 @@ namespace PMCG.Messaging.Client.UT.TestDoubles
 			IConnectionManager connectionManager,
 			BlockingCollection<Publication> publicationQueue)
 		{
-			//throw new NotImplementedException();
 		}
+
 
 		public void CreatePublishers(
 			BusConfiguration configuration,
