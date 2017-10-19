@@ -126,7 +126,7 @@ namespace PMCG.Messaging.Client.AT.Publish
 			Console.Read();
 		}
 
-		// TODO: What is this test for???
+
 		public void Publish_With_Timeout()
 		{
 			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
