@@ -50,7 +50,7 @@ namespace PMCG.Messaging.Client
 			// a response back from the library due to ChannelShutdown first and will no longer be waiting.
 			if(!this.c_result.TrySetResult(_publicationResult))
 			{
-				this.c_logger.Warn("TrySetResult unsuccessful for PublicationResult. Likelihood is that Task was already set due to ChannelShutdown");
+				this.c_logger.Warn("SetResult TrySetResult unsuccessful for PublicationResult. Likelihood is that Task was already set due to ChannelShutdown");
 			}
 		}
 	}

@@ -41,8 +41,7 @@ namespace PMCG.Messaging.Client
 			
 				if (!this.c_configuration.MessageConsumers.HasConfiguration(message.BasicProperties.Type))
 				{
-					this.c_logger.DebugFormat("Process No match found for message, {0}", _logMessageContext);
-					//pending - see errored below
+					this.c_logger.WarnFormat("Process No match found for message, {0}", _logMessageContext);
 					channel.BasicNack(message.DeliveryTag, false, false);
 					return;
 				}
@@ -67,7 +66,7 @@ namespace PMCG.Messaging.Client
 
 				if (_actionResult == ConsumerHandlerResult.Errored)
 				{
-					//pending - should i use configuration properties
+					this.c_logger.WarnFormat("Process ConsumerHandlerResult.Errored for message, {0}", _logMessageContext);
 					// Nack, do not requeue, dead letter the message if dead letter exchange configured for the queue
 					channel.BasicNack(message.DeliveryTag, false, false);
 				}
@@ -77,7 +76,8 @@ namespace PMCG.Messaging.Client
 				}
 				else if (_actionResult == ConsumerHandlerResult.Requeue)
 				{
-					//pending does this make sense ?
+					// Unsure if this is the right thing to do
+					this.c_logger.WarnFormat("Process ConsumerHandlerResult.Requeue for message, {0}", _logMessageContext);
 					channel.BasicReject(message.DeliveryTag, true);
 				}
 

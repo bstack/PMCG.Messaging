@@ -124,7 +124,7 @@ namespace PMCG.Messaging.Client
 		private void OnChannelShutdown(
 			ShutdownEventArgs reason)
 		{
-			this.c_logger.InfoFormat("OnChannelShuutdown Starting, code = {0} and text = {1}", reason.ReplyCode, reason.ReplyText);
+			this.c_logger.WarnFormat("OnChannelShutdown Starting, code = {0} and text = {1}", reason.ReplyCode, reason.ReplyText);
 
 			var _highestDeliveryTag = this.c_unconfirmedPublications
 				.Keys
@@ -139,7 +139,7 @@ namespace PMCG.Messaging.Client
 					publication => publication.SetResult(PublicationResultStatus.ChannelShutdown, _context));
 			}
 
-			this.c_logger.InfoFormat("OnChannelShuutdown Completed, code = {0} and text = {1}", reason.ReplyCode, reason.ReplyText);
+			this.c_logger.WarnFormat("OnChannelShutdown Completed, code = {0} and text = {1}", reason.ReplyCode, reason.ReplyText);
 		}
 
 
@@ -160,14 +160,14 @@ namespace PMCG.Messaging.Client
 		private void OnChannelNacked(
 			BasicNackEventArgs args)
 		{
-			this.c_logger.DebugFormat("OnChannelNacked Starting, is multiple = {0} and delivery tag = {1}", args.Multiple, args.DeliveryTag);
+			this.c_logger.WarnFormat("OnChannelNacked Starting, is multiple = {0} and delivery tag = {1}", args.Multiple, args.DeliveryTag);
 
 			this.ProcessDeliveryTags(
 				args.Multiple,
 				args.DeliveryTag,
 				publication => publication.SetResult(PublicationResultStatus.Nacked));
 
-			this.c_logger.DebugFormat("OnChannelNacked Completed, is multiple = {0} and delivery tag = {1}", args.Multiple, args.DeliveryTag);
+			this.c_logger.WarnFormat("OnChannelNacked Completed, is multiple = {0} and delivery tag = {1}", args.Multiple, args.DeliveryTag);
 		}
 
 
