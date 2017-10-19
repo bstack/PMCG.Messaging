@@ -57,6 +57,8 @@ namespace PMCG.Messaging.Client
 					AutomaticRecoveryEnabled = true,
 					Password = this.c_connectionSettings.Password,
 					Port = this.c_connectionSettings.Port,
+					RequestedConnectionTimeout = 3000,
+					RequestedHeartbeat = 10,
 					TopologyRecoveryEnabled = true,
 					UseBackgroundThreadsForIO = false,
 					UserName = this.c_connectionSettings.UserName,

@@ -8,7 +8,7 @@ namespace PMCG.Messaging.Client.AT.Connect
 	{
 		public void Connect_Non_Existent_Broker_Indefinitely()
 		{
-			// NOTE: With this test, we provide two connection strings which have invalid ports. We are using the default connection retry mechanism
+			// NOTE: With this test, we provide connection strings which have invalid ports. We are using the default connection retry mechanism
 			// thats built into the RabbitMQ library - retries each connection randomly and then throws a BrokerUnreachableException if it has failed
 			// to retry on all connections provided. Our own library catches this exception, and then retries all again
 			var _connectionSettingsString = Accessories.Configuration.ConnectionSettingsString.Replace("5672", "2567"); // Wrong port number
