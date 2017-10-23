@@ -1,10 +1,8 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 
 
 namespace PMCG.Messaging.Client.UT
 {
-	[TestFixture]
 	public class Consumer
 	{
 		// NOTE: We dont have any UTs here as this class is fully dependent on RabbitMQ library concepts. There is hardly any logic that is worth testing here, 

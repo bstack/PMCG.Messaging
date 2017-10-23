@@ -69,7 +69,6 @@
     <Compile Include="Configuration\MessageConsumer.cs" />
     <Compile Include="Configuration\MessageConsumers.cs" />
     <Compile Include="Configuration\MessagePublication.cs" />
-    <Compile Include="ConnectionManager.cs" />
     <Compile Include="ConsumerMessageProcessor.cs" />
     <Compile Include="Consumer.cs" />
     <Compile Include="TestDoubles\ConnectionSettingsBuilder.cs" />
