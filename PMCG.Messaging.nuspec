@@ -3,18 +3,19 @@
   <metadata>
     <id>PMCG.Messaging</id>
     <version>1.0.0.0</version>
-    <authors>pmcgrath</authors>
-    <owners>pmcgrath</owners>
-    <projectUrl>https://github.com/pmcgrath/PMCG.Messaging</projectUrl>
+    <authors>bstack-nmcgrath</authors>
+    <owners>bstack-nmcgrath</owners>
+    <projectUrl>https://github.com/bstack/PMCG.Messaging</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>RabbitMQ wrapper library</description>
-    <releaseNotes>RabbitMQ wrapper library</releaseNotes>
-    <copyright>Copyright 2015</copyright>
+    <description>RabbitMQ .NET client wrapper library</description>
+    <releaseNotes>RabbitMQ .NET client wrapper library</releaseNotes>
+    <copyright>Copyright 2017</copyright>
     <tags>RabbitMQ AMQP</tags>
     <dependencies>
-      <dependency id="log4net" version="2.0.3"/>
-      <dependency id="Newtonsoft.Json" version="6.0.1"/>
-      <dependency id="RabbitMQ.Client" version="3.4.3"/>
+      <dependency id="log4net" version="2.0.8"/>
+	  <dependency id="Microsoft.Diagnostics.Tracing.EventSource.Redist" version="1.1.28" />
+      <dependency id="Newtonsoft.Json" version="9.0.1"/>
+      <dependency id="RabbitMQ.Client" version="5.0.1"/>
     </dependencies>
   </metadata>
   <files>
