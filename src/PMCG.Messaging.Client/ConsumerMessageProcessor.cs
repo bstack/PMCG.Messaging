@@ -41,8 +41,8 @@ namespace PMCG.Messaging.Client
 			
 				if (!this.c_configuration.MessageConsumers.HasConfiguration(message.BasicProperties.Type))
 				{
-					this.c_logger.WarnFormat("Process No match found for message, {0}", _logMessageContext);
-					channel.BasicNack(message.DeliveryTag, false, false);
+					this.c_logger.DebugFormat("Process No match found for message, {0}, this consumer is not interested in this message", _logMessageContext);
+					channel.BasicAck(message.DeliveryTag, false);
 					return;
 				}
 

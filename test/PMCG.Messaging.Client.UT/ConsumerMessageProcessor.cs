@@ -33,7 +33,7 @@ namespace PMCG.Messaging.Client.UT
 
 			_SUT.Process(this.c_channel, _message);
 
-			this.c_channel.Received().BasicNack(_message.DeliveryTag, false, false);
+			this.c_channel.Received().BasicAck(_message.DeliveryTag, false);
 		}
 
 
@@ -53,7 +53,7 @@ namespace PMCG.Messaging.Client.UT
 		public void Process_Where_Message_Action_Throws_Exception_Results_In_Channel_Being_Nacked()
 		{
 			var _SUT = this.BuildSUT(message => throw new Exception("BANG!"));
-			var _message = this.BuildBasicDeliverEventArgs("Throw_Error_Type_Header");
+			var _message = this.BuildBasicDeliverEventArgs(typeof(MyEvent).Name);
 
 			_SUT.Process(this.c_channel, _message);
 
