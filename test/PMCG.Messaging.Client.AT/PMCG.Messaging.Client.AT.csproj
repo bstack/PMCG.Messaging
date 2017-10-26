@@ -52,6 +52,7 @@
     <Compile Include="Accessories\Configuration.cs" />
     <Compile Include="Accessories\MyEvent.cs" />
     <Compile Include="Accessories\MyOtherEvent.cs" />
+    <Compile Include="Cluster\Tests.cs" />
     <Compile Include="Connect\Tests.cs" />
     <Compile Include="Consume\Tests.cs" />
     <Compile Include="Program.cs" />

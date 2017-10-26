@@ -17,6 +17,7 @@ namespace PMCG.Messaging.Client.AT
 			var _connectTests = new PMCG.Messaging.Client.AT.Connect.Tests();
 			var _publishTests = new PMCG.Messaging.Client.AT.Publish.Tests();
 			var _consumeTests = new PMCG.Messaging.Client.AT.Consume.Tests();
+			var _clusterTests = new PMCG.Messaging.Client.AT.Cluster.Tests();
 
 			//_connectTests.Connect_Non_Existent_Broker_Indefinitely();
 			//_connectTests.Connect_Restart_Broker_Connection_Reestablished_Automatically();
@@ -46,7 +47,24 @@ namespace PMCG.Messaging.Client.AT
 			//_consumeTests.Publish_10000_Messages_And_Consume_For_The_Same_Messages_With_Ack_Connection_Closed_By_Server_Recovers_Automatically();
 			//_consumeTests.Publish_10000_Messages_And_Consume_On_Separate_Bus_For_The_Same_Messages_Consumer_Connection_Closed_By_Server_Recovers_Automatically();
 			//_consumeTests.Publish_50000_Messages_And_Then_Consume_On_Separate_Bus_For_The_Same_Messages();
-			_consumeTests.Publish_1000_Messages_And_Consume_For_The_Same_Messsage_On_A_Transient_Queue();
+			//_consumeTests.Publish_1000_Messages_And_Consume_For_The_Same_Messsage_On_A_Transient_Queue();
+
+			//_clusterTests.Reboot_Node_In_The_Cluster_Where_Queues_Exists();
+			//_clusterTests.Reboot_Node_In_The_Cluster_Where_Queues_Does_Not_Exist();
+			//_clusterTests.Publish_Continues_When_Node_We_Are_Not_Connected_To_Has_RabbitMQ_Service_Stopped();
+			//_clusterTests.Publish_Continues_When_Node_We_Are_Connected_To_Has_RabbitMQ_Service_Stopped();
+			//_clusterTests.Publish_Continues_When_Node_We_Are_Not_Connected_Is_Rebooted();
+			//_clusterTests.Publish_Continues_When_Node_We_Are_Connected_To_Is_Rebooted();
+			//_clusterTests.Publish_Continues_When_Node_We_Are_Not_Connected_Is_Blocked();
+			//_clusterTests.Publish_Continues_When_Node_We_Are_Connected_To_Is_Blocked();
+			//_clusterTests.Publish_Continues_When_Node_We_Are_Connected_To_Has_Connection_Forced_Closed_Via_Management_UI();
+			//_clusterTests.Consume_Continues_When_Node_We_Are_Not_Connected_To_Has_RabbitMQ_Service_Stopped();
+			//_clusterTests.Consume_Continues_When_Node_We_Are_Connected_To_Has_RabbitMQ_Service_Stopped();
+			//_clusterTests.Consume_Continues_When_Node_We_Are_Not_Connected_To_Is_Rebooted();
+			//_clusterTests.Consume_Continues_When_Node_We_Are_Connected_To_Is_Rebooted();
+			//_clusterTests.Consume_Continues_When_Node_We_Are_Not_Connected_To_Is_Blocked();
+			//_clusterTests.Consume_Continues_When_Node_We_Are_Connected_To_Is_Blocked();
+			_clusterTests.Consume_Continues_When_Node_We_Are_Connected_To_Has_Connection_Forced_Closed_Via_Management_UI();
 		}
 	}
 }
