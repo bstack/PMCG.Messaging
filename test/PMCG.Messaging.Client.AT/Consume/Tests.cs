@@ -200,7 +200,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 			}
 
 			Console.WriteLine("Ensure there are no messages in the queue");
-			Console.WriteLine("Ensure there are some messages in the dead letter queue(reason expired)");
+			Console.WriteLine("Ensure there are some messages in the dead letter queue (reason expired)");
 			Console.ReadKey();
 		}
 

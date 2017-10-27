@@ -17,7 +17,7 @@ namespace PMCG.Messaging.Client.AT.Connect
 			_SUT.Connect();
 
 			Console.WriteLine("Allow time for connection attempts to fail, should see retries indefinitely");
-			Console.WriteLine("Observe that BrokerUnreachableException is thrown");
+			Console.WriteLine("Observe that BrokerUnreachableException is thrown each time the RabbitMQ client library has failed to retry on all connections provided");
 		}
 
 

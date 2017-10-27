@@ -154,8 +154,11 @@ namespace PMCG.Messaging.Client.AT.Publish
 				.RegisterPublication<Accessories.MyEvent>(Accessories.Configuration.ExchangeName1, typeof(Accessories.MyEvent).Name, MessageDeliveryMode.Persistent, message => Accessories.Configuration.QueueName1);
 			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
+
+			// Close the connection explicitly
 			_SUT.Close();
 
+			// Attempt to publish after closing the connection from the application, this should never happen in reality ...
 			var _message = new Accessories.MyEvent(Guid.NewGuid(), "", "R1", 1, "09:00", "DDD....");
 			var _result = _SUT.PublishAsync(_message);
 			
