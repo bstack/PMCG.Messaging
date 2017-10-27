@@ -64,7 +64,7 @@ namespace PMCG.Messaging.Client.AT
 			//_clusterTests.Consume_Continues_When_Node_We_Are_Connected_To_Is_Rebooted();
 			//_clusterTests.Consume_Continues_When_Node_We_Are_Not_Connected_To_Is_Blocked();
 			//_clusterTests.Consume_Continues_When_Node_We_Are_Connected_To_Is_Blocked();
-			_clusterTests.Consume_Continues_When_Node_We_Are_Connected_To_Has_Connection_Forced_Closed_Via_Management_UI();
+			//_clusterTests.Consume_Continues_When_Node_We_Are_Connected_To_Has_Connection_Forced_Closed_Via_Management_UI();
 		}
 	}
 }

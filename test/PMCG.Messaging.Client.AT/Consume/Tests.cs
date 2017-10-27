@@ -295,7 +295,7 @@ namespace PMCG.Messaging.Client.AT.Consume
 					Accessories.Configuration.QueueName1,
 					typeof(Accessories.MyEvent).Name,
 					message => {
-						_consumedMessageCount++;
+						Interlocked.Increment(ref _consumedMessageCount);
 						return ConsumerHandlerResult.Completed; });
 			var _consumerBus = new Bus(_consumerBusConfigurationBuilder.Build());
 			_consumerBus.Connect();
