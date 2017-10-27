@@ -16,7 +16,7 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			// Let other node = NodeB
 
 			// Before reboot of NodeA, verify cluster is in working order
-			// Reboot NodeA (ssh ccs\whoever_admin@NodeA.ccs.local)
+			// Reboot NodeA
 			// During reboot, verify that cluster still exists conceptually, but one NodeA is down (Node not running)
 			// After successful reboot, verify that cluster is restored back to working order
 			// Verify that all queues now exist on other NodeB
@@ -29,7 +29,7 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			// Let other node = NodeB
 
 			// Before reboot of NodeB, verify cluster is in working order
-			// Reboot NodeB (ssh ccs\whoever_admin@NodeB.ccs.local)
+			// Reboot NodeB
 			// During reboot, verify that cluster still exists conceptually, but one NodeB is down (Node not running)
 			// After successful reboot, verify that cluster is restored back to working order
 			// Verify that all queues still exist on NodeA
@@ -50,11 +50,9 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			// Before stopping rabbitmq service on NodeB, verify cluster is in working order
 			// We publish continuously for 10,000 messages
 			// During publication, stop rabbitmq service on NodeB
-			//		ssh ccs\whoever_admin@NodeB.ccs.local
 			//		service rabbitmq-server stop
 			// Verify 10,000 messages exist on queue
 			// Start rabbitmq service on NodeB
-			//		service rabbitmq-server start
 
 			var _tasks = new ConcurrentBag<Task<PMCG.Messaging.PublicationResult>>();
 			for (int count = 0; count < 10000; count++)
@@ -91,12 +89,10 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			// Before stopping rabbitmq service on NodeA, verify cluster is in working order
 			// We publish continuously for 10,000 messages
 			// During publication, stop rabbitmq service on NodeA
-			//		ssh ccs\whoever_admin@NodeA.ccs.local
 			//		service rabbitmq-server stop
 			// Verify 10,000 messages exist on queue
 			// Verify we are now connected to NodeB (via automatic recovery)
 			// Start rabbitmq service on NodeA
-			//		service rabbitmq-server start
 
 			var _tasks = new ConcurrentBag<Task<PMCG.Messaging.PublicationResult>>();
 			for (int count = 0; count < 10000; count++)
@@ -133,10 +129,9 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			// Before rebooting NodeB, verify cluster is in working order
 			// We publish continuously for 10,000 messages
 			// During publication, reboot NodeB
-			//		ssh ccs\whoever_admin@NodeB.ccs.local
 			//		reboot
 			// Verify 10,000 messages exist on queue
-			// Verify cluster is in working order
+			// Verify cluster is in working order after reboot
 
 			var _tasks = new ConcurrentBag<Task<PMCG.Messaging.PublicationResult>>();
 			for (int count = 0; count < 10000; count++)
@@ -173,10 +168,10 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			// Before rebooting NodeA, verify cluster is in working order
 			// We publish continuously for 10,000 messages
 			// During publication, reboot NodeA
-			//		ssh ccs\whoever_admin@NodeA.ccs.local
 			//		reboot
 			// Verify 10,000 messages exist on queue
 			// Verify we are now connected to NodeB (via automatic recovery)
+			// Verify cluster is in working order after reboot
 
 			var _tasks = new ConcurrentBag<Task<PMCG.Messaging.PublicationResult>>();
 			for (int count = 0; count < 10000; count++)
@@ -213,12 +208,10 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			// Before rebooting NodeA, verify cluster is in working order
 			// We publish continuously for 15,000 messages
 			// During publication, reboot NodeA
-			//		ssh ccs\whoever_admin@NodeA.ccs.local
 			//		reboot
 			// Wait for the reboot to finish, verify cluster is in working order
 			// Synchronize the queue (if required, otherwise this may result in lost messages)
 			// During publication, reboot NodeB
-			//		ssh ccs\whoever_admin@NodeB.ccs.local
 			//		reboot
 			// Wait for the reboot to finish, verify cluster is in working order
 			// Verify 15,000 messages exist on queue
@@ -258,7 +251,6 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			// Before blocking NodeB, verify cluster is in working order
 			// We publish continuously for 10,000 messages
 			// During publication, block NodeB for a period of time, then unblock
-			//		ssh ccs\whoever_admin@NodeB.ccs.local
 			//		rabbitmqctl set_vm_memory_high_watermark 0.0000001
 			//		rabbitmqctl set_vm_memory_high_watermark 0.4
 			// Verify 10,000 messages exist on queue
@@ -299,14 +291,13 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			// Before blocking NodeA, verify cluster is in working order
 			// We publish continuously for 10,000 messages
 			// During publication, block NodeA for a period of time, then unblock
-			//		ssh ccs\whoever_admin@NodeA.ccs.local
 			//		rabbitmqctl set_vm_memory_high_watermark 0.0000001
 			//		rabbitmqctl set_vm_memory_high_watermark 0.4
 			// Verify 10,000 messages exist on queue
 			// Verify cluster is in working order
 
 			// NOTE: When we run high volume very fast we see messages go missing, we do not think this is worth chasing up on
-			// We also know that for some edge cases, channel.BasicPublish can execute where the messages simply go missing, this is simply anoth
+			// We also know that for some edge cases, channel.BasicPublish can execute where the messages simply go missing, this is simply another one of these use cases
 
 			var _tasks = new ConcurrentBag<Task<PMCG.Messaging.PublicationResult>>();
 			for (int count = 0; count < 10000; count++)
@@ -321,8 +312,8 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			{
 				var _taskStatusCount = _tasks.Count(result => result.Status == TaskStatus.RanToCompletion);
 				var _messagePublishedCount = _tasks.Count(result => result.Result.Status == Messaging.PublicationResultStatus.Published);
-				Console.WriteLine(string.Format("RanToCompletionTaskCount expected: (10000), actual: ({0})", _taskStatusCount));
-				Console.WriteLine(string.Format("MessagePublishedCount expected: (10000), actual: ({0})", _messagePublishedCount));
+				Console.WriteLine(string.Format("RanToCompletionTaskCount expected(nearly): (10000), actual: ({0})", _taskStatusCount));
+				Console.WriteLine(string.Format("MessagePublishedCount expected(nearly): (10000), actual: ({0})", _messagePublishedCount));
 			});
 
 			Console.Read();
@@ -340,12 +331,12 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			// Let node that we are connected to = NodeA
 			// Let other node = NodeB
 
-			// Before stopping forcing the connection to be closed on NodeA, verify cluster is in working order
+			// Before forcing the connection to be closed on NodeA, verify cluster is in working order
 			// We publish continuously for 10,000 messages
 			// During publication, force connection closed on NodeA via management UI
 			// Verify nearly all 10,000 messages exist on queue
 			//	- we expect some messages to go missing here as not all messages may get published when a network failure occurs
-			// Verify we reconnect (this can be NodeA or NodeB as selection is random)
+			// Verify we reconnect via automatic recovery
 
 			var _tasks = new ConcurrentBag<Task<PMCG.Messaging.PublicationResult>>();
 			for (int count = 0; count < 10000; count++)
@@ -360,8 +351,8 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			{
 				var _taskStatusCount = _tasks.Count(result => result.Status == TaskStatus.RanToCompletion);
 				var _messagePublishedCount = _tasks.Count(result => result.Result.Status == Messaging.PublicationResultStatus.Published);
-				Console.WriteLine(string.Format("RanToCompletionTaskCount expected: (10000), actual: ({0})", _taskStatusCount));
-				Console.WriteLine(string.Format("MessagePublishedCount expected: (10000), actual: ({0})", _messagePublishedCount));
+				Console.WriteLine(string.Format("RanToCompletionTaskCount expected(nearly): (10000), actual: ({0})", _taskStatusCount));
+				Console.WriteLine(string.Format("MessagePublishedCount expected(nearly): (10000), actual: ({0})", _messagePublishedCount));
 			});
 
 			Console.Read();
@@ -383,12 +374,10 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			// We publish 50,000 messages and verify that these are on the queue
 			// We continuously consume the 50,000 messages
 			// During consumption, stop rabbitmq service on NodeB
-			//		ssh ccs\whoever_admin@NodeB.ccs.local
 			//		service rabbitmq-server stop
 			// Verify 0 messages exist on queue
 			// Verify consumed message count is at least 50,000
 			// Start rabbitmq service on NodeB
-			//		service rabbitmq-server start
 
 			for (int count = 0; count < 50000; count++)
 			{
@@ -416,14 +405,14 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			var _consumerBus = new Bus(_consumerBusConfigurationBuilder.Build());
 			_consumerBus.Connect();
 
-			for (int i = 0; i < 50; i++)
+			for (int _counter = 0; _counter < 60; _counter++)
 			{
 				Thread.Sleep(1000);
-				Console.WriteLine(i);
+				Console.WriteLine(string.Format("{0} seconds completed", _counter));
 			}
 			
 			Console.WriteLine("Ensure there are no messages in the queue");
-			Console.WriteLine(string.Format("Consumed message count expected: (50000), actual: ({0})", _consumedMessageCount));
+			Console.WriteLine(string.Format("Consumed message count expected(at least): (50000), actual: ({0})", _consumedMessageCount));
 			Console.ReadKey();
 		}
 
@@ -443,12 +432,10 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			// We publish 50,000 messages and verify that these are on the queue
 			// We continuously consume the 50,000 messages
 			// During consumption, stop rabbitmq service on NodeA
-			//		ssh ccs\whoever_admin@NodeA.ccs.local
 			//		service rabbitmq-server stop
 			// Verify 0 messages exist on queue
 			// Verify consumed message count is at least 50,000
 			// Start rabbitmq service on NodeA
-			//		service rabbitmq-server start
 
 			// Note that sometimes we see that the queue does not failover to a slave due to queues being in an unsynchronized state
 			// This will only ever happen if the rabbitmq server is manually stopped. This is not applicable to server reboot for example 
@@ -482,16 +469,14 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			var _consumerBus = new Bus(_consumerBusConfigurationBuilder.Build());
 			_consumerBus.Connect();
 
-			for (int i = 0; i < 60; i++)
+			for (int _counter = 0; _counter < 60; _counter++)
 			{
 				Thread.Sleep(1000);
-				Console.WriteLine(i);
+				Console.WriteLine(string.Format("{0} seconds completed", _counter));
 			}
 
 			Console.WriteLine("Ensure there are no messages in the queue");
-			Console.WriteLine(string.Format("Consumed message count expected: (50000), actual: ({0})", _consumedMessageCount));
-			Console.ReadKey();
-			Console.WriteLine(string.Format("Consumed message count expected: (50000), actual: ({0})", _consumedMessageCount));
+			Console.WriteLine(string.Format("Consumed message count expected(at least): (50000), actual: ({0})", _consumedMessageCount));
 			Console.ReadKey();
 		}
 
@@ -538,14 +523,14 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			var _consumerBus = new Bus(_consumerBusConfigurationBuilder.Build());
 			_consumerBus.Connect();
 
-			for (int i = 0; i < 80; i++)
+			for (int _counter = 0; _counter < 60; _counter++)
 			{
 				Thread.Sleep(1000);
-				Console.WriteLine(i);
+				Console.WriteLine(string.Format("{0} seconds completed", _counter));
 			}
 
 			Console.WriteLine("Ensure there are no messages in the queue");
-			Console.WriteLine(string.Format("Consumed message count expected: (50000), actual: ({0})", _consumedMessageCount));
+			Console.WriteLine(string.Format("Consumed message count expected(at least): (50000), actual: ({0})", _consumedMessageCount));
 			Console.ReadKey();
 		}
 
@@ -566,7 +551,7 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			// We continuously consume the 50,000 messages
 			// During consumption, reboot NodeA
 			// Verify 0 messages exist on queue
-			// Verify consumed message count is around 50,000
+			// Verify consumed message count is nearly 50,000
 
 			for (int count = 0; count < 50000; count++)
 			{
@@ -592,14 +577,14 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			var _consumerBus = new Bus(_consumerBusConfigurationBuilder.Build());
 			_consumerBus.Connect();
 
-			for (int i = 0; i < 80; i++)
+			for (int _counter = 0; _counter < 60; _counter++)
 			{
 				Thread.Sleep(1000);
-				Console.WriteLine(i);
+				Console.WriteLine(string.Format("{0} seconds completed", _counter));
 			}
 
 			Console.WriteLine("Ensure there are no messages in the queue");
-			Console.WriteLine(string.Format("Consumed message count expected: (50000), actual: ({0})", _consumedMessageCount));
+			Console.WriteLine(string.Format("Consumed message count expected(nearly): (50000), actual: ({0})", _consumedMessageCount));
 			Console.ReadKey();
 		}
 
@@ -619,11 +604,10 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			// We publish 50,000 messages and verify that these are on the queue
 			// We continuously consume the 50,000 messages
 			// During consumption, block NodeB for a period of time, then unblock
-			//		ssh ccs\whoever_admin@NodeB.ccs.local
 			//		rabbitmqctl set_vm_memory_high_watermark 0.0000001
 			//		rabbitmqctl set_vm_memory_high_watermark 0.4
 			// Verify 0 messages exist on queue
-			// Verify consumed message count is at exactly 50,000
+			// Verify consumed message count is at least 50,000
 
 			for (int count = 0; count < 50000; count++)
 			{
@@ -651,14 +635,14 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			var _consumerBus = new Bus(_consumerBusConfigurationBuilder.Build());
 			_consumerBus.Connect();
 
-			for (int i = 0; i < 80; i++)
+			for (int _counter = 0; _counter < 60; _counter++)
 			{
 				Thread.Sleep(1000);
-				Console.WriteLine(i);
+				Console.WriteLine(string.Format("{0} seconds completed", _counter));
 			}
 
 			Console.WriteLine("Ensure there are no messages in the queue");
-			Console.WriteLine(string.Format("Consumed message count expected: (50000), actual: ({0})", _consumedMessageCount));
+			Console.WriteLine(string.Format("Consumed message count expected(at least): (50000), actual: ({0})", _consumedMessageCount));
 			Console.ReadKey();
 		}
 
@@ -682,7 +666,7 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			//		rabbitmqctl set_vm_memory_high_watermark 0.0000001
 			//		rabbitmqctl set_vm_memory_high_watermark 0.4
 			// Verify 0 messages exist on queue
-			// Verify consumed message count is at exactly 50,000
+			// Verify consumed message count is at least 50,000
 
 			for (int count = 0; count < 50000; count++)
 			{
@@ -710,14 +694,14 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			var _consumerBus = new Bus(_consumerBusConfigurationBuilder.Build());
 			_consumerBus.Connect();
 
-			for (int i = 0; i < 80; i++)
+			for (int _counter = 0; _counter < 60; _counter++)
 			{
 				Thread.Sleep(1000);
-				Console.WriteLine(i);
+				Console.WriteLine(string.Format("{0} seconds completed", _counter));
 			}
 
 			Console.WriteLine("Ensure there are no messages in the queue");
-			Console.WriteLine(string.Format("Consumed message count expected: (50000), actual: ({0})", _consumedMessageCount));
+			Console.WriteLine(string.Format("Consumed message count expected(at least): (50000), actual: ({0})", _consumedMessageCount));
 			Console.ReadKey();
 		}
 
@@ -733,12 +717,12 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			// Let node that we are connected to = NodeA
 			// Let other node = NodeB
 
-			// Before stopping forcing the connection to be closed on NodeA, verify cluster is in working order
+			// Before forcing the connection to be closed on NodeA, verify cluster is in working order
 			// We publish 50,000 messages and verify that these are on the queue
 			// We continuously consume the 50,000 messages
 			// During consumption, force connection closed on NodeA via management UI
 			// Verify 0 messages exist on queue
-			// Verify consumed message count is at exactly 50,000
+			// Verify consumed message count is at least 50,000
 
 			for (int count = 0; count < 50000; count++)
 			{
@@ -766,14 +750,14 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			var _consumerBus = new Bus(_consumerBusConfigurationBuilder.Build());
 			_consumerBus.Connect();
 
-			for (int i = 0; i < 80; i++)
+			for (int _counter = 0; _counter < 60; _counter++)
 			{
 				Thread.Sleep(1000);
-				Console.WriteLine(i);
+				Console.WriteLine(string.Format("{0} seconds completed", _counter));
 			}
 
 			Console.WriteLine("Ensure there are no messages in the queue");
-			Console.WriteLine(string.Format("Consumed message count expected: (50000), actual: ({0})", _consumedMessageCount));
+			Console.WriteLine(string.Format("Consumed message count expected(at least): (50000), actual: ({0})", _consumedMessageCount));
 			Console.ReadKey();
 		}
 	}
