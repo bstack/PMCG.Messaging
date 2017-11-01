@@ -155,6 +155,9 @@ namespace PMCG.Messaging.Client.AT.Publish
 			var _SUT = new Bus(_busConfigurationBuilder.Build());
 			_SUT.Connect();
 
+			Console.WriteLine("Verify connection exists. Press enter to close connection ...");
+			Console.ReadKey();
+
 			// Close the connection explicitly
 			_SUT.Close();
 
@@ -185,19 +188,20 @@ namespace PMCG.Messaging.Client.AT.Publish
 			//		5 - Observe that all failed messages have since published successfully (via logs)
 
 			var _tasks = new ConcurrentBag<Task<PMCG.Messaging.PublicationResult>>();
-			for (int count = 0; count < 40000; count++)
+			for (int count = 0; count < 10000; count++)
 			{
 				var _message = new Accessories.MyEvent(Guid.NewGuid(), "", "R1", 1, "09:00", "DDD....");
 				_tasks.Add(_SUT.PublishAsync(_message));
 				Console.WriteLine(count);
+				System.Threading.Thread.Sleep(1);
 			}
 
 			Task.WhenAll(_tasks).ContinueWith(a =>
 			{
 				var _taskStatusCount = _tasks.Count(result => result.Status == TaskStatus.RanToCompletion);
 				var _messagePublishedCount = _tasks.Count(result => result.Result.Status == Messaging.PublicationResultStatus.Published);
-				Console.WriteLine(string.Format("RanToCompletionTaskCount expected: (40000), actual: ({0})", _taskStatusCount));
-				Console.WriteLine(string.Format("MessagePublishedCount expected: (40000), actual: ({0})", _messagePublishedCount));
+				Console.WriteLine(string.Format("RanToCompletionTaskCount expected: (10000), actual: ({0})", _taskStatusCount));
+				Console.WriteLine(string.Format("MessagePublishedCount expected: (10000), actual: ({0})", _messagePublishedCount));
 			});
 
 			Console.Read();

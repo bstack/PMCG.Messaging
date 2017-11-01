@@ -55,6 +55,7 @@ namespace PMCG.Messaging.Client.AT
 			//_clusterTests.Publish_Continues_When_Node_We_Are_Connected_To_Has_RabbitMQ_Service_Stopped();
 			//_clusterTests.Publish_Continues_When_Node_We_Are_Not_Connected_Is_Rebooted();
 			//_clusterTests.Publish_Continues_When_Node_We_Are_Connected_To_Is_Rebooted();
+			//_clusterTests.Publish_Continues_When_Both_Nodes_Are_Rebooted_Consecutively_Simulating_Ubuntu_Updates();
 			//_clusterTests.Publish_Continues_When_Node_We_Are_Not_Connected_Is_Blocked();
 			//_clusterTests.Publish_Continues_When_Node_We_Are_Connected_To_Is_Blocked();
 			//_clusterTests.Publish_Continues_When_Node_We_Are_Connected_To_Has_Connection_Forced_Closed_Via_Management_UI();
@@ -65,6 +66,8 @@ namespace PMCG.Messaging.Client.AT
 			//_clusterTests.Consume_Continues_When_Node_We_Are_Not_Connected_To_Is_Blocked();
 			//_clusterTests.Consume_Continues_When_Node_We_Are_Connected_To_Is_Blocked();
 			//_clusterTests.Consume_Continues_When_Node_We_Are_Connected_To_Has_Connection_Forced_Closed_Via_Management_UI();
+			//_clusterTests.Reboot_Both_Nodes_In_The_Cluster_Simultaneously();
+			//_clusterTests.Kill_Both_Nodes_VM_In_The_Cluster_Simultaneously();
 		}
 	}
 }
