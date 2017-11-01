@@ -7,6 +7,31 @@ namespace PMCG.Messaging.Client.AT.Consume
 {
 	public class Tests
 	{
+		public void Consume_From_A_Queue_That_Doesnt_Exist()
+		{
+			var _capturedMessageId = string.Empty;
+
+			var _busConfigurationBuilder = new BusConfigurationBuilder(Accessories.Configuration.ConnectionSettingsString);
+			_busConfigurationBuilder.NumberOfConsumers = 2;
+			_busConfigurationBuilder
+				.RegisterConsumer<Accessories.MyEvent>(
+					"QueueDoesNotExist",
+					typeof(Accessories.MyEvent).Name,
+					message => { _capturedMessageId = message.Id.ToString(); return ConsumerHandlerResult.Completed; });
+			var _SUT = new Bus(_busConfigurationBuilder.Build());
+
+			try
+			{
+				_SUT.Connect();
+			}
+			catch (Exception exception)
+			{
+				Console.WriteLine(string.Format("Exception expected: (RabbitMQ.Client.Exceptions.OperationInterruptedException), actual: ({0})", exception.GetType()));
+			}
+			Console.Read();
+		}
+
+
 		public void Publish_A_Message_And_Consume_For_The_Same_Message_With_Ack()
 		{
 			var _capturedMessageId = string.Empty;

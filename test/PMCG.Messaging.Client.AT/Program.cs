@@ -37,6 +37,7 @@ namespace PMCG.Messaging.Client.AT
 			//_publishTests.Publish_Invalid_Message_Is_Null();
 			//_publishTests.Publish_A_Message_That_Expires_Ends_Up_In_Dead_Letter_Queue();
 
+			_consumeTests.Consume_From_A_Queue_That_Doesnt_Exist();
 			//_consumeTests.Publish_A_Message_And_Consume_For_The_Same_Message_With_Ack();
 			//_consumeTests.Publish_A_Message_And_Consume_For_The_Same_Message_With_Nack();
 			//_consumeTests.Publish_A_Message_And_Consume_For_The_Same_Message_With_Nack_And_Dead_Letter_Queue();
