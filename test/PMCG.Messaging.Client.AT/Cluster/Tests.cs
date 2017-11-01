@@ -222,7 +222,7 @@ namespace PMCG.Messaging.Client.AT.Cluster
 				var _message = new Accessories.MyEvent(Guid.NewGuid(), "", "R1", 1, "09:00", "DDD....");
 				_tasks.Add(_SUT.PublishAsync(_message));
 				Console.WriteLine(count);
-				Thread.Sleep(1);
+				Thread.Sleep(10);
 			}
 
 			Task.WhenAll(_tasks).ContinueWith(a =>
@@ -759,6 +759,30 @@ namespace PMCG.Messaging.Client.AT.Cluster
 			Console.WriteLine("Ensure there are no messages in the queue");
 			Console.WriteLine(string.Format("Consumed message count expected(at least): (50000), actual: ({0})", _consumedMessageCount));
 			Console.ReadKey();
+		}
+
+
+		public void Reboot_Both_Nodes_In_The_Cluster_Simultaneously()
+		{
+			// Let node that queues were created on = NodeA
+			// Let other node = NodeB
+
+			// Before reboot of NodeA and NodeB, verify cluster is in working order
+			// Reboot NodeA and NodeB as simultaneously as possible
+			// After successful reboot, verify that cluster is restored back to working order
+			// Verify that all exchanges, queues etc are all as expected
+		}
+
+
+		public void Kill_Both_Nodes_VM_In_The_Cluster_Simultaneously()
+		{
+			// Let node that queues were created on = NodeA
+			// Let other node = NodeB
+
+			// Before reboot of NodeA and NodeB, verify cluster is in working order
+			// Turn off NodeA and NodeB simultaneously (you need a member of IT services to execute this task via VMWare manager)
+			// After successful reboot, verify that cluster is restored back to working order
+			// Verify that all exchanges, queues etc are all as expected
 		}
 	}
 }
