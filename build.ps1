@@ -15,10 +15,9 @@ write-host "### Paths"
 $nugetSpecFileName = 'PMCG.Messaging.nuspec'
 $rootDirectoryPath = (split-path ($MyInvocation.MyCommand.Path))
 $solutionFilePath = join-path $rootDirectoryPath PMCG.Messaging.sln
-$versionAttributeFilePath = join-path $rootDirectoryPath (join-path src SharedAssemblyInfo.cs)
-$releaseDirectoryPath = join-path $rootDirectoryPath release
+$packagesDirectoryPath = join-path $rootDirectoryPath packages
 $nugetSpecFilePath = join-path $rootDirectoryPath $nugetSpecFileName
-$nugetPackageFilePath = join-path $releaseDirectoryPath $nugetSpecFileName.Replace('.nuspec', '.' + $version + '.nupkg')
+$nugetPackageFilePath = join-path $packagesDirectoryPath $nugetSpecFileName.Replace('.nuspec', '.' + $version + '.nupkg')
 
 
 echo "### nuget ensure we have our dependencies"
@@ -26,13 +25,9 @@ nuget restore $solutionFilePath -verbosity detailed
 
 
 write-host "### Compile"
-# Change version attribute - Assembly and file
-(get-content $versionAttributeFilePath) | % { $_ -replace 'Version\("[\d.]*"', "Version(`"$version`"" } | set-content $versionAttributeFilePath -encoding utf8
 # Build
-& 'c:\program files (x86)\microsoft visual studio\2017\*\msbuild\15.0\bin\msbuild.exe' $solutionFilePath /target:ReBuild /property:Configuration=Release
+& 'c:\program files (x86)\microsoft visual studio\2017\*\msbuild\15.0\bin\msbuild.exe' $solutionFilePath /target:ReBuild /property:Configuration=Release /property:Version=$version
 if ($LastExitCode -ne 0) { write-host 'Compile failure !'; exit 1 }
-# Restore version attribute file
-git checkout $versionAttributeFilePath
 
 
 write-host "### Run tests"
@@ -48,10 +43,10 @@ dir test -recurse -include *.UT.dll | ? { $_.FullName.IndexOf('bin\Release') -gt
 
 write-host "### nuget pack"
 # Ensure we have an empty release directory
-if (test-path $releaseDirectoryPath) { rm -recurse -force $releaseDirectoryPath }
-mkdir $releaseDirectoryPath | out-null
+if (test-path $packagesDirectoryPath) { rm -recurse -force $packagesDirectoryPath }
+mkdir $packagesDirectoryPath | out-null
 # nuget pack
-nuget pack $nugetSpecFilePath -outputdirectory $releaseDirectoryPath -version $version -verbosity detailed
+nuget pack $nugetSpecFilePath -outputdirectory $packagesDirectoryPath -version $version -verbosity detailed
 
 
 write-host "### Push instruction"

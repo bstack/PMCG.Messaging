@@ -7,24 +7,6 @@ namespace PMCG.Messaging.Client.Configuration
 {
 	public class ConnectionSettingsParser
 	{
-		private readonly IPasswordParser c_passwordParser;
-
-
-		public ConnectionSettingsParser()
-			: this(new DefaultPasswordParser())
-		{
-		}
-
-
-		public ConnectionSettingsParser(
-			IPasswordParser passwordParser)
-		{
-			Check.RequireArgumentNotNull("passwordParser", passwordParser);
-
-			this.c_passwordParser = passwordParser;
-		}
-
-
 		public ConnectionSettings Parse(
 			string connectionStringSettings)
 		{
@@ -36,11 +18,8 @@ namespace PMCG.Messaging.Client.Configuration
 			var _virtualHost = this.GetSetting(_settings, "virtualhost", "/");
 			var _clientProvidedName = this.GetSetting(_settings, "clientprovidedname", "clientProvidedName");
 			var _userName = this.GetSetting(_settings, "username", "guest");
-			var _isPasswordEncrypted = this.GetSetting(_settings, "ispasswordencrypted", "false");
 			var _password = this.GetSetting(_settings, "password", "guest");
 
-			if (bool.Parse(_isPasswordEncrypted)) { _password = this.c_passwordParser.Parse(_password); }
-			
 			return new ConnectionSettings(_hostNames, _port, _virtualHost, _clientProvidedName, _userName, _password);
 		}
 

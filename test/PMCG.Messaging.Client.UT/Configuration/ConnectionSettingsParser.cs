@@ -63,24 +63,6 @@ namespace PMCG.Messaging.Client.UT.Configuration
 
 
 		[Test]
-		public void Parse_Where_Single_Host_With_Encrypted_Password_Results_In_A_Single_Connection_String()
-		{
-			var _passwordCipher = new PMCG.Messaging.Client.Configuration.DefaultPasswordParser().Encrypt("ThePassword");
-			var _connectionStringSettings = string.Format("hosts=localhost;port=5672;virtualhost=/;username=guest;ispasswordencrypted=true;password={0}:{1}", Environment.MachineName, _passwordCipher);
-
-			var _result = this.c_SUT.Parse(_connectionStringSettings);
-
-			Assert.IsNotNull(_result);
-			Assert.AreEqual(1, _result.HostNames.Count());
-			Assert.AreEqual("localhost", _result.HostNames.Single());
-			Assert.AreEqual(5672, _result.Port);
-			Assert.AreEqual("guest", _result.UserName);
-			Assert.AreEqual("ThePassword", _result.Password);
-			Assert.AreEqual("/", _result.VirtualHost);
-		}
-
-
-		[Test]
 		public void Parse_Where_Only_Hosts_Specified_Results_In_A_Multiple_Connection_Strings()
 		{
 			var _result = this.c_SUT.Parse("hosts=host1,host2");
