@@ -16,6 +16,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="src\PMCG.Messaging.Client\bin\Release\PMCG.Messaging*.dll" target="lib\net45"/>
+    <file src="src\PMCG.Messaging.Client\bin\Release\net47\PMCG.Messaging*.dll" target="lib\net45"/>
   </files>
 </package>
