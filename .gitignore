@@ -16,7 +16,12 @@ TestResult.xml
 *.sln.DotSettings.user
 *.csproj.user
 *.suo
+.vs/
 
+# Visual studio code
+.vscode
 # Resharper files
 *resharper*
 _resharper*/
+# nuget
+**/packages/*

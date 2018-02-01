@@ -2,6 +2,8 @@
 using log4net.Config;
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 
 
 namespace PMCG.Messaging.Client.AT
@@ -11,7 +13,8 @@ namespace PMCG.Messaging.Client.AT
 		static void Main(
 			string[] args)
 		{
-			XmlConfigurator.Configure();
+			var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+			XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
 			GlobalContext.Properties["pid"] = Process.GetCurrentProcess().Id;   // See http://stackoverflow.com/questions/2075603/log4net-process-id-information
 
 			var _connectTests = new PMCG.Messaging.Client.AT.Connect.Tests();
@@ -24,7 +27,7 @@ namespace PMCG.Messaging.Client.AT
 			//_connectTests.Connect_Close_The_Connection_Using_The_Management_UI_Connection_Reestablished_Automatically();
 			//_connectTests.Connect_Is_Already_Started_Then_Blocked_And_Then_Unblocked();
 
-			//_publishTests.Publish_A_Message_To_A_Queue_Using_The_Direct_Exchange();
+			_publishTests.Publish_A_Message_To_A_Queue_Using_The_Direct_Exchange();
 			//_publishTests.Publish_A_Message_To_A_Queue_Using_Custom_Exchange();
 			//_publishTests.Publish_A_Message_To_Two_Exchanges();
 			//_publishTests.Publish_A_Message_To_An_Exchange_That_Doesnt_Exist();
