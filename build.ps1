@@ -16,9 +16,9 @@ write-host "### Empty packages directory"
 if (test-path $packagesDirectoryPath) { Remove-Item -recurse -force $packagesDirectoryPath }
 
 write-host "### Build and pack"
-# We could have just done a build and pack in 1 go with dotnet pack without the --no-build option, but better to keep seperate
+# We could have just done a build and pack in 1 go with dotnet pack without the --no-build option, but better to keep separate
 dotnet clean $solutionFilePath
-dotnet build $solutionFilePath --configuration Release /p:PackageVersion=$version
+dotnet build $solutionFilePath --configuration Release /p:Version=$version
 dotnet pack $solutionFilePath --no-build --configuration Release /p:PackageVersion=$version --output $packagesDirectoryPath
 if ($LastExitCode -ne 0) { write-host 'Build and pack failure !'; exit 1 }
 
@@ -33,4 +33,4 @@ Get-ChildItem test -recurse -include *.UT.dll | ? { $_.FullName.IndexOf('bin\Rel
 }
 
 write-host "### Push instruction"
-write-host "Copy-Item $packagesDirectoryPath\PMCG.Messaging.*.nupkg' -Exclude '*.AT.*' YOUR_NUGET_LOCATION"
+write-host "Copy-Item '$packagesDirectoryPath\PMCG.Messaging.*.nupkg' -Exclude '*.AT.*' YOUR_NUGET_LOCATION"
